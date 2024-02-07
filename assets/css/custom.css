@@ -1,0 +1,74 @@
+.wrapper-kode-ticket {
+    display: block;
+    width: 100%;
+    padding: 8px 16px;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #5A6A85;
+    background-color: transparent;
+    background-clip: padding-box;
+    border: var(--bs-border-width) solid #DFE5EF;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 7px;
+}
+
+.sidebar-nav ul .sidebar-item .first-level .sidebar-item .sidebar-link.active {
+    color: var(--bs-primary) !important;
+}
+
+.collapse.in {
+    display: block;
+}
+
+
+.sidebar-nav ul .sidebar-item .first-level .sidebar-link .ti{
+    font-size: 7px;
+}
+
+.sidebar-nav ul .sidebar-item .first-level .sidebar-item .sidebar-link.active{
+    background-color: transparent !important;
+    color: var(--bs-primary) !important;
+}
+
+.sidebar-nav .has-arrow::after{
+    position: absolute;
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-width: 1px 0 0 1px;
+    border-style: solid;
+    border-color: var(--bs-dark-text-emphasis);
+    margin-left: 10px;
+    transform: rotate(135deg) translate(0, -50%);
+    transform-origin: top;
+    top: 22px;
+    right: 15px;
+    transition: all 0.3s ease-out;
+}
+
+.sidebar-nav li.active > .has-arrow::after, 
+.sidebar-nav li > .has-arrow.active::after, 
+.sidebar-nav .has-arrow[aria-expanded=true]::after {
+    top: 18px;
+    margin-top: 1px;
+    border-color: var(--bs-white);
+    transform: rotate(-135deg) translate(0, -50%);
+}
+
+.input-total-rangkuman {
+    border-radius: 0px;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    border-bottom: 1px solid #000000;
+    height: 20px;
+    padding: 15px;
+}
+
+.dash-preview {
+    width: 60px;
+    height: 60px;
+}

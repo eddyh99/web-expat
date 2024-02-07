@@ -1,0 +1,36 @@
+login
+
+Daftar Agen
+  - Nama Agen
+  - Alamat
+  - HP
+  - Kontak
+
+Daftar Tiket
+  - Tujuan
+  - Harga
+
+Pesan Tiket
+  - Kode Tiket (readonly)
+  - Nama Tamu (inputan)
+  - Nasionality (daftar negara)
+  - Penumpang Adult (inputan) 
+  - Penumpang Child (inputan)
+  - Free of Charge (FOC) - (inputan)
+  - One Way - Return (radio button)
+  - Depart (lembongan-sanur 08.15, sanur-lembongan 09.15, lembongan - sanur 13.00, sanru - lembongan 14.30, lembongan-sanur 16.00, sanur-lembongan 17.00)
+  - Return (lembongan-sanur 08.15, sanur-lembongan 09.15, lembongan - sanur 13.00, sanru - lembongan 14.30, lembongan-sanur 16.00, sanur-lembongan 17.00)
+  - Tanggal Berangkat datepicker
+  - Tanggal Kembali datepicker
+  - Agent (pakai select 2, munculin nama agen)
+  - Pickup Lembongan (inputan)
+  - Drop off bali (inputan)
+  - Remarks (inputan text - catatan kecil saja)
+
+Abis tiket simpan, akan muncul tiket yang bisa di print
+
+Pesan tiket grup
+  Sama persis ama pesan tiket biasa tapi di bagian penumpang misal 5 (ada 5 inputan nama)
+
+Laporan
+ - Tujuan | Jam | nama tamu | nasionality | Adult | Child | Total
