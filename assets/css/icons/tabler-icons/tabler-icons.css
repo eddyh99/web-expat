@@ -11402,6 +11402,10 @@
   content: "\ebf2";
 }
 
+.ti-users-group:before {
+  content: "\fa21";
+}
+
 .ti-uv-index:before {
   content: "\f3b2";
 }

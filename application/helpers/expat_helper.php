@@ -1,7 +1,7 @@
 <?php
-function expat($url, $postData = NULL)
+function expatAPI($url, $postData = NULL)
 {
-    $token = "pPaqjxUmeiwXb9aqfWVREKvNzKOUh5ei5DQPHXCMkIluGCwkXu";
+    $token = "4adf13f385783d126bde52d1087ff3e64c04866a";
 
     $ch     = curl_init($url);
     $headers    = array(
@@ -14,7 +14,11 @@ function expat($url, $postData = NULL)
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-    $result = json_decode(curl_exec($ch));
+    // $result = json_decode(curl_exec($ch));
+    $result = (object) array(
+        'result'        => json_decode(curl_exec($ch)),
+        'status'        => curl_getinfo($ch)['http_code']
+    );
     curl_close($ch);
     return $result;
 }

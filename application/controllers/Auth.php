@@ -36,21 +36,35 @@ class Auth extends CI_Controller
 		$input = $this->input;
 		$username = $this->security->xss_clean($input->post('username'));
 		$password = $this->security->xss_clean($input->post('password'));
-		// $role_login = $this->security->xss_clean($input->post('role_login'));
 
-		$datas = array(
+		$mdata = array(
 			'username'	=> $username,
-			'password'	=> $password,
-			// 'role'		=> $role_login
+			'passwd'	=> sha1($password),
 		);
 
-		$url = URLAPI . "/v1/auth/signin";
-		$result = expat($url, json_encode($mdata));
-		if (@$result->code != 200) {
-			$this->session->set_flashdata('failed', $result->message);
+		$url = URLAPI . "/auth/expatsignin";
+		$response = expatAPI($url, json_encode($mdata));
+		$result = $response->result->messages;
+		// echo '<pre>'.print_r($response,true).'</pre>';
+		// die;
+		
+		if (@$response->status != 200) {
+			$this->session->set_flashdata('error', $result->error);
 			redirect("/");
 			return;
 		}
+
+		
+		$temp_session = array(
+			'username'  => $result->username,
+			'role'      => $result->role,
+			'is_login'  => true
+		);
+
+		$this->session->set_userdata('logged_user', $temp_session);
+		$this->session->set_flashdata('success_login', "Selamat datang <b>".$result->username."</b>");
+		redirect('dashboard');
+
 	}
 
 	public function logout()

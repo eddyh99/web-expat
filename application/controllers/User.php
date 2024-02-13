@@ -7,7 +7,7 @@ class User extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        if (!isset($this->session->userdata['logged_status'])) {
+        if (!isset($this->session->userdata['logged_user'])) {
 			redirect('/');
 		}
 
@@ -17,75 +17,91 @@ class User extends CI_Controller
     {
         $data = array(
             'title'         => NAMETITLE . ' - List User',
-            'content'       => 'admin/user/index',
-            'extra'         => 'admin/user/js/_js_index',
+            'content'       => 'admin/master/user/index',
+            'extra'         => 'admin/master/user/js/_js_index',
             'user_active'    => 'active',
         );
         $this->load->view('layout/wrapper-dashboard', $data);
 
     }
 
-    public function list_user()
+    public function list_alluser()
     {
-		$url = URLAPI . "/v1/user/getUser";
-		$result = expat($url);
+		$url = URLAPI . "/v1/user/get_alluser";
+		$result = expatAPI($url)->result->message;
         echo json_encode($result);        
+
     }
 
-    public function tambah_user()
+    public function add_user()
     {
         $data = array(
-            'title'         => NAMETITLE . ' - Tambah User',
-            'content'       => 'admin/user/tambah_user',
-            'extra'         => 'admin/user/js/_js_index',
+            'title'         => NAMETITLE . ' - Adding User',
+            'content'       => 'admin/master/user/add_user',
+            'extra'         => 'admin/master/user/js/_js_index',
             'user_active'    => 'active',
         );
         $this->load->view('layout/wrapper-dashboard', $data);
     }
 
-    public function tambah_process()
+    public function adduser_process()
     {
-        /*@todo 
-            role isinya admin, kasir
-        */
+        $this->form_validation->set_rules('username', 'Username', 'trim|required');
+		$this->form_validation->set_rules('passwd', 'Password', 'trim|required');
+		$this->form_validation->set_rules('name', 'Name', 'trim|required');
+		$this->form_validation->set_rules('role', 'Role', 'trim|required');
+
+
+        if ($this->form_validation->run() == FALSE) {
+			$this->session->set_flashdata('error_validation', $this->message->error_msg(validation_errors()));
+			redirect("user/tambah_user");
+			return;
+		}
 
         $input      = $this->input;
         $username   = $this->security->xss_clean($input->post('username'));
         $passwd     = $this->security->xss_clean($input->post('passwd'));
+        $name       = $this->security->xss_clean($input->post('name'));
         $role       = $this->security->xss_clean($input->post('role'));
 
-        $datas = array(
+        $mdata = array(
             "username"  => $username, 
             "passwd"    => sha1($passwd),
-            "role"      => $lokasi,
+            "nama"      => $name,
+            "role"      => $role,
         );
 
 		$url = URLAPI . "/v1/user/addUser";
-		$result = expat($url, json_encode($mdata));
+		$response = expatAPI($url, json_encode($mdata));
+        $result = $response->result;
 
-        if($result['code'] == 200) {
-            $this->session->set_flashdata('success', $this->message->success_msg());
+        // echo '<pre>'.print_r($result,true).'</pre>';
+        // die;
+
+        if($response->status == 200) {
+            $this->session->set_flashdata('success', $result->messages);
 			redirect('user');
 			return;
         }else{
-            $this->session->set_flashdata('error', $this->message->error_msg($result["message"]));
-			redirect('user/tambah_user');
+            $this->session->set_flashdata('error', $result->messages->error);
+			redirect('user/add_user');
 			return;
         }
 
     }
 
-    public function edit_user($id)
+    public function edit_user($username)
     {
-        $id	= base64_decode($this->security->xss_clean($id));
+        $username	= base64_decode($this->security->xss_clean($username));
 
-        $url = URLAPI . "/v1/user/getUserbyid?user_id=".$id;
-		$result = expat($url);
+        $url = URLAPI . "/v1/user/get_byusername?username=".$username;
+		$result = expatAPI($url)->result->messages;
+
 
         $data = array(
             'title'             => NAMETITLE . ' - Edit user',
-            'content'           => 'admin/user/edit_user',
-            'extra'             => 'admin/user/js/_js_index',
+            'content'           => 'admin/master/user/edit_user',
+            'extra'             => 'admin/master/user/js/_js_index',
             'user_active'       => 'active',
             'user'              => $result,
         );
@@ -93,70 +109,80 @@ class User extends CI_Controller
         $this->load->view('layout/wrapper-dashboard', $data);
     }
     
-    public function edit_process()
+    public function edituser_process()
     {
         $this->form_validation->set_rules('username', 'Username', 'trim|required');
 		$this->form_validation->set_rules('passwd', 'Password', 'trim');
-		$this->form_validation->set_rules('lokasi', 'Location', 'trim|required');
+		$this->form_validation->set_rules('name', 'Name', 'trim|required');
+		$this->form_validation->set_rules('role', 'Role', 'trim|required');
 
+        $input      = $this->input;
+        $urisegment   = $this->security->xss_clean($input->post('urisegment'));
 
         if ($this->form_validation->run() == FALSE) {
 			$this->session->set_flashdata('error_validation', $this->message->error_msg(validation_errors()));
-            redirect('user/edit_user/'.base64_encode($username));
+            redirect('user/edit_user/'.$urisegment);
 			return;
 		}
 
-
-        $input      = $this->input;
         $username   = $this->security->xss_clean($input->post('username'));
         $passwd     = $this->security->xss_clean($input->post('passwd'));
+        $name     = $this->security->xss_clean($input->post('name'));
         $role       = $this->security->xss_clean($input->post('role'));
         
-        //kosongkan password jika tidak mengganti password
+
         if (empty($passwd)){
-            $datas = array(
+            $mdata = array(
                 "username"  => $username, 
+                "nama"      => $name,
                 "role"      => $role,
             );
         }else{
-            $datas = array(
+            $mdata = array(
                 "username"  => $username, 
                 "passwd"    => sha1($passwd),
+                "nama"      => $name,
                 "role"      => $role,
             );
+        
         }
         $url = URLAPI . "/v1/user/updateUser";
-		$result = expat($url, json_encode($mdata));
+		$response = expatAPI($url, json_encode($mdata));
+        $result = $response->result;
 
-        if($result['code'] == 200){
-            $this->session->set_flashdata('success', $this->message->success_edit_msg());
+
+        if($response->status == 200){
+            $this->session->set_flashdata('success', $result->messages);
 			redirect('user');
 			return;
         }else{
-            $this->session->set_flashdata('error', $this->message->success_edit_msg());
-            redirect('user/edit_user/'.base64_encode($id_edit));
+            $this->session->set_flashdata('error', $result->messages->error);
+            redirect('user/edit_user/'.$urisegment);
             return;
         }
     }
 
-    public function hapus($id)
+    public function delete($username)
     {
-        $id_delete = base64_decode($this->security->xss_clean($id));
-        if ($id_delete=="admin"){
+        $username_delete = base64_decode($this->security->xss_clean($username));
+
+        if ($username_delete=="admin"){
             $this->session->set_flashdata('success', "Admin can't be deleted");
             redirect("user");
             return;
         }
 
-        $url = URLAPI . "/v1/user/deleteUser?user_id=".$id_delete;
-		$result = expat($url);
+        $url = URLAPI . "/v1/user/deleteUser?username=".$username_delete;
+		$response = expatAPI($url);
+        $result = $response->result;
 
-        if($result['code'] = 200){
-            $this->session->set_flashdata('success', $this->message->delete_msg());
+
+        if($response->status == 200){
+            $this->session->set_flashdata('success', $result->messages);
 			redirect('user');
 			return;
         }else{
-            $this->session->set_flashdata('error', $this->message->error_delete_msg());
+            $this->session->set_flashdata('error', $result->messages->error);
             redirect('user');
             return;
         }

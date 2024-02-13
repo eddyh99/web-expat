@@ -88,4 +88,4 @@ define('NAMETITLE','Expat. Roasters');
 
 
 //Inisialisasi Database Table
-define("URLAPI",'https://api-expat.softwarebali.com');
+define("URLAPI",'https://api-expats.softwarebali.com');

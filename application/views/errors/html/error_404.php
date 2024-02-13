@@ -1,64 +1,43 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-?><!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>404 Page Not Found</title>
-<style type="text/css">
+?>
 
-::selection { background-color: #E13300; color: white; }
-::-moz-selection { background-color: #E13300; color: white; }
+<html lang="en" dir="ltr" data-bs-theme="light" data-color-theme="Blue_Theme" data-layout="vertical" data-boxed-layout="boxed" data-card="shadow"><head>
+  <!-- Required meta tags -->
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-body {
-	background-color: #fff;
-	margin: 40px;
-	font: 13px/20px normal Helvetica, Arial, sans-serif;
-	color: #4F5155;
-}
+<!-- Favicon icon-->
+<link rel="shortcut icon" type="image/png" href="<?php echo config_item('base_url');?>assets/img/favicon.png">
 
-a {
-	color: #003399;
-	background-color: transparent;
-	font-weight: normal;
-}
+<!-- Core Css -->
+<link rel="stylesheet" href="<?php echo config_item('base_url');?>assets/css/styles.css">
+<link rel="stylesheet" href="<?php echo config_item('base_url');?>assets/css/custom.css">
 
-h1 {
-	color: #444;
-	background-color: transparent;
-	border-bottom: 1px solid #D0D0D0;
-	font-size: 19px;
-	font-weight: normal;
-	margin: 0 0 14px 0;
-	padding: 14px 15px 10px 15px;
-}
-
-code {
-	font-family: Consolas, Monaco, Courier New, Courier, monospace;
-	font-size: 12px;
-	background-color: #f9f9f9;
-	border: 1px solid #D0D0D0;
-	color: #002166;
-	display: block;
-	margin: 14px 0 14px 0;
-	padding: 12px 10px 12px 10px;
-}
-
-#container {
-	margin: 10px;
-	border: 1px solid #D0D0D0;
-	box-shadow: 0 0 8px #D0D0D0;
-}
-
-p {
-	margin: 12px 15px 12px 15px;
-}
-</style>
+  <title>ERROR 404 NOT FOUND</title>
 </head>
-<body>
-	<div id="container">
-		<h1><?php echo $heading; ?></h1>
-		<?php echo $message; ?>
-	</div>
+
+<body data-sidebartype="full">
+
+  <div class="preloader" style="display: none;">
+    <img src="../assets/images/logos/favicon.png" alt="loader" class="lds-ripple img-fluid">
+  </div>
+  <div id="main-wrapper">
+    <div class="position-relative overflow-hidden min-vh-100 w-100 d-flex align-items-center justify-content-center">
+      <div class="d-flex align-items-center justify-content-center w-100">
+        <div class="row justify-content-center w-100">
+          <div class="col-lg-4">
+            <div class="text-center">
+              <img src="<?php echo config_item('base_url');?>assets/img/error404.jpg" alt="" class="img-fluid" width="500">
+              <h1 class="fw-semibold mb-7 fs-9">Opps!!!</h1>
+              <h4 class="fw-semibold mb-7">This page you are looking for could not be found.</h4>
+              <a class="btn btn-expat" href="<?php echo config_item('base_url');?>" role="button">Go Back to Home</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
