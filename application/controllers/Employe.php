@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Member extends CI_Controller
+class Employe extends CI_Controller
 {
 
     public function __construct()
@@ -16,26 +16,25 @@ class Member extends CI_Controller
     public function index()
     {
         $data = array(
-            'title'             => NAMETITLE . ' - Member',
-            'content'           => 'admin/master/member/index',
-            'extra'             => 'admin/master/member/js/_js_index',
-            'member_active'     => 'active',
-            'dropdown_stmember' => 'text-success',
+            'title'             => NAMETITLE . ' - Employe',
+            'content'           => 'admin/master/employe/index',
+            'extra'             => 'admin/master/employe/js/_js_index',
+            'employe_active'    => 'active',
         );
         $this->load->view('layout/wrapper-dashboard', $data);
 
     }
 
     
-    public function list_allmember()
+    public function list_allemploye()
     {
-        $status     = $this->security->xss_clean($this->input->post('status'));
-		$url = URLAPI . "/v1/member/get_allmember?role=member";
-		$response = expatAPI($url)->result->messages;
+        // $status     = $this->security->xss_clean($this->input->post('status'));
+		$url = URLAPI . "/v1/member/get_allmember?role=pegawai";
+		$response = expatAPI($url)->result->messages;   
 
+        // $resultNew = array();
+        // $resultDisabled = array();
         $resultActive = array();
-        $resultNew = array();
-        $resultDisabled = array();
         foreach($response as $dt){
             if($dt->status == 'active'){
                 $mdata = array(
@@ -45,69 +44,49 @@ class Member extends CI_Controller
                     "nama" => $dt->nama,
                     "dob" => $dt->dob,
                     "gender" => $dt->gender,
-                    "status" => $dt->status,
                     "membership" => $dt->membership,
+                    "is_driver" => $dt->is_driver,
+                    "plafon" => $dt->plafon,
+                    "status" => $dt->status,
                 );
                 array_push($resultActive, $mdata);
-            }else if($dt->status == 'new'){
-                $mdata = array(
-                    "id" => $dt->id,
-                    "memberid" => $dt->memberid,
-                    "email" => $dt->email,
-                    "nama" => $dt->nama,
-                    "dob" => $dt->dob,
-                    "gender" => $dt->gender,
-                    "status" => $dt->status,
-                    "membership" => $dt->membership,
-                );
-                array_push($resultNew, $mdata);
-            }else if($dt->status == 'disabled'){
-                $mdata = array(
-                    "id" => $dt->id,
-                    "memberid" => $dt->memberid,
-                    "email" => $dt->email,
-                    "nama" => $dt->nama,
-                    "dob" => $dt->dob,
-                    "gender" => $dt->gender,
-                    "status" => $dt->status,
-                    "membership" => $dt->membership,
-                );
-                array_push($resultDisabled, $mdata);
             }
         }
 
-        if($status == 'active'){
-            echo json_encode($resultActive);        
-        }else if($status == 'new'){
-            echo json_encode($resultNew);        
-        }else if($status == 'disabled'){
-            echo json_encode($resultDisabled);        
-        }
+        echo json_encode($resultActive);  
+              
+        // if($status == 'active'){
+        //     echo json_encode($resultActive);        
+        // }else if($status == 'new'){
+        //     echo json_encode($resultNew);        
+        // }else if($status == 'disabled'){
+        //     echo json_encode($resultDisabled);        
+        // }
 
     }
 
-    public function add_member()
+    public function add_employe()
     {
         $data = array(
-            'title'         => NAMETITLE . ' - Add Member',
-            'content'       => 'admin/master/member/add_member',
-            'extra'         => 'admin/master/member/js/_js_index',
-            'member_active' => 'active',
+            'title'         => NAMETITLE . ' - Add Employe',
+            'content'       => 'admin/master/employe/add_employe',
+            'extra'         => 'admin/master/employe/js/_js_index',
+            'employe_active' => 'active',
         );
         $this->load->view('layout/wrapper-dashboard', $data);
     }
 
-    public function addmember_process()
+    public function addemploye_process()
     {
         $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
 		$this->form_validation->set_rules('passwd', 'Password', 'trim|required');
 		$this->form_validation->set_rules('name', 'Name', 'trim|required');
 		$this->form_validation->set_rules('gender', 'Gender', 'trim|required');
-		$this->form_validation->set_rules('membership', 'Membership', 'trim|required');
+		$this->form_validation->set_rules('is_driver', 'Is Driver', 'trim|required');
 
         if ($this->form_validation->run() == FALSE) {
 			$this->session->set_flashdata('error_validation', $this->message->error_msg(validation_errors()));
-			redirect("user/tambah_user");
+			redirect("employe/add_employe");
 			return;
 		}
 
@@ -116,15 +95,16 @@ class Member extends CI_Controller
         $passwd     = $this->security->xss_clean($input->post('passwd'));
         $name       = $this->security->xss_clean($input->post('name'));
         $gender     = $this->security->xss_clean($input->post('gender'));
-        $membership = $this->security->xss_clean($input->post('membership'));
+        $is_driver  = $this->security->xss_clean($input->post('is_driver'));
 
         $mdata = array(
             "email"         => $email,
             "passwd"        => sha1($passwd),
             "nama"          => $name,
             "gender"        => $gender,
-            "role"          => 'member',
-            "membership"    => $membership,
+            "role"          => 'pegawai',
+            'membership'    => 'bronze',
+            "is_driver"     => $is_driver,
         );
 
         
@@ -137,16 +117,16 @@ class Member extends CI_Controller
 
         if($response->status == 200) {
             $this->session->set_flashdata('success', $result->messages);
-			redirect('member');
+			redirect('employe');
 			return;
         }else{
             $this->session->set_flashdata('error', $result->messages->error);
-			redirect('member/add_member');
+			redirect('employe/add_employe');
 			return;
         }
     } 
 
-    public function edit_member($id)
+    public function edit_employe($id)
     {
         $id_member	= base64_decode($this->security->xss_clean($id));
 
@@ -155,10 +135,10 @@ class Member extends CI_Controller
 
 
         $data = array(
-            'title'             => NAMETITLE . ' - Edit Member',
-            'content'           => 'admin/master/member/edit_member',
-            'extra'             => 'admin/master/member/js/_js_index',
-            'member_active'       => 'active',
+            'title'             => NAMETITLE . ' - Edit Employe',
+            'content'           => 'admin/master/employe/edit_employe',
+            'extra'             => 'admin/master/employe/js/_js_index',
+            'employe_active'       => 'active',
             'member'              => $result,
         );
 
@@ -166,19 +146,19 @@ class Member extends CI_Controller
     }
 
 
-    public function editmember_process()
+    public function editemploye_process()
     {
 		$this->form_validation->set_rules('passwd', 'Password', 'trim');
 		$this->form_validation->set_rules('name', 'Name', 'trim|required');
 		$this->form_validation->set_rules('gender', 'Gender', 'trim|required');
-		$this->form_validation->set_rules('membership', 'Membership', 'trim|required');
+		$this->form_validation->set_rules('is_driver', 'Driver', 'trim|required');
 
         $input      = $this->input;
         $urisegment   = $this->security->xss_clean($input->post('urisegment'));
 
         if ($this->form_validation->run() == FALSE) {
 			$this->session->set_flashdata('error_validation', $this->message->error_msg(validation_errors()));
-            redirect('member/edit_member/'.$urisegment);
+            redirect('employe/edit_employe/'.$urisegment);
 			return;
 		}
 
@@ -187,7 +167,7 @@ class Member extends CI_Controller
         $name       = $this->security->xss_clean($input->post('name'));
         $newpasswd  = $this->security->xss_clean($input->post('passwd'));
         $gender     = $this->security->xss_clean($input->post('gender'));
-        $membership = $this->security->xss_clean($input->post('membership'));
+        $is_driver  = $this->security->xss_clean($input->post('is_driver'));
 
         
 
@@ -196,16 +176,18 @@ class Member extends CI_Controller
                 "passwd"        => $oldpass,
                 "nama"          => $name,
                 "gender"        => $gender,
-                "membership"    => $membership,
-                "role"          => 'member'
+                "membership"    => 'bronze',
+                "is_driver"     => $is_driver,
+                "role"          => 'pegawai'
             );
         }else{
             $mdata = array(
                 "passwd"        => sha1($newpasswd),
                 "nama"          => $name,
                 "gender"        => $gender,
-                "membership"    => $membership,
-                "role"          => 'member'
+                "membership"    => 'bronze',
+                "is_driver"     => $is_driver,
+                "role"          => 'pegawai'
             );
         
         }
@@ -216,14 +198,15 @@ class Member extends CI_Controller
 
         if($response->status == 200){
             $this->session->set_flashdata('success', $result->messages);
-			redirect('member');
+			redirect('employe');
 			return;
         }else{
             $this->session->set_flashdata('error', $result->messages->error);
-            redirect('member/edit_member/'.$urisegment);
+            redirect('employe/edit_employe/'.$urisegment);
             return;
         }
     }
+
 
 
     public function delete($id)
@@ -233,15 +216,17 @@ class Member extends CI_Controller
         $url = URLAPI . "/v1/member/deleteMember?id=".$id_member;
 		$response = expatAPI($url);
         $result = $response->result;
- 
+
+        // echo '<pre>'.print_r($response,true).'</pre>';
+        // die;    
 
         if($response->status == 200){
             $this->session->set_flashdata('success', $result->messages);
-			redirect('member');
+			redirect('employe');
 			return;
         }else{
             $this->session->set_flashdata('error', $result->messages->error);
-            redirect('member');
+            redirect('employe');
             return;
         }
     }

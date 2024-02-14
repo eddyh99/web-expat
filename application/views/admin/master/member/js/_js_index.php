@@ -31,9 +31,15 @@
 			{ data: 'membership' },
 			{ 
                 data: null, "mRender": function(data, type, full, meta) {
-                    button='<a href="<?=base_url()?>user/edit_user/'+encodeURI(btoa(full.username))+'" class="btn btn-success mx-1 my-1"><i class="ti ti-pencil-minus fs-4"></i></a>'
-					button = button + '<a href="<?=base_url()?>user/delete/'+encodeURI(btoa(full.username))+'" class="del-data btn btn-danger mx-1 my-1"><i class="ti ti-trash"></i></a>';
-					return button;     
+                    var btnActive ='<a href="<?=base_url()?>member/manual_activation/'+encodeURI(btoa(full.id))+'" class="btn btn-primary  my-1"><i class="ti ti-key fs-4"></i></a>'
+                    var btnEnabled ='<a href="<?=base_url()?>member/edit_user/'+encodeURI(btoa(full.username))+'" class="btn btn-primary  my-1"><i class="ti ti-arrow-back fs-4"></i></a>'
+                    var btnEdit ='<a href="<?=base_url()?>member/edit_member/'+encodeURI(btoa(full.id))+'" class="btn btn-success mx-1 my-1"><i class="ti ti-pencil-minus fs-4"></i></a>'
+					var btnDelete = '<a href="<?=base_url()?>member/delete/'+encodeURI(btoa(full.id))+'" class="del-data btn btn-danger my-1"><i class="ti ti-trash"></i></a>';
+					return `
+                        ${full.status == 'new' ? btnActive : ''} 
+                        ${full.status == 'disabled' ? btnEnabled : ''} 
+                        ${((full.status == 'active') || (full.status == 'new')) ? btnEdit : ''} 
+                        ${((full.status == 'active') || (full.status == 'new')) ? btnDelete : ''}`;     
                 
                         
                 } 

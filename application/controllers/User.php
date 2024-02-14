@@ -36,7 +36,7 @@ class User extends CI_Controller
     public function add_user()
     {
         $data = array(
-            'title'         => NAMETITLE . ' - Adding User',
+            'title'         => NAMETITLE . ' - Add User',
             'content'       => 'admin/master/user/add_user',
             'extra'         => 'admin/master/user/js/_js_index',
             'user_active'    => 'active',
@@ -74,9 +74,6 @@ class User extends CI_Controller
 		$url = URLAPI . "/v1/user/addUser";
 		$response = expatAPI($url, json_encode($mdata));
         $result = $response->result;
-
-        // echo '<pre>'.print_r($result,true).'</pre>';
-        // die;
 
         if($response->status == 200) {
             $this->session->set_flashdata('success', $result->messages);
