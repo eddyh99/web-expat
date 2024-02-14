@@ -162,3 +162,11 @@
 option {
     height: 40px !important;
 }
+
+.nav-link {
+    color: #ffffff !important;
+}
+
+.nav-link:hover {
+    color: var(--expat-bg-primary) !important;
+}
