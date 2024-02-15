@@ -2,7 +2,7 @@
 <div class="container-fluid">
     <div class="row my-4">
         <div class="col-lg-12 d-flex align-items-strech">
-            <a href="<?= base_url()?>member" class="btn btn-outline-expat d-flex align-items-center">
+            <a href="<?= base_url()?>employe" class="btn btn-outline-expat d-flex align-items-center">
                 <i class="ti ti-chevron-left fs-5 me-1"></i>
                 <span>
                     Back
@@ -21,8 +21,8 @@
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     <?php } ?>
-                    <h5 class="card-title fw-semibold mb-4">Edit Member</h5>
-                    <form action="<?= base_url()?>member/editmember_process" method="POST">
+                    <h5 class="card-title fw-semibold mb-4">Edit Employe</h5>
+                    <form action="<?= base_url()?>employe/editemploye_process" method="POST">
                         <input type="hidden" id="token" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                         <input type="hidden" name="urisegment" value="<?php echo $this->uri->segment('3')?>">
                         <input type="hidden" name="oldpass" value="<?= $member->passwd?>">
@@ -43,16 +43,14 @@
                             </select>
                         </div>
                         <div class="mb-3 col-3">
-                            <label for="membership" class="form-label">Membership</label>
-                            <select name="membership" id="membership" class="form-select">
-                                <option value="bronze" <?php echo ($member->membership=="bronze")?"selected":"" ?>>Bronze</option>
-                                <option value="silver" <?php echo ($member->membership=="silver")?"selected":"" ?>>Silver</option>
-                                <option value="gold" <?php echo ($member->membership=="gold")?"selected":"" ?>>Gold</option>
-                                <option value="platinum" <?php echo ($member->membership=="platinum")?"selected":"" ?>>Platinum</option>
+                            <label for="is_driver" class="form-label">Are you driver?</label>
+                            <select name="is_driver" id="is_driver" class="form-select">
+                                <option value="yes" <?php echo ($member->is_driver=="yes")?"selected":"" ?>>Yes</option>
+                                <option value="no" <?php echo ($member->is_driver=="no")?"selected":"" ?>>No</option>
                             </select>
                         </div>
 
-                        <button type="submit" class="btn btn-expat mt-3">Save User</button>
+                        <button type="submit" class="btn btn-expat mt-3">Update Employe</button>
                   </form>
                 </div>
             </div>

@@ -17,10 +17,9 @@ class Member extends CI_Controller
     {
         $data = array(
             'title'             => NAMETITLE . ' - Member',
-            'content'           => 'admin/master/member/index',
-            'extra'             => 'admin/master/member/js/_js_index',
+            'content'           => 'admin/member/index',
+            'extra'             => 'admin/member/js/_js_index',
             'member_active'     => 'active',
-            'dropdown_stmember' => 'text-success',
         );
         $this->load->view('layout/wrapper-dashboard', $data);
 
@@ -90,8 +89,8 @@ class Member extends CI_Controller
     {
         $data = array(
             'title'         => NAMETITLE . ' - Add Member',
-            'content'       => 'admin/master/member/add_member',
-            'extra'         => 'admin/master/member/js/_js_index',
+            'content'       => 'admin/member/add_member',
+            'extra'         => 'admin/member/js/_js_index',
             'member_active' => 'active',
         );
         $this->load->view('layout/wrapper-dashboard', $data);
@@ -156,8 +155,8 @@ class Member extends CI_Controller
 
         $data = array(
             'title'             => NAMETITLE . ' - Edit Member',
-            'content'           => 'admin/master/member/edit_member',
-            'extra'             => 'admin/master/member/js/_js_index',
+            'content'           => 'admin/member/edit_member',
+            'extra'             => 'admin/member/js/_js_index',
             'member_active'       => 'active',
             'member'              => $result,
         );

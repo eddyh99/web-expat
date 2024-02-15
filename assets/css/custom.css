@@ -134,13 +134,43 @@
 }
 
 
+.input-outlet-image {
+    border: 1px solid #e5e5e5;
+  }
+  
 
-/* @media (min-width: 768px) {
-    .form-select.member-status {
-        width: 50%;
-    }
+.input-outlet-image input[type=file]::file-selector-button {
+    background-color: #fff;
+    color: #000;
+    border: 0px;
+    border-right: 1px solid #e5e5e5;
+    padding: 10px 15px;
+    margin-right: 20px;
+    transition: .5s;
+}
 
-} */
+.input-outlet-image input[type=file]::file-selector-button:hover {
+    background-color: #eee;
+    border: 0px;
+    border-right: 1px solid #e5e5e5;
+}
+
+.preview-image-container{
+    padding: 10px ;
+    max-height: 300px;
+    max-width: 100%;
+    width: 400px;
+    background-color:#f6f6f6;
+    border: 2px dashed var(--expat-text-primary);
+    border-radius: 10px;
+    object-fit: contain;
+}
+
+
+.preview-image-container {
+border-radius: 10px;
+}
+
 
 
 

@@ -17,8 +17,8 @@ class Employe extends CI_Controller
     {
         $data = array(
             'title'             => NAMETITLE . ' - Employe',
-            'content'           => 'admin/master/employe/index',
-            'extra'             => 'admin/master/employe/js/_js_index',
+            'content'           => 'admin/employe/index',
+            'extra'             => 'admin/employe/js/_js_index',
             'employe_active'    => 'active',
         );
         $this->load->view('layout/wrapper-dashboard', $data);
@@ -69,8 +69,8 @@ class Employe extends CI_Controller
     {
         $data = array(
             'title'         => NAMETITLE . ' - Add Employe',
-            'content'       => 'admin/master/employe/add_employe',
-            'extra'         => 'admin/master/employe/js/_js_index',
+            'content'       => 'admin/employe/add_employe',
+            'extra'         => 'admin/employe/js/_js_index',
             'employe_active' => 'active',
         );
         $this->load->view('layout/wrapper-dashboard', $data);
@@ -136,8 +136,8 @@ class Employe extends CI_Controller
 
         $data = array(
             'title'             => NAMETITLE . ' - Edit Employe',
-            'content'           => 'admin/master/employe/edit_employe',
-            'extra'             => 'admin/master/employe/js/_js_index',
+            'content'           => 'admin/employe/edit_employe',
+            'extra'             => 'admin/employe/js/_js_index',
             'employe_active'       => 'active',
             'member'              => $result,
         );

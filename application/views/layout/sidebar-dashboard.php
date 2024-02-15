@@ -51,6 +51,22 @@
                         <span class="hide-menu">Employee</span>
                     </a>
                 </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link <?= @$outlet_active?>" href="<?= base_url()?>outlet" aria-expanded="false">
+                        <span>       
+                        <i class="ti ti-building-store"></i>
+                        </span>
+                        <span class="hide-menu">Outlet</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link <?= @$promotion_active?>" href="<?= base_url()?>promotion" aria-expanded="false">
+                        <span>       
+                        <i class="ti ti-discount-2"></i>
+                        </span>
+                        <span class="hide-menu">Promotion</span>
+                    </a>
+                </li>
                 <!-- <li class="sidebar-item">
                     <a class="sidebar-link has-arrow <?= @$member_active?>" href="javascript:void(0)" aria-expanded="false">
                         <span class="d-flex">

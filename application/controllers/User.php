@@ -17,8 +17,8 @@ class User extends CI_Controller
     {
         $data = array(
             'title'         => NAMETITLE . ' - List User',
-            'content'       => 'admin/master/user/index',
-            'extra'         => 'admin/master/user/js/_js_index',
+            'content'       => 'admin/user/index',
+            'extra'         => 'admin/user/js/_js_index',
             'user_active'    => 'active',
         );
         $this->load->view('layout/wrapper-dashboard', $data);
@@ -37,8 +37,8 @@ class User extends CI_Controller
     {
         $data = array(
             'title'         => NAMETITLE . ' - Add User',
-            'content'       => 'admin/master/user/add_user',
-            'extra'         => 'admin/master/user/js/_js_index',
+            'content'       => 'admin/user/add_user',
+            'extra'         => 'admin/user/js/_js_index',
             'user_active'    => 'active',
         );
         $this->load->view('layout/wrapper-dashboard', $data);
@@ -97,8 +97,8 @@ class User extends CI_Controller
 
         $data = array(
             'title'             => NAMETITLE . ' - Edit user',
-            'content'           => 'admin/master/user/edit_user',
-            'extra'             => 'admin/master/user/js/_js_index',
+            'content'           => 'admin/user/edit_user',
+            'extra'             => 'admin/user/js/_js_index',
             'user_active'       => 'active',
             'user'              => $result,
         );
