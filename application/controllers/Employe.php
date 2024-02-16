@@ -21,7 +21,7 @@ class Employe extends CI_Controller
             'extra'             => 'admin/employe/js/_js_index',
             'employe_active'    => 'active',
         );
-        $this->load->view('layout/wrapper-dashboard', $data);
+        $this->load->view('layout/wrapper', $data);
 
     }
 
@@ -73,7 +73,7 @@ class Employe extends CI_Controller
             'extra'         => 'admin/employe/js/_js_index',
             'employe_active' => 'active',
         );
-        $this->load->view('layout/wrapper-dashboard', $data);
+        $this->load->view('layout/wrapper', $data);
     }
 
     public function addemploye_process()
@@ -142,7 +142,7 @@ class Employe extends CI_Controller
             'member'              => $result,
         );
 
-        $this->load->view('layout/wrapper-dashboard', $data);
+        $this->load->view('layout/wrapper', $data);
     }
 
 

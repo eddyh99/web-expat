@@ -21,7 +21,7 @@ class Dashboard extends CI_Controller
             'extra'         => 'admin/dashboard/js/_js_index',
             'dash_active'   => 'active',
         );
-        $this->load->view('layout/wrapper-dashboard', $data);
+        $this->load->view('layout/wrapper', $data);
 
     }
 

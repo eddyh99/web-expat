@@ -21,7 +21,7 @@ class User extends CI_Controller
             'extra'         => 'admin/user/js/_js_index',
             'user_active'    => 'active',
         );
-        $this->load->view('layout/wrapper-dashboard', $data);
+        $this->load->view('layout/wrapper', $data);
 
     }
 
@@ -41,7 +41,7 @@ class User extends CI_Controller
             'extra'         => 'admin/user/js/_js_index',
             'user_active'    => 'active',
         );
-        $this->load->view('layout/wrapper-dashboard', $data);
+        $this->load->view('layout/wrapper', $data);
     }
 
     public function adduser_process()
@@ -103,7 +103,7 @@ class User extends CI_Controller
             'user'              => $result,
         );
 
-        $this->load->view('layout/wrapper-dashboard', $data);
+        $this->load->view('layout/wrapper', $data);
     }
     
     public function edituser_process()
