@@ -19,7 +19,9 @@ class User extends CI_Controller
             'title'         => NAMETITLE . ' - List User',
             'content'       => 'admin/user/index',
             'extra'         => 'admin/user/js/_js_index',
-            'user_active'    => 'active',
+            'master_active' => 'active',
+            'master_in'    => 'in',
+            'dropdown_user'  => 'text-expat-green'
         );
         $this->load->view('layout/wrapper', $data);
 
@@ -39,7 +41,9 @@ class User extends CI_Controller
             'title'         => NAMETITLE . ' - Add User',
             'content'       => 'admin/user/add_user',
             'extra'         => 'admin/user/js/_js_index',
-            'user_active'    => 'active',
+            'master_active' => 'active',
+            'master_in'    => 'in',
+            'dropdown_user' => 'text-expat-green'
         );
         $this->load->view('layout/wrapper', $data);
     }
@@ -99,8 +103,10 @@ class User extends CI_Controller
             'title'             => NAMETITLE . ' - Edit user',
             'content'           => 'admin/user/edit_user',
             'extra'             => 'admin/user/js/_js_index',
-            'user_active'       => 'active',
             'user'              => $result,
+            'master_active'     => 'active',
+            'master_in'         => 'in',
+            'dropdown_user'     => 'text-expat-green'
         );
 
         $this->load->view('layout/wrapper', $data);

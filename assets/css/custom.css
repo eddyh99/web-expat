@@ -42,6 +42,10 @@
     color: #ffffff;
 }
 
+.text-expat-green {
+    color: var(--expat-bg-primary) !important;
+}
+
 
 
 .border-expat {
@@ -75,7 +79,7 @@
 
 
 .sidebar-nav ul .sidebar-item .first-level .sidebar-link .ti{
-    font-size: 7px;
+    font-size: 20px;
 }
 
 .sidebar-nav ul .sidebar-item .first-level .sidebar-item .sidebar-link.active{

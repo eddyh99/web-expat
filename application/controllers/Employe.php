@@ -19,8 +19,11 @@ class Employe extends CI_Controller
             'title'             => NAMETITLE . ' - Employe',
             'content'           => 'admin/employe/index',
             'extra'             => 'admin/employe/js/_js_index',
-            'employe_active'    => 'active',
+            'master_active'     => 'active',
+            'master_in'         => 'in',
+            'dropdown_employe'  => 'text-expat-green'
         );
+
         $this->load->view('layout/wrapper', $data);
 
     }
@@ -71,7 +74,9 @@ class Employe extends CI_Controller
             'title'         => NAMETITLE . ' - Add Employe',
             'content'       => 'admin/employe/add_employe',
             'extra'         => 'admin/employe/js/_js_index',
-            'employe_active' => 'active',
+            'master_active'     => 'active',
+            'master_in'         => 'in',
+            'dropdown_employe'  => 'text-expat-green'
         );
         $this->load->view('layout/wrapper', $data);
     }
@@ -138,8 +143,10 @@ class Employe extends CI_Controller
             'title'             => NAMETITLE . ' - Edit Employe',
             'content'           => 'admin/employe/edit_employe',
             'extra'             => 'admin/employe/js/_js_index',
-            'employe_active'       => 'active',
-            'member'              => $result,
+            'member'            => $result,
+            'master_active'     => 'active',
+            'master_in'         => 'in',
+            'dropdown_employe'  => 'text-expat-green'
         );
 
         $this->load->view('layout/wrapper', $data);

@@ -17,7 +17,7 @@
             <div class="card border-expat w-100">
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
-                        <h5 class="card-title fw-semibold mb-4">List Member</h5>
+                        <h5 class="card-title fw-semibold mb-4">List Promotion</h5>
                         <div class="w-30">
                             <label for="role" class="form-label">Promotion Type</label>
                             <select name="promotion_type" id="promotion_type" class="form-select member-status mb-3">

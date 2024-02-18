@@ -55,7 +55,7 @@
                                             <p class="text-findme text-start">*png, jpg</p>
                                         </span>
                                         <div class="d-flex flex-row flex-sm-column">
-                                            <span class="d-block">Old Image</span>
+                                            <span class="d-block">previous image</span>
                                             <img  class="preview-image-container d-block" src="<?= @$outlet->picture?>"/>
                                         </div>
                                     </div>

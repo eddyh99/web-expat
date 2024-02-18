@@ -26,14 +26,46 @@
 			},
 			{ data: 'deskripsi' },
 			{ data: 'tipe' },
-			{ data: 'tanggal' },
-			{ data: 'end_date' },
 			{ 
                 data: null, "mRender": function(data, type, full, meta) {
-                    var btnEdit ='<a href="<?=base_url()?>member/edit_member/'+encodeURI(btoa(full.id))+'" class="btn btn-success mx-1 my-1"><i class="ti ti-pencil-minus fs-4"></i></a>'
-					var btnDelete = '<a href="<?=base_url()?>member/delete/'+encodeURI(btoa(full.id))+'" class="del-data btn btn-danger my-1"><i class="ti ti-trash"></i></a>';
-					return `
-                        ${btnEdit} ${btnDelete}`;     
+                    return full.tanggal.split("-").reverse().join("-");
+                } 
+            },
+			{ 
+                data: null, "mRender": function(data, type, full, meta) {
+                    return full.end_date.split("-").reverse().join("-");
+                } 
+             },
+			{ 
+                data: null, "mRender": function(data, type, full, meta) {
+                    var btnImage = `
+					<div class="dropdown my-1">
+						<button class="btn btn-secondary" type="button" data-bs-toggle="modal" data-bs-target="#addinfo${full.id}">
+							<i class="ti ti-info-circle"></i>
+						</button> 
+						<div class="modal fade" id="addinfo${full.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+								<div class="modal-header">
+									<h1 class="modal-title fs-5" id="exampleModalLabel">Preview Image</h1>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									<div class="d-flex justify-content-center">
+										<img class="img-fluid" src="${full.picture}" alt="${full.nama}"/>
+									</div>
+									
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+								</div>
+								</div>
+							</div>
+						</div>
+					</div>`;
+                    var btnEdit ='<a href="<?=base_url()?>promotion/edit_promotion/'+encodeURI(btoa(full.id))+'" class="btn btn-success mx-1 my-1"><i class="ti ti-pencil-minus fs-4"></i></a>'
+					var btnDelete = '<a href="<?=base_url()?>promotion/delete/'+encodeURI(btoa(full.id))+'" class="del-data btn btn-danger my-1"><i class="ti ti-trash"></i></a>';
+					return `<div class="d-flex">${btnImage} ${btnEdit} ${btnDelete} </div>`;     
                 
                         
                 } 
@@ -61,20 +93,20 @@
 
         
         $( "#start_date" ).datepicker({
-            dateFormat: 'dd-mm-yy',
+            dateFormat: 'yy-mm-dd',
             changeYear: true,
             changeMonth: true,
             minDate: 0,
             yearRange: "-100:+20",
-        }).val('');
+        });
 
         $( "#end_date" ).datepicker({
-            dateFormat: 'dd-mm-yy',
+            dateFormat: 'yy-mm-dd',
             changeYear: true,
             changeMonth: true,
             minDate: 0,
             yearRange: "-100:+20",
-        }).val('');
+        });
     });
 
 

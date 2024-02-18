@@ -22,23 +22,24 @@
                         </div>
                     <?php } ?>
                     <h5 class="card-title fw-semibold mb-4">Add Promotion</h5>
-                    <form action="<?= base_url()?>promotion/addpromotion_process" method="POST">
+                    <form action="<?= base_url()?>promotion/editpromotion_process" method="POST">
                         <input type="hidden" id="token" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
+                        <input type="hidden" name="urisegment" value="<?php echo $this->uri->segment('3')?>">
                         <div class="mb-3">
-                            <label for="desc" class="form-label">Description</label>
-                            <input type="text" class="form-control" id="desc" name="desc" placeholder="Enter description..." required autocomplete="off">
+                            <label for="description" class="form-label">Description</label>
+                            <input type="text" class="form-control" id="description" name="description" value="<?= @$promotion->deskripsi?>" placeholder="Enter description..." required autocomplete="off">
                         </div>
                         <div class="mb-3 col-3">
                             <label for="promotion_type" class="form-label">Promotion Type</label>
                             <select name="promotion_type" id="promotion_type" class="form-select">
-                                <option value="instore">Store</option>
-                                <option value="online">Online</option>
+                                <option value="instore" <?php echo ($promotion->tipe=="instore")?"selected":"" ?>>Store</option>
+                                <option value="online" <?php echo ($promotion->tipe=="online")?"selected":"" ?>>Online</option>
                             </select>
                         </div>
                         <div class="mb-3 col-3">
                             <label for="start_date" class="form-label">Start Date</label>
                             <div class="form-control d-flex">
-                                <input type="text" class="w-100 border-0 cursor-pointer" name="start_date" id="start_date" autocomplete="off">
+                                <input type="text" class="w-100 border-0 cursor-pointer" value="<?= date("d-m-Y", strtotime($promotion->tanggal));?>" name="start_date" id="start_date" autocomplete="off">
                                 <label for="start_date" class="cursor-pointer">
                                     <i class="ti ti-calendar-event fs-6"></i>
                                 </label>
@@ -47,7 +48,7 @@
                         <div class="mb-3 col-3">
                             <label for="end_date" class="form-label">End Date</label>
                             <div class="form-control d-flex">
-                                <input type="text" class="w-100 border-0 cursor-pointer" name="end_date" id="end_date" autocomplete="off">
+                                <input type="text" class="w-100 border-0 cursor-pointer" value="<?= date("d-m-Y", strtotime($promotion->end_date));?>" name="end_date" id="end_date" autocomplete="off">
                                 <label for="end_date" class="cursor-pointer">
                                     <i class="ti ti-calendar-event fs-6"></i>
                                 </label>
@@ -57,17 +58,18 @@
                             <label for="images-logo" class="form-label">Image</label>   
                             <div class="d-flex flex-column">
                                 <div class="col-12 col-sm-8 col-lg-6 input-outlet-image">
-                                    <input name="imgoutlet" type="file" id="images-logo" accept="image/jpg, image/jpeg, image/png" style="cursor: pointer;" required>
+                                    <input name="imgpromotion" type="file" id="images-logo" accept="image/jpg, image/jpeg, image/png" style="cursor: pointer;" >
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-12 d-flex flex-column flex-sm-row">
+                                        
                                         <img id="image-container" class="preview-image-container" />
                                         <span class="p-4 fw-bolder">
                                             <p class="text-findme text-start">*Maximum 2MB</p>
                                             <p class="text-findme text-start">*png, jpg</p>
                                         </span>
                                         <div class="d-flex flex-row flex-sm-column">
-                                            <span class="d-block">Old Image</span>
+                                            <span class="d-block">previous image</span>
                                             <img  class="preview-image-container d-block" src="<?= @$promotion->picture?>"/>
                                         </div>
                                     </div>

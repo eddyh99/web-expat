@@ -19,8 +19,11 @@ class Member extends CI_Controller
             'title'             => NAMETITLE . ' - Member',
             'content'           => 'admin/member/index',
             'extra'             => 'admin/member/js/_js_index',
-            'member_active'     => 'active',
+            'master_active'     => 'active',
+            'master_in'         => 'in',
+            'dropdown_member'  => 'text-expat-green'
         );
+
         $this->load->view('layout/wrapper', $data);
 
     }
@@ -88,10 +91,12 @@ class Member extends CI_Controller
     public function add_member()
     {
         $data = array(
-            'title'         => NAMETITLE . ' - Add Member',
-            'content'       => 'admin/member/add_member',
-            'extra'         => 'admin/member/js/_js_index',
-            'member_active' => 'active',
+            'title'             => NAMETITLE . ' - Add Member',
+            'content'           => 'admin/member/add_member',
+            'extra'             => 'admin/member/js/_js_index',
+            'master_active'     => 'active',
+            'master_in'         => 'in',
+            'dropdown_member'   => 'text-expat-green'
         );
         $this->load->view('layout/wrapper', $data);
     }
@@ -152,13 +157,14 @@ class Member extends CI_Controller
         $url = URLAPI . "/v1/member/get_byid?id=".$id_member;
 		$result = expatAPI($url)->result->messages;
 
-
         $data = array(
             'title'             => NAMETITLE . ' - Edit Member',
             'content'           => 'admin/member/edit_member',
             'extra'             => 'admin/member/js/_js_index',
-            'member_active'       => 'active',
-            'member'              => $result,
+            'member'            => $result,
+            'master_active'     => 'active',
+            'master_in'         => 'in',
+            'dropdown_member'   => 'text-expat-green'
         );
 
         $this->load->view('layout/wrapper', $data);

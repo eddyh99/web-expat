@@ -19,7 +19,9 @@ class Promotion extends CI_Controller
             'title'             => NAMETITLE . ' - Promotion',
             'content'           => 'admin/promotion/index',
             'extra'             => 'admin/promotion/js/_js_index',
-            'promotion_active'     => 'active',
+            'master_active'     => 'active',
+            'master_in'         => 'in',
+            'dropdown_promotion' => 'text-expat-green'
         );
         $this->load->view('layout/wrapper', $data);
 
@@ -47,26 +49,180 @@ class Promotion extends CI_Controller
             'title'         => NAMETITLE . ' - Add Promotion',
             'content'       => 'admin/promotion/add_promotion',
             'extra'         => 'admin/promotion/js/_js_index',
-            'promotion_active' => 'active',
+            'master_active'     => 'active',
+            'master_in'         => 'in',
+            'dropdown_promotion' => 'text-expat-green'
         );
         $this->load->view('layout/wrapper', $data);
     }
+
+    public function addpromotion_process()
+    {
+		$this->form_validation->set_rules('description', 'Description', 'trim|required');
+		$this->form_validation->set_rules('promotion_type', 'Promotion Type', 'trim|required');
+		$this->form_validation->set_rules('start_date', 'Start Date', 'trim|required');
+		$this->form_validation->set_rules('end_date', 'End Date', 'trim|required');
+
+        if ($this->form_validation->run() == FALSE) {
+			$this->session->set_flashdata('error_validation', $this->message->error_msg(validation_errors()));
+			redirect("promotion/add_promotion");
+			return;
+		}
+
+        $input              = $this->input;
+        $description        = $this->security->xss_clean($this->input->post("description"));
+        $promotion_type     = $this->security->xss_clean($this->input->post("promotion_type"));
+        $start_date         = $this->security->xss_clean($this->input->post("start_date"));
+        $end_date           = $this->security->xss_clean($this->input->post("end_date"));
+
+        $image      = $this->security->xss_clean(@$_FILES['imgpromotion']);
+        if(!empty($image)){
+            $blob       = curl_file_create($image['tmp_name'],$image['type']);
+            $mdata = array(
+                "deskripsi"   => $description,
+                "tipe"        => $promotion_type,
+                "start_date"  => $start_date,
+                "end_date"    => $end_date,
+                "image"       => $blob,
+            );
+        }else{
+
+            $mdata = array(
+                "deskripsi"   => $description,
+                "tipe"        => $promotion_type,
+                "start_date"  => $start_date,
+                "end_date"    => $end_date,
+            );
+
+        }
+
+        // echo '<pre>'.print_r($mdata,true).'</pre>';
+        
+        $url = URLAPI . "/v1/promotion/addPromo";
+		$response = expatAPI($url, json_encode($mdata));
+        $result = $response->result;
+        
+        // echo '<pre>'.print_r($response,true).'</pre>';
+        // die;
+
+        if($response->status == 200) {
+            $this->session->set_flashdata('success', $result->messages);
+			redirect('promotion');
+			return;
+        }else{
+            $this->session->set_flashdata('error', $result->messages->error);
+			redirect('promotion/add_promotion');
+			return;
+        }
+    }
+
+
     public function edit_promotion($id)
     {
         $id_promotion	= base64_decode($this->security->xss_clean($id));
 
         $url = URLAPI . "/v1/promotion/getpromo_byid?id=".$id_promotion;
-		$result = expatAPI($url)->result->messages;
-
+		$result = expatAPI($url)->result->messages[0];
 
         $data = array(
             'title'             => NAMETITLE . ' - Edit Member',
             'content'           => 'admin/promotion/edit_promotion',
             'extra'             => 'admin/promotion/js/_js_index',
-            'promotion_active'       => 'active',
-            'promotion'              => $result,
+            'promotion'         => $result,
+            'master_active'     => 'active',
+            'master_in'         => 'in',
+            'dropdown_promotion'=> 'text-expat-green'
         );
 
         $this->load->view('layout/wrapper', $data);
     }
+
+    public function editpromotion_process()
+    {
+		$this->form_validation->set_rules('description', 'Description', 'trim|required');
+		$this->form_validation->set_rules('promotion_type', 'Promotion Type', 'trim|required');
+		$this->form_validation->set_rules('start_date', 'Start Date', 'trim|required');
+		$this->form_validation->set_rules('end_date', 'End Date', 'trim|required');
+
+        $input      = $this->input;
+        $urisegment   = $this->security->xss_clean($input->post('urisegment'));
+
+        if ($this->form_validation->run() == FALSE) {
+			$this->session->set_flashdata('error_validation', $this->message->error_msg(validation_errors()));
+            redirect('promotion/edit_promotion/'.$urisegment);
+			return;
+		}
+
+        $id                 = base64_decode($urisegment);
+        $description        = $this->security->xss_clean($this->input->post("description"));
+        $promotion_type     = $this->security->xss_clean($this->input->post("promotion_type"));
+        
+        $start_date         = $this->security->xss_clean($this->input->post("start_date"));
+        $new_start_date    = date("Y-m-d", strtotime($start_date)); 
+        
+        $end_date           = $this->security->xss_clean($this->input->post("end_date"));
+        $new_end_date       = date("Y-m-d", strtotime($end_date)); 
+
+
+        $image      = $this->security->xss_clean(@$_FILES['imgpromotion']);
+        if(!empty($image)){
+            $blob       = curl_file_create($image['tmp_name'],$image['type']);
+            $mdata = array(
+                "deskripsi"   => $description,
+                "tipe"        => $promotion_type,
+                "start_date"  => $new_start_date,
+                "end_date"    => $new_end_date,
+                "image"       => $blob,
+            );
+        }else{
+
+            $mdata = array(
+                "deskripsi"   => $description,
+                "tipe"        => $promotion_type,
+                "start_date"  => $new_start_date,
+                "end_date"    => $new_end_date,
+            );
+
+        }
+        
+        // echo '<pre>'.print_r($mdata,true).'</pre>';
+        // die;
+        
+        $url = URLAPI . "/v1/promotion/updatePromo?id=".$id;
+		$response = expatAPI($url, json_encode($mdata));
+        $result = $response->result;
+        
+        
+        if($response->status == 200){
+            $this->session->set_flashdata('success', $result->messages);
+			redirect('promotion');
+			return;
+        }else{
+            $this->session->set_flashdata('error', $result->messages->error);
+            redirect('promotion/edit_promotion/'.$urisegment);
+            return;
+        }
+    }
+
+
+    public function delete($id)
+    {
+        $id_member = base64_decode($this->security->xss_clean($id));
+
+        $url = URLAPI . "/v1/promotion/deletePromo?id=".$id_member;
+		$response = expatAPI($url);
+        $result = $response->result;
+ 
+
+        if($response->status == 200){
+            $this->session->set_flashdata('success', $result->messages);
+			redirect('promotion');
+			return;
+        }else{
+            $this->session->set_flashdata('error', $result->messages->error);
+            redirect('promotion');
+            return;
+        }
+    }
+
 }

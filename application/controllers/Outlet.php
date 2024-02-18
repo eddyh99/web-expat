@@ -19,7 +19,9 @@ class Outlet extends CI_Controller
             'title'             => NAMETITLE . ' - Outlet',
             'content'           => 'admin/outlet/index',
             'extra'             => 'admin/outlet/js/_js_index',
-            'outlet_active'     => 'active',
+            'master_active'     => 'active',
+            'master_in'         => 'in',
+            'dropdown_outlet'   => 'text-expat-green'
         );
         $this->load->view('layout/wrapper', $data);
 
@@ -40,7 +42,9 @@ class Outlet extends CI_Controller
             'title'         => NAMETITLE . ' - Add Outlet',
             'content'       => 'admin/outlet/add_outlet',
             'extra'         => 'admin/outlet/js/_js_index',
-            'outlet_active' => 'active',
+            'master_active'     => 'active',
+            'master_in'         => 'in',
+            'dropdown_outlet'   => 'text-expat-green'
         );
         $this->load->view('layout/wrapper', $data);
     }
@@ -65,14 +69,25 @@ class Outlet extends CI_Controller
         $contact    = $this->security->xss_clean($this->input->post("contact"));
 
         $image      = $this->security->xss_clean($_FILES['imgoutlet']);
-        $blob       = curl_file_create($image['tmp_name'],$image['type']);
-        $mdata = array(
-            "nama"          => $name,
-            "alamat"        => $address,
-            "opening"       => $opening,
-            "kontak"        => $contact,
-            "image"         => $blob,
-        );
+        if(!empty($image)){
+            $blob       = curl_file_create($image['tmp_name'],$image['type']);
+            $mdata = array(
+                "nama"        => $name,
+                "alamat"      => $address,
+                "opening"     => $opening,
+                "kontak"      => $contact,
+                "image"       => $blob
+            );
+        }else{
+
+            $mdata = array(
+                "nama"        => $name,
+                "alamat"      => $address,
+                "opening"     => $opening,
+                "kontak"      => $contact,
+            );
+
+        }
 
         $url = URLAPI . "/v1/outlet/addCabang";
 		$response = expatAPI($url, json_encode($mdata));
@@ -101,8 +116,10 @@ class Outlet extends CI_Controller
             'title'             => NAMETITLE . ' - Edit Outlet',
             'content'           => 'admin/outlet/edit_outlet',
             'extra'             => 'admin/outlet/js/_js_index',
-            'outlet_active'       => 'active',
             'outlet'              => $result,
+            'master_active'     => 'active',
+            'master_in'         => 'in',
+            'dropdown_outlet'   => 'text-expat-green'
         );
 
         $this->load->view('layout/wrapper', $data);
@@ -132,9 +149,8 @@ class Outlet extends CI_Controller
 
         
         $image      = $this->security->xss_clean(@$_FILES['imgoutlet']);
-        $blob       = curl_file_create($image['tmp_name'],$image['type']);
-;
-        if ($image['error'] == 0){
+        if(!empty($image)){
+            $blob       = curl_file_create($image['tmp_name'],$image['type']);
             $mdata = array(
                 "nama"        => $name,
                 "alamat"      => $address,
@@ -143,14 +159,16 @@ class Outlet extends CI_Controller
                 "image"       => $blob
             );
         }else{
+
             $mdata = array(
                 "nama"        => $name,
                 "alamat"      => $address,
                 "opening"     => $opening,
                 "kontak"      => $contact,
             );
-        
+
         }
+
 
         $url = URLAPI . "/v1/outlet/updateCabang?id=".$id;
 		$response = expatAPI($url, json_encode($mdata));

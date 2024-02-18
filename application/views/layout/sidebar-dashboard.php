@@ -27,64 +27,65 @@
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                     <span class="hide-menu">MASTER</span>
                 </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link <?= @$user_active?>" href="<?= base_url()?>user" aria-expanded="false">
+                <!-- <a class="sidebar-link <?= @$user_active?>" href="<?= base_url()?>user" aria-expanded="false">
                         <span>
                             <i class="ti ti-address-book"></i>
                         </span>
                         <span class="hide-menu">Setup User</span>
-                    </a>
-                </li>
+                    </a> -->
                 <li class="sidebar-item">
-                    <a class="sidebar-link <?= @$member_active?>" href="<?= base_url()?>member" aria-expanded="false">
-                        <span>   
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-users-group" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M8 21v-1a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v1" /><path d="M15 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M17 10h2a2 2 0 0 1 2 2v1" /><path d="M5 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M3 13v-1a2 2 0 0 1 2 -2h2" /></svg>
-                        </span>
-                        <span class="hide-menu">Member</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link <?= @$employe_active?>" href="<?= base_url()?>employe" aria-expanded="false">
-                        <span>       
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4" /><path d="M15 19l2 2l4 -4" /></svg>
-                        </span>
-                        <span class="hide-menu">Employee</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link <?= @$outlet_active?>" href="<?= base_url()?>outlet" aria-expanded="false">
-                        <span>       
-                        <i class="ti ti-building-store"></i>
-                        </span>
-                        <span class="hide-menu">Outlet</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link <?= @$promotion_active?>" href="<?= base_url()?>promotion" aria-expanded="false">
-                        <span>       
-                        <i class="ti ti-discount-2"></i>
-                        </span>
-                        <span class="hide-menu">Promotion</span>
-                    </a>
-                </li>
-                <!-- <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow <?= @$member_active?>" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow <?= @$master_active?>" href="javascript:void(0)" aria-expanded="false">
                         <span class="d-flex">
-                            <i class="ti ti-file-analytics"></i>
+                            <i class="ti ti-settings"></i>
                         </span>
-                        <span class="hide-menu">Member</span>
+                        <span class="hide-menu">Setup Master</span>
                     </a>
-                    <ul aria-expanded="false" class="collapse first-level">
-                        <li class="sidebar-item active">
-                            <a href="<?= base_url()?>member" class="sidebar-link <?= @$dropdown_stmember?>">
-                                <div class="round-16 d-flex align-items-center justify-content-center">
-                                    <i class="ti ti-circle"></i>
+
+                    <ul aria-expanded="false" class="collapse first-level <?= @$master_in?>">
+                        <li class="sidebar-item">
+                            <a href="<?= base_url()?>user" class="sidebar-link <?= @$dropdown_user?>">
+                                <div class="round-16 ms-3 d-flex align-items-center justify-content-center">
+                                    <i class="ti ti-address-book"></i>
                                 </div>
-                                <span class="hide-menu">Setup Member</span>
+                                <span class="hide-menu">User</span>
+                            </a>
+                        
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="<?= base_url()?>member" class="sidebar-link <?= @$dropdown_member?>">
+                                <div class="round-16 ms-3 d-flex align-items-center justify-content-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-users-group" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M8 21v-1a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v1" /><path d="M15 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M17 10h2a2 2 0 0 1 2 2v1" /><path d="M5 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M3 13v-1a2 2 0 0 1 2 -2h2" /></svg>
+                                </div>
+                                <span class="hide-menu">Member</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="<?= base_url()?>employe" class="sidebar-link <?= @$dropdown_employe?>">
+                                <div class="round-16 ms-3 d-flex align-items-center justify-content-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4" /><path d="M15 19l2 2l4 -4" /></svg>
+                                </div>
+                                <span class="hide-menu">Employe</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="<?= base_url()?>outlet" class="sidebar-link <?= @$dropdown_outlet?>">
+                                <div class="round-16 ms-3 d-flex align-items-center justify-content-center">
+                                    <i class="ti ti-building-store"></i>
+                                </div>
+                                <span class="hide-menu">Outlet</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="<?= base_url()?>promotion" class="sidebar-link <?= @$dropdown_promotion?>">
+                                <div class="round-16 ms-3 d-flex align-items-center justify-content-center">
+                                <i class="ti ti-discount-2"></i>
+                                </div>
+                                <span class="hide-menu">Promotion</span>
                             </a>
                         </li>
                     </ul>
-                </li> -->
+                </li>
+
                 <li class="sidebar-item mb-5 pb-5">
                     <a class="sidebar-link" href="<?= base_url()?>auth/logout" aria-expanded="false">
                         <span>
