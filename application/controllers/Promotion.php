@@ -21,7 +21,7 @@ class Promotion extends CI_Controller
             'extra'             => 'admin/promotion/js/_js_index',
             'promotion_active'     => 'active',
         );
-        $this->load->view('layout/wrapper-dashboard', $data);
+        $this->load->view('layout/wrapper', $data);
 
     }
 
@@ -49,7 +49,7 @@ class Promotion extends CI_Controller
             'extra'         => 'admin/promotion/js/_js_index',
             'promotion_active' => 'active',
         );
-        $this->load->view('layout/wrapper-dashboard', $data);
+        $this->load->view('layout/wrapper', $data);
     }
     public function edit_promotion($id)
     {
@@ -67,6 +67,6 @@ class Promotion extends CI_Controller
             'promotion'              => $result,
         );
 
-        $this->load->view('layout/wrapper-dashboard', $data);
+        $this->load->view('layout/wrapper', $data);
     }
 }

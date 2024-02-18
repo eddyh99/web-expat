@@ -1,0 +1,171 @@
+:root{
+    --expat-text-primary: #72A28A;
+    --expat-bg-primary: #72A28A;
+    --expat-bg-primary-dark: #477960;
+    --expat-bg-botbar: #191919;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+
+
+body {
+    font-family: "Inter", sans-serif;
+}
+
+.btn-expat {
+    color: #ffffff;
+    background-color: var(--expat-bg-primary);
+    border-radius: 9999999px !important;
+    -webkit-border-radius: 9999999px !important;
+    -moz-border-radius: 9999999px !important;
+    -ms-border-radius: 9999999px !important;
+    -o-border-radius: 9999999px !important;
+}
+
+.btn-expat:hover {
+    border: 1px solid #ffffff;
+    color: #ffffff;
+    background-color: var(--expat-bg-primary-dark);
+    border-radius: 9999999px !important;
+    -webkit-border-radius: 9999999px !important;
+    -moz-border-radius: 9999999px !important;
+    -ms-border-radius: 9999999px !important;
+    -o-border-radius: 9999999px !important;
+}
+
+
+/* Bot Bar */
+.app-botbar .app-member {
+    margin: auto;
+    padding: .5rem 1rem;
+    background: var(--expat-bg-botbar);
+    box-shadow: inset 0px 1px 0px #323436;
+    border-radius: 40px 40px 0px 0px;
+    -webkit-border-radius: 40px 40px 0px 0px;
+    -moz-border-radius: 40px 40px 0px 0px;
+    -ms-border-radius: 40px 40px 0px 0px;
+    -o-border-radius: 40px 40px 0px 0px;
+}
+
+.app-botbar .app-member .icon-svg {
+    height: 30px;
+    width: 45px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.app-botbar .app-member .icon-svg svg {
+    height: 24px !important;
+    width: 24px !important;
+}
+
+.app-botbar .app-member .icon-svg.fill svg {
+    fill:  #fff;
+}
+
+.app-botbar .app-member .icon-svg.stroke svg {
+    stroke: #fff;
+}
+
+
+.app-botbar .app-member .text-botbar {
+    font-size: 14px;
+    position: relative;
+    z-index: 999;
+}
+
+.app-botbar .app-member .icon-svg.fill.scan svg {
+    height: 40px !important;
+    width: 40px !important;
+}
+
+.app-botbar .app-member .icon-svg.fill.scan {
+    /* background-color: var(--expat-bg-botbar); */
+    position: relative;
+    top: -20px;
+    padding-top: 20px;
+}
+
+.app-botbar .app-member .icon-svg.fill.scan::before{
+    content: "";
+    top: -10px;
+    z-index: -1;
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    background-color: var(--expat-bg-botbar);
+    border-radius: 99999px;
+    -webkit-border-radius: 99999px;
+    -moz-border-radius: 99999px;
+    -ms-border-radius: 99999px;
+    -o-border-radius: 99999px;
+}
+
+.circle-scan {
+    background-color: var(--expat-bg-botbar);
+    position: relative;
+    width: 75px;
+    z-index: 9999999;
+    top: -5px;
+}
+
+.app-content .app-member .label-amount {
+    width: 100%;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 15px;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+}
+
+.app-content .app-member .label-amount span {
+    font-size: 12px;
+}
+
+.card-input-amount-select {
+    display: none;
+}
+
+
+.card-input-amount-select:checked + .span-amount{
+    color: var(--expat-bg-primary);
+    font-weight: 700;
+}
+
+
+.app-content .app-member .input-amount-topup-specifict {
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #fff;
+    color: #fff;
+}
+
+.app-content .app-member .input-amount-topup-specifict:focus {
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #fff;
+    box-shadow: none;
+    color: #fff;
+    outline: none;
+}
+
+.app-content .app-member .label-method-payment span{
+    font-size: 12px;
+
+}
+
+.app-content .app-member .label-method-payment img{
+    height: 30px;
+    width: auto;
+
+}

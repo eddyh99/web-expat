@@ -12,6 +12,10 @@ class Auth extends CI_Controller
 	public function index()
 	{	
 
+		// $segment = $this->uri->segment('1');
+		// echo '<pre>'.print_r(gettype($segment),true).'</pre>';
+		// die;
+
 		$data = array(
 			'title'     => NAMETITLE . ' - Login',
 			'content'   => 'auth/login/index',

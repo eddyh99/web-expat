@@ -21,7 +21,7 @@ class Outlet extends CI_Controller
             'extra'             => 'admin/outlet/js/_js_index',
             'outlet_active'     => 'active',
         );
-        $this->load->view('layout/wrapper-dashboard', $data);
+        $this->load->view('layout/wrapper', $data);
 
     }
 
@@ -42,7 +42,7 @@ class Outlet extends CI_Controller
             'extra'         => 'admin/outlet/js/_js_index',
             'outlet_active' => 'active',
         );
-        $this->load->view('layout/wrapper-dashboard', $data);
+        $this->load->view('layout/wrapper', $data);
     }
 
     public function addoutlet_process()
@@ -105,7 +105,7 @@ class Outlet extends CI_Controller
             'outlet'              => $result,
         );
 
-        $this->load->view('layout/wrapper-dashboard', $data);
+        $this->load->view('layout/wrapper', $data);
     }
 
     public function editoutlet_process()
