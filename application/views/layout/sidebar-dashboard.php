@@ -27,12 +27,6 @@
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                     <span class="hide-menu">MASTER</span>
                 </li>
-                <!-- <a class="sidebar-link <?= @$user_active?>" href="<?= base_url()?>user" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-address-book"></i>
-                        </span>
-                        <span class="hide-menu">Setup User</span>
-                    </a> -->
                 <li class="sidebar-item">
                     <a class="sidebar-link has-arrow <?= @$master_active?>" href="javascript:void(0)" aria-expanded="false">
                         <span class="d-flex">
@@ -85,7 +79,21 @@
                         </li>
                     </ul>
                 </li>
+                <li class="nav-small-cap">
+                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                    <span class="hide-menu">Transaction</span>
+                </li>
 
+                <li class="sidebar-item">
+                    <a class="sidebar-link  <?= @$historytopup_active?>" href="<?= base_url()?>topup/history" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-history"></i>
+                        </span>
+                        <span class="hide-menu">
+                            Topup History
+                        </span>
+                    </a>
+                </li>
                 <li class="sidebar-item mb-5 pb-5">
                     <a class="sidebar-link" href="<?= base_url()?>auth/logout" aria-expanded="false">
                         <span>
