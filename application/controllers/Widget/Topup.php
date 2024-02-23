@@ -13,12 +13,11 @@ class Topup extends CI_Controller
 	{	
 		//LISTIE "69712d282337451ae8650f8e575319c26ed59669";
 		//YANYIIK "8bb791cab9ffc8518f808425cbbec28d9947206e";
-		// $url 		= URLAPI . "/v1/member/get_bytoken?token=".$token;
-		$url 		= URLAPI . "/v1/member/get_bytoken?token=8bb791cab9ffc8518f808425cbbec28d9947206e";
+		// $url 		= URLAPI . "/v1/member/get_bytoken?token=8bb791cab9ffc8518f808425cbbec28d9947206e";
+		$url 		= URLAPI . "/v1/member/get_bytoken?token=".$token;
 		$response 	= expatAPI($url);
 
-		// echo '<pre>'.print_r($this->security->get_csrf_hash(),true).'</pre>';
-		// die;
+
 		if($response->status == 200) {		
 			$mdata = array(
 				'title'     => NAMETITLE . ' - Topup',
