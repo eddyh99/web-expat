@@ -70,10 +70,10 @@
                 </div>
             </div>
             
-            <br><br>
-            <!-- <input type="text" name="amount" placeholder="Enter specific value" class="input-amount-topup-specifict money-input"> -->
+            <!-- <br><br>
+            <input type="text" name="amount" placeholder="Enter specific value" class="input-amount-topup-specifict money-input"> -->
             
-            <br><br><br><br>
+            <br><br>
             <h6 class="text-white">PAYMENT METHOD (by doku)</h6>
             <label for="selectcredit" class="label-method-payment my-3">
                 <div class="d-flex align-items-center">
