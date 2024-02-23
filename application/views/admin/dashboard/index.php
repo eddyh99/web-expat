@@ -3,7 +3,7 @@
     <div class="row">
    
         <div class="col-sm-6 col-xl-4">
-            <div class="card bg-success-subtle shadow-none">
+            <div class="card bg-white-subtle shadow-lg">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center">
                         <div class="dash-preview rounded text-bg-success d-flex align-items-center justify-content-center">
@@ -21,7 +21,7 @@
         </div>
 
         <div class="col-sm-6 col-xl-4">
-            <div class="card bg-primary-subtle shadow-none">
+            <div class="card bg-white-subtle shadow-lg">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center">
                         <div class="dash-preview rounded text-bg-primary d-flex align-items-center justify-content-center">
@@ -39,7 +39,7 @@
         </div>
         
         <div class="col-sm-6 col-xl-4">
-            <div class="card bg-danger-subtle shadow-none">
+            <div class="card bg-white-subtle shadow-lg">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center">
                         <div class="dash-preview rounded text-bg-danger d-flex align-items-center justify-content-center">

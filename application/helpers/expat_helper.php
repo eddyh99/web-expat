@@ -22,3 +22,16 @@ function expatAPI($url, $postData = NULL)
     curl_close($ch);
     return $result;
 }
+
+
+function getToken()
+{
+    $email = 'yanari0797@gmail.com';
+    $pass = '1d5565033f4e2627a4f01374f17666d6096e643d';
+
+    $token = sha1($email.$pass);
+
+    return $token;
+
+
+}

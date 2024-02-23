@@ -18,26 +18,33 @@
 
 <div class="app-content px-2 row pt-3 mb-5 pb-5">
     <div class="app-member mx-auto col-12 col-lg-8">
-        <form action="<?=base_url()?>widget/topup/confirm" method="POST">
+        <?php if (@isset($_SESSION["error"])) { ?>
+            <div class="col-12 alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="notif-login f-poppins"><?= $_SESSION["error"] ?></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php } ?>
+        <form action="<?=base_url()?>widget/topup/summary/<?=$token?>" method="POST">
+            <input type="hidden" id="token" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
 			<input type="hidden" name="token" value="<?=$token?>">
 			<input type="hidden" name="email" value="<?=$email?>">
             <h6 class="text-white">SELECT TOP-UP VALUE</h6>
             <div class="d-flex gap-1">
                 <div class="col-4">
                     <label for="rp50" class="label-amount">
-                        <input type="radio" id="rp50" value="50" name="amount" class="card-input-amount-select">
+                        <input type="radio" id="rp50" value="50000" name="amount" class="card-input-amount-select">
                         <span class="span-amount">Rp 50.000</span>
                     </label>
                 </div>
                 <div class="col-4">
                     <label for="rp100" class="label-amount">
-                        <input type="radio" id="rp100" value="100" name="amount" class="card-input-amount-select">
+                        <input type="radio" id="rp100" value="100000" name="amount" class="card-input-amount-select">
                         <span class="span-amount">Rp 100.000</span>
                     </label>
                 </div>
                 <div class="col-4">
                     <label for="rp200" class="label-amount">
-                        <input type="radio" id="rp200" value="200" name="amount" class="card-input-amount-select">
+                        <input type="radio" id="rp200" value="200000" name="amount" class="card-input-amount-select">
                         <span class="span-amount">Rp 200.000</span>
                     </label>
                 </div>
@@ -45,26 +52,26 @@
             <div class="d-flex gap-1 mt-2">
                 <div class="col-4">
                     <label for="rp300" class="label-amount">
-                        <input type="radio" id="rp300" value="300" name="amount" class="card-input-amount-select">
+                        <input type="radio" id="rp300" value="300000" name="amount" class="card-input-amount-select">
                         <span class="span-amount">Rp 300.000</span>
                     </label>
                 </div>
                 <div class="col-4">
                     <label for="rp500" class="label-amount">
-                        <input type="radio" id="rp500" value="500" name="amount" class="card-input-amount-select">
+                        <input type="radio" id="rp500" value="500000" name="amount" class="card-input-amount-select">
                         <span class="span-amount">Rp 500.000</span>
                     </label>
                 </div>
                 <div class="col-4">
                     <label for="rp1000" class="label-amount">
-                        <input type="radio" id="rp1000" value="1000" name="amount" class="card-input-amount-select">
+                        <input type="radio" id="rp1000" value="1000000" name="amount" class="card-input-amount-select">
                         <span class="span-amount">Rp 1.000.000</span>
                     </label>
                 </div>
             </div>
             
             <br><br>
-            <input type="text" name="amount" placeholder="Enter specific value" class="input-amount-topup-specifict money-input">
+            <!-- <input type="text" name="amount" placeholder="Enter specific value" class="input-amount-topup-specifict money-input"> -->
             
             <br><br><br><br>
             <h6 class="text-white">PAYMENT METHOD (by doku)</h6>

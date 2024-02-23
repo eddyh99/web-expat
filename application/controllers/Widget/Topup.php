@@ -11,9 +11,14 @@ class Topup extends CI_Controller
 
 	public function membertopup($token)
 	{	
-		//"69712d282337451ae8650f8e575319c26ed59669";
-		$url 		= URLAPI . "/v1/member/get_bytoken?token=".$token;
+		//LISTIE "69712d282337451ae8650f8e575319c26ed59669";
+		//YANYIIK "8bb791cab9ffc8518f808425cbbec28d9947206e";
+		// $url 		= URLAPI . "/v1/member/get_bytoken?token=".$token;
+		$url 		= URLAPI . "/v1/member/get_bytoken?token=8bb791cab9ffc8518f808425cbbec28d9947206e";
 		$response 	= expatAPI($url);
+
+		// echo '<pre>'.print_r($this->security->get_csrf_hash(),true).'</pre>';
+		// die;
 		if($response->status == 200) {		
 			$mdata = array(
 				'title'     => NAMETITLE . ' - Topup',
@@ -228,12 +233,60 @@ class Topup extends CI_Controller
 		// if you don't add `FILE_APPEND`, the file will be erased each time you add a log
 		file_put_contents($log_file_data, $log_header . $log_msg . "\n", FILE_APPEND);
 	}
-	
-	public function success(){
-		echo "Sukses";
+
+	public function summary($token)
+	{
+
+		$amount     = str_replace(",","",$this->security->xss_clean($this->input->post('amount')));
+        $_POST["amount"]=$amount;
+
+
+		$this->form_validation->set_rules('token', 'Token', 'trim|required');
+		$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
+		$this->form_validation->set_rules('amount', 'Amount', 'trim|required|greater_than[0]|less_than_equal_to[1000000]');
+		$this->form_validation->set_rules('methodpayment', 'Method', 'trim|required');
+		
+		
+		if ($this->form_validation->run() == FALSE) {
+			$this->session->set_flashdata('error', $this->message->error_msg(validation_errors()));
+			redirect("widget/topup/membertopup/".$token);
+			return;
+		}
+
+
+		$input		= $this->input;
+		$token      = $this->security->xss_clean($input->post('token'));
+		$email      = $this->security->xss_clean($input->post('email'));
+        $amount     = $this->security->xss_clean($input->post('amount'));
+        $method		= $this->security->xss_clean($input->post('methodpayment'));
+
+		$mdata = array(
+			"token"		=> $token,
+			"email"		=> $email,
+			"amount"	=> $amount,
+			"method"	=> $method
+		);
+
+		$mdata = array(
+            'title'     => NAMETITLE . ' - Topup Success',
+            'content'   => 'widget/topup/topup_summary',
+			'data'		=> $mdata,
+            'extra'		=> 'widget/topup/js/_js_index',
+        );
+        $this->load->view('layout/wrapper', $mdata);
 	}
 	
-	public function cancel(){
+	public function success()
+	{
+		$mdata = array(
+            'title'     => NAMETITLE . ' - Topup Success',
+            'content'   => 'widget/topup/topup_success',
+        );
+        $this->load->view('layout/wrapper', $mdata);
+	}
+	
+	public function cancel()
+	{
 		$this->session->set_flashdata("error","Your topup cannot be processed");
 		redirect(base_url()."widget/topup/membertopup/".$token);
 	}
