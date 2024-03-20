@@ -70,6 +70,62 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
+                            <!-- <a href="<?= base_url()?>produk" class="sidebar-link <?= @$dropdown_produk?>">
+                                <div class="round-16 ms-3 d-flex align-items-center justify-content-center">
+                                    <i class="ti ti-box"></i>
+                                </div>
+                                <span class="hide-menu">Produk</span>
+                            </a> -->
+                            <a class="sidebar-link ms-3 has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                <span class="d-flex">
+                                    <i class="ti ti-box"></i>
+                                </span>
+                                <span class="hide-menu">Setup Produk</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse first-level <?= @$dpd_in?>">
+                                <li class="ps-4 sidebar-item <?= @$dpd_active?>">
+                                    <a href="<?= base_url()?>produk" class="sidebar-link <?= @$dpd_produk?>">
+                                        <div class="round-16 d-flex align-items-center justify-content-center">
+                                            <i class="ti ti-circle fs-1"></i>
+                                        </div>
+                                        <span class="hide-menu">Produk</span>
+                                    </a>
+                                </li>
+                                <li class="ps-4 sidebar-item <?= @$dpd_active?>">
+                                    <a href="<?= base_url()?>produk/additional" class="sidebar-link <?= @$dpd_additional?>">
+                                        <div class="round-16 d-flex align-items-center justify-content-center">
+                                            <i class="ti ti-circle fs-1"></i>
+                                        </div>
+                                        <span class="hide-menu">Additional</span>
+                                    </a>
+                                </li>
+                                <li class="ps-4 sidebar-item <?= @$dpd_active?>">
+                                    <a href="<?= base_url()?>produk/optional" class="sidebar-link <?= @$dpd_optional?>">
+                                        <div class="round-16 d-flex align-items-center justify-content-center">
+                                            <i class="ti ti-circle fs-1"></i>
+                                        </div>
+                                        <span class="hide-menu">Optional</span>
+                                    </a>
+                                </li>
+                                <li class="ps-4 sidebar-item <?= @$dpd_active?>">
+                                    <a href="<?= base_url()?>produk/satuan" class="sidebar-link <?= @$dpd_satuan?>">
+                                        <div class="round-16 d-flex align-items-center justify-content-center">
+                                            <i class="ti ti-circle fs-1"></i>
+                                        </div>
+                                        <span class="hide-menu">Satuan</span>
+                                    </a>
+                                </li>
+                                <li class="ps-4 sidebar-item <?= @$dpd_active?>">
+                                    <a href="<?= base_url()?>produk/variant" class="sidebar-link <?= @$dpd_variant?>">
+                                        <div class="round-16 d-flex align-items-center justify-content-center">
+                                            <i class="ti ti-circle fs-1"></i>
+                                        </div>
+                                        <span class="hide-menu">Variant</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item">
                             <a href="<?= base_url()?>promotion" class="sidebar-link <?= @$dropdown_promotion?>">
                                 <div class="round-16 ms-3 d-flex align-items-center justify-content-center">
                                 <i class="ti ti-discount-2"></i>

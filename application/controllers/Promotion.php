@@ -76,7 +76,7 @@ class Promotion extends CI_Controller
         $end_date           = $this->security->xss_clean($this->input->post("end_date"));
 
         $image      = $this->security->xss_clean(@$_FILES['imgpromotion']);
-        if(!empty($image)){
+        if(!empty($image['name'])){
             $blob       = curl_file_create($image['tmp_name'],$image['type']);
             $mdata = array(
                 "deskripsi"   => $description,
@@ -165,7 +165,7 @@ class Promotion extends CI_Controller
 
 
         $image      = $this->security->xss_clean(@$_FILES['imgpromotion']);
-        if(!empty($image)){
+        if(!empty($image['name'])){
             $blob       = curl_file_create($image['tmp_name'],$image['type']);
             $mdata = array(
                 "deskripsi"   => $description,

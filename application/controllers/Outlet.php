@@ -69,7 +69,7 @@ class Outlet extends CI_Controller
         $contact    = $this->security->xss_clean($this->input->post("contact"));
 
         $image      = $this->security->xss_clean($_FILES['imgoutlet']);
-        if(!empty($image)){
+        if(!empty($image['name'])){
             $blob       = curl_file_create($image['tmp_name'],$image['type']);
             $mdata = array(
                 "nama"        => $name,
@@ -149,7 +149,7 @@ class Outlet extends CI_Controller
 
         
         $image      = $this->security->xss_clean(@$_FILES['imgoutlet']);
-        if(!empty($image)){
+        if(!empty($image['name'])){
             $blob       = curl_file_create($image['tmp_name'],$image['type']);
             $mdata = array(
                 "nama"        => $name,

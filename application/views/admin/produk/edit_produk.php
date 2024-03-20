@@ -2,7 +2,7 @@
 <div class="container-fluid">
     <div class="row my-4">
         <div class="col-lg-12 d-flex align-items-strech">
-            <a href="<?= base_url()?>outlet" class="btn btn-outline-expat d-flex align-items-center">
+            <a href="<?= base_url()?>produk" class="btn btn-outline-expat d-flex align-items-center">
                 <i class="ti ti-chevron-left fs-5 me-1"></i>
                 <span>
                     Back
@@ -21,30 +21,30 @@
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     <?php } ?>
-                    <h5 class="card-title fw-semibold mb-4">Add Outlet</h5>
-                    <form action="<?= base_url()?>outlet/addoutlet_process" enctype='multipart/form-data' method="POST">
+                    <h5 class="card-title fw-semibold mb-4">Edit Produk</h5>
+                    <form action="<?= base_url()?>produk/editproduk_process" enctype='multipart/form-data' method="POST">
                         <input type="hidden" id="token" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
+                        <input type="hidden" name="urisegment" value="<?php echo $this->uri->segment('3')?>">
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter outlet name..." required autocomplete="off">
+                            <input type="text" class="form-control" value="<?= @$produk->nama?>" id="name" name="name" placeholder="Enter produk name..." required autocomplete="off">
                         </div>
                         <div class="mb-3">
-                            <label for="address" class="form-label">Outlet Address</label>
-                            <input type="text" class="form-control" id="address" name="address" placeholder="Enter address..." required autocomplete="off">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea name="description" id="description" rows="3" class="form-control" placeholder="Enter description..."><?= @$produk->deskripsi?></textarea>
                         </div>
-                        <div class="mb-3">
-                            <label for="opening" class="form-label">Opening</label>
-                            <input type="text" class="form-control" id="opening" name="opening" placeholder="Ex: Monday to Sunday, 7 AM - 7 PM" required autocomplete="off">
-                        </div>
-                        <div class="mb-4">
-                            <label for="contact" class="form-label">Contact</label>
-                            <input type="text" class="form-control" id="contact" name="contact" placeholder="Enter contact outlet..." required autocomplete="off">
+                        <div class="mb-3 col-3">
+                            <label for="favorite" class="form-label">Favorite</label>
+                            <select name="favorite" id="favorite" class="form-select">
+                                <option value="yes" <?= ($produk->favorite=="yes")?"selected":"" ?>>yes</option>
+                                <option value="no" <?= ($produk->favorite=="no")?"selected":"" ?>>no</option>
+                            </select>
                         </div>
                         <div class="mb-3">   
                             <label for="images-logo" class="form-label">Image</label>   
                             <div class="d-flex flex-column">
                                 <div class="col-12 col-sm-8 col-lg-6 input-outlet-image">
-                                    <input name="imgoutlet" type="file" id="images-logo" accept="image/jpg, image/jpeg, image/png" style="cursor: pointer;" >
+                                    <input name="imgproduk" type="file" id="images-logo" accept="image/jpg, image/jpeg, image/png" style="cursor: pointer;">
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-12 d-flex flex-column flex-sm-row">
@@ -53,12 +53,17 @@
                                             <p class="text-findme text-start">*Maximum 2MB</p>
                                             <p class="text-findme text-start">*png, jpg</p>
                                         </span>
+                                        <div class="d-flex flex-row flex-sm-column">
+                                            <span class="d-block">previous image</span>
+                                            <img  class="preview-image-container d-block" src="<?= @$produk->picture?>"/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-expat mt-3">Save Outlet</button>
-                  </form>
+                        <button type="submit" class="btn btn-expat mt-3">Save Produk</button>
+                    </form>
+                    
                 </div>
             </div>
         </div>

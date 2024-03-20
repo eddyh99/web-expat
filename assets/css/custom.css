@@ -204,3 +204,30 @@ option {
 .nav-link:hover {
     color: var(--expat-bg-primary) !important;
 }
+
+.card-header {
+    background-color: #000000 !important;
+}
+
+.nav-pills .nav-link.active, 
+.nav-pills .show>.nav-link {
+    background-color: #477960;
+}
+
+.select2-results__option--highlighted {
+    color: white !important;
+    background-color: darkgreen !important;
+}
+
+.select2-container--default .select2-results__option[aria-selected=true] {
+    background-color: darkgray;
+}
+
+.select2{
+    width: 100% !important;
+}
+
+.select2-container--bootstrap .select2-selection--multiple .select2-selection__choice__remove {
+    border: none;
+    padding: 0px 3px;
+}

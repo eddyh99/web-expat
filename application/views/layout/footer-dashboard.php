@@ -17,6 +17,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="<?= base_url()?>assets/js/script.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/autonumeric/1.8.2/autoNumeric.js"></script>
+
 	<?php
 		if (isset($extra)) {
 			$this->load->view($extra);
