@@ -25,6 +25,7 @@
                                 <th>No</th>
                                 <th>Name</th>
                                 <th class="th-outlet-address">Description</th>
+                                <th>Category</th>
                                 <th>Favorite</th>
                                 <th>Action</th>
                             </tr>
@@ -36,7 +37,8 @@
                                 <th>No</th>
                                 <th>Name</th>
                                 <th>Description</th>
-                                <th>Contact</th>
+                                <th>Category</th>
+                                <th>Favorite</th>
                                 <th>Action</th>
                             </tr>
                         </tfoot>

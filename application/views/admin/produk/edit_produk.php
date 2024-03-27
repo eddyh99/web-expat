@@ -34,6 +34,14 @@
                             <textarea name="description" id="description" rows="3" class="form-control" placeholder="Enter description..."><?= @$produk->deskripsi?></textarea>
                         </div>
                         <div class="mb-3 col-3">
+                            <label for="kategori" class="form-label">Kategori</label>
+                            <select name="kategori" id="kategori" class="form-select">
+                                <option value="food" <?= ($produk->kategori=="food")?"selected":"" ?>>Food</option>
+                                <option value="drink" <?= ($produk->kategori=="drink")?"selected":"" ?>>Drink</option>
+                                <option value="retail" <?= ($produk->kategori=="retail")?"selected":"" ?>>Retail</option>
+                            </select>
+                        </div>
+                        <div class="mb-3 col-3">
                             <label for="favorite" class="form-label">Favorite</label>
                             <select name="favorite" id="favorite" class="form-select">
                                 <option value="yes" <?= ($produk->favorite=="yes")?"selected":"" ?>>yes</option>

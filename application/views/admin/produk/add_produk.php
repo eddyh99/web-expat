@@ -33,6 +33,14 @@
                             <textarea name="description" id="description" rows="3" class="form-control" placeholder="Enter description..."></textarea>
                         </div>
                         <div class="mb-3 col-3">
+                            <label for="kategori" class="form-label">Kategori</label>
+                            <select name="kategori" id="kategori" class="form-select">
+                                <option value="food">Food</option>
+                                <option value="drink">Drink</option>
+                                <option value="retail">Retail</option>
+                            </select>
+                        </div>
+                        <div class="mb-3 col-3">
                             <label for="favorite" class="form-label">Favorite</label>
                             <select name="favorite" id="favorite" class="form-select">
                                 <option value="yes">yes</option>

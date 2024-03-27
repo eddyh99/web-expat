@@ -32,34 +32,59 @@
                                 <?php }?>
                             </select>
                         </div>
+                        
+                        <div class="rounded-2 p-4 mb-4" style="border: 2px dashed #72A28A;">
+                            <div class="mb-4 col-12">
+                                <label for="group_additional" class="form-label">Group Additional</label>
+                                <select name="group_additional[]"  id="group_additional" class="form-control group_additional_select2">
+                                    <option value="">--Select Additional Group--</option>
+                                    <?php foreach($additional as $ad){?>
+                                        <option value="<?= $ad->additional_group?>"><?= $ad->additional_group?></option>
+                                    <?php }?>
+                                </select>
+                            </div>
+                            <div class="mb-4 col-12">
+                                <label for="additional" class="form-label">Select Additional</label>
+                                <select name="additional[]" multiple="multiple" id="additional" class="form-control additional_select2">
+                                </select>
+                            </div>
 
-                        <div class="mb-4 col-12">
-                            <label for="additional" class="form-label">Select Additional</label>
-                            <select name="additional[]" multiple="multiple" id="additional" class="form-control additional_select2">
-                                <?php foreach($additional as $ad){?>
-                                    <option value="<?= $ad->id?>"><?= $ad->additional?></option>
-                                <?php }?>
-                            </select>
                         </div>
                   
-                        <div class="mb-4 col-12">
-                            <label for="optional" class="form-label">Select Optional</label>
-                            <select name="optional[]" multiple="multiple" id="optional" class="form-control optional_select2">
-                                <?php foreach($optional as $op){?>
-                                    <option value="<?= $op->id?>"><?= $op->optional?></option>
-                                <?php }?>
-                            </select>
+                        <div class="rounded-2 p-4 mb-4" style="border: 2px dashed #72A28A;">
+                            <div class="mb-4 col-12">
+                                <label for="group_optional" class="form-label">Group Optional</label>
+                                <select name="group_optional[]"  id="group_optional" class="form-control group_optional_select2">
+                                    <option value="">--Select Optional Group--</option>
+                                    <?php foreach($optional as $op){?>
+                                        <option value="<?= $op->optiongroup?>"><?= $op->optiongroup?></option>
+                                    <?php }?>
+                                </select>
+                            </div>
+                            <div class="mb-4 col-12">
+                                <label for="optional" class="form-label">Select Optional</label>
+                                <select name="optional[]" multiple="multiple" id="optional" class="form-control optional_select2">
+                                </select>
+                            </div>
+                        
                         </div>
 
-                 
-
-                        <div class="mb-4 col-12">
-                            <label for="satuan" class="form-label">Select Satuan</label>
-                            <select name="satuan[]" multiple="multiple" id="satuan" class="form-control satuan_select2">
-                                <?php foreach($satuan as $st){?>
-                                    <option value="<?= $st->id?>"><?= $st->satuan?></option>
-                                <?php }?>
-                            </select>
+                        <div class="rounded-2 p-4 mb-4" style="border: 2px dashed #72A28A;">
+                            <div class="mb-4 col-12">
+                                <label for="group_satuan" class="form-label">Group Satuan</label>
+                                <select name="group_satuan[]"  id="group_satuan" class="form-control group_satuan_select2">
+                                    <option value="">--Select Satuan Group--</option>
+                                    <?php foreach($satuan as $st){?>
+                                        <option value="<?= $st->groupname?>"><?= $st->groupname?></option>
+                                    <?php }?>
+                                </select>
+                            </div>
+                            <div class="mb-4 col-12">
+                                <label for="satuan" class="form-label">Select Satuan</label>
+                                <select name="satuan[]" multiple="multiple" id="satuan" class="form-control satuan_select2">
+                                </select>
+                            </div>
+                                        
                         </div>
 
 

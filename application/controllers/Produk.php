@@ -56,6 +56,7 @@ class Produk extends CI_Controller
     {
 		$this->form_validation->set_rules('name', 'Name Outlet', 'trim|required');
 		$this->form_validation->set_rules('description', 'Description', 'trim|required');
+        $this->form_validation->set_rules('kategori', 'Kategori', 'trim|required');
 		$this->form_validation->set_rules('favorite', 'Favorite', 'trim|required');
 
         if ($this->form_validation->run() == FALSE) {
@@ -67,6 +68,7 @@ class Produk extends CI_Controller
         $input          = $this->input;
         $name           = $this->security->xss_clean($this->input->post("name"));
         $description    = $this->security->xss_clean($this->input->post("description"));
+        $kategori       = $this->security->xss_clean($this->input->post("kategori"));
         $favorite       = $this->security->xss_clean($this->input->post("favorite"));
 
         $image      = $this->security->xss_clean($_FILES['imgproduk']);
@@ -76,6 +78,7 @@ class Produk extends CI_Controller
                 "nama"          => $name,
                 "deskripsi"     => $description,
                 "is_favorite"   => $favorite,
+                "kategori"      => $kategori,
                 "image"         => $blob
             );
         }else{
@@ -84,6 +87,7 @@ class Produk extends CI_Controller
                 "nama"          => $name,
                 "deskripsi"     => $description,
                 "is_favorite"   => $favorite,
+                "kategori"      => $kategori,
             );
 
         }
@@ -131,6 +135,7 @@ class Produk extends CI_Controller
     {
 		$this->form_validation->set_rules('name', 'Name Outlet', 'trim|required');
 		$this->form_validation->set_rules('description', 'Description', 'trim|required');
+		$this->form_validation->set_rules('kategori', 'Kategori', 'trim|required');
 		$this->form_validation->set_rules('favorite', 'Favorite', 'trim|required');
 
         $input      = $this->input;
@@ -145,6 +150,7 @@ class Produk extends CI_Controller
         $id             = base64_decode($urisegment);
         $name           = $this->security->xss_clean($this->input->post("name"));
         $description    = $this->security->xss_clean($this->input->post("description"));
+        $kategori       = $this->security->xss_clean($this->input->post("kategori"));
         $favorite       = $this->security->xss_clean($this->input->post("favorite"));
 
         
@@ -155,6 +161,7 @@ class Produk extends CI_Controller
             $mdata = array(
                 "nama"          => $name,
                 "deskripsi"     => $description,
+                "kategori"      => $kategori,
                 "is_favorite"   => $favorite,
                 "image"         => $blob
             );
@@ -162,6 +169,7 @@ class Produk extends CI_Controller
             $mdata = array(
                 "nama"          => $name,
                 "deskripsi"     => $description,
+                "kategori"      => $kategori,
                 "is_favorite"   => $favorite,
             );
 
@@ -768,9 +776,9 @@ class Produk extends CI_Controller
 
 		$result_allproduk   = expatAPI(URLAPI . "/v1/produk/get_allproduk")->result->messages;
 		$result_cabang      = expatAPI(URLAPI . "/v1/outlet/get_allcabang")->result->messages;
-		$result_optional    = expatAPI(URLAPI . "/v1/optional/get_alloptional")->result->messages;
-		$result_additional    = expatAPI(URLAPI . "/v1/additional/get_alladditional")->result->messages;
-		$result_satuan    = expatAPI(URLAPI . "/v1/satuan/get_allsatuan")->result->messages;
+		$result_optional    = expatAPI(URLAPI . "/v1/optional/get_groupoptional")->result->messages;
+		$result_additional  = expatAPI(URLAPI . "/v1/additional/get_groupadditional")->result->messages;
+		$result_satuan      = expatAPI(URLAPI . "/v1/satuan/get_groupsatuan")->result->messages;
 
 
         $mdata = array(
@@ -790,6 +798,27 @@ class Produk extends CI_Controller
         );
         $this->load->view('layout/wrapper', $mdata);
 
+    }
+
+    public function variant_additional(){
+        $url = URLAPI . "/v1/additional/get_alladditional";
+		$response = expatAPI($url);
+        $result = $response->result->messages;
+        echo json_encode($result);
+    }
+    
+    public function variant_optional(){
+        $url = URLAPI . "/v1/optional/get_alloptional";
+		$response = expatAPI($url);
+        $result = $response->result->messages;
+        echo json_encode($result);
+    }
+    
+    public function variant_satuan(){
+        $url = URLAPI . "/v1/satuan/get_allsatuan";
+		$response = expatAPI($url);
+        $result = $response->result->messages;
+        echo json_encode($result);
     }
 
     public function addvariant_process()

@@ -7,23 +7,23 @@
                 <label id="labelpickup" class="col-6 d-flex justify-content-center align-items-center" for="pickup">
                     <div class="">
                         <span>PICK UP</span>
-                        <input type="radio" name="chartdelivery" value="pickup" id="pickup" >
+                        <input type="radio" name="cartdelivery" value="2" id="pickup">
                     </div>
                 </label>
-                <label id="labeldelivery" class="col-6 bg-expat d-flex justify-content-center align-items-center" for="delivery">
+                <label id="labeldelivery" class="col-6 d-flex bg-expat justify-content-center align-items-center" for="delivery">
                     <div>
                         <span>DELIVERY</span>
-                        <input type="radio" name="chartdelivery" value="delivery" id="delivery" checked="checked" >
+                        <input type="radio" name="cartdelivery" value="1" id="delivery" checked="checked">
                     </div>
                 </label>
             </div>
 
-            <div id="editaddress" class="d-flex justify-content-center align-items-center p-3">
+            <!-- <div id="editaddress" class="d-flex justify-content-center align-items-center p-3">
                 <a class="btn btn-white px-3 m-3" href="">Add Address</a>
                 <a class="btn btn-white px-3 m-3" href="">Add Note</a>
-            </div>
+            </div> -->
 
-            <div id="address" class="pt-1">
+            <div id="address" class="pt-1 mt-5">
                 <h2>Delivery Address</h2>
                 <h4 class="color-expat">Kantor Agency</h4>
                 <span class="color-expat-secondary">Jl. Lorem ipsum dolor sit anem</span>
@@ -49,23 +49,27 @@
             </div>
 
             <hr style="border-bottom: 2px solid #fff;">
-
-            <div class="item-preview-order d-flex align-items-center justify-content-between my-4">
-                <div class="d-flex align-items-center">
-                    <img src="<?= base_url()?>assets/img/widget/expresso.png" alt="img">
-                    <div class="item-detail ms-2">
-                        <h3>Expresso</h3>
-                        <span class="color-expat-secondary">1 shot | nomad</span>
+            <?php foreach($variant as $vr){?>
+                <div class="item-preview-order d-flex align-items-center justify-content-between my-4">
+                    <div class="d-flex align-items-center">
+                        <img src="<?= $vr['picture']?>" alt="img">
+                        <div class="item-detail ms-3">
+                            <h3><?= $vr['nama']?></h3>
+                            <span class="color-expat-secondary"><?= $vr['additional']?> | <?= $vr['optional']?></span><br>
+                            <span class="color-expat-secondary"><?= number_format($vr['harga'], 2) ?></span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <i onclick="minuscart('<?= $vr['id']?>')" class="fas fa-minus-circle minus-<?= $vr['id']?> fs-3" style="cursor: pointer;"></i>
+                        <!-- <input type="hidden" name="injumlahcoffe" id="injumlahcoffe"> -->
+                        <span class="d-block" style="width: 50px;">
+                            <input type="hidden" name="id_variant[]" value="<?= $vr['id']?>">
+                            <input type="number" name="jumlah[]" class="text-end w-100 border-0 bg-transparent text-white" id="jumlah<?= $vr['id']?>" value="<?= $vr['jumlah']?>">
+                        </span>
+                        <i onclick="pluscart('<?= $vr['id']?>')"  class="fas fa-plus-circle plus-<?= $vr['id']?> fs-3" style="cursor: pointer;"></i>
                     </div>
                 </div>
-                <div class="d-flex align-items-center">
-                    <i class="fas fa-minus-circle fs-3" style="cursor: pointer;"></i>
-                    <input type="hidden" name="injumlahcoffe" id="injumlahcoffe">
-                    <span class="mx-4" id="jumlahcoffe"></span>
-                    <i class="fas fa-plus-circle fs-3" style="cursor: pointer;"></i>
-                </div>
-            </div>
-          
+            <?php }?>
             <!-- <div class="item-preview-order d-flex align-items-center justify-content-between my-3">
                 <div class="d-flex align-items-center">
                     <img src="<?= base_url()?>assets/img/widget/expresso.png" alt="img">
@@ -80,15 +84,27 @@
                     <span class="mx-4" id="jumlahcoffe"></span>
                     <i class="fas fa-plus-circle fs-3" style="cursor: pointer;"></i>
                 </div>
-            </div> -->
-          
+            </div>
+           -->
             <hr style="border-bottom: 8px solid #fff;">
 
             <div id="summaryorder">
                 <h2>Payment Summary</h2>
                 <div class="price d-flex justify-content-between align-items-center">
                     <span>Price</span>
-                    <span>Rp. 38.000</span>
+                    <span> Rp 
+                        <?php 
+                            $price = 0;
+                            $quantity = 0;
+                            $total = 0;
+                            foreach($variant as $vr){
+                                $price += $vr['harga'];
+                                $quantity += $vr['jumlah']; 
+                            }
+                            $total = $price * $quantity;
+                            echo number_format($total, 2);
+                        ?>
+                    </span>
                 </div>
                 <div class="fee d-flex justify-content-between align-items-center">
                     <span>Fee Delivery</span>
@@ -100,7 +116,11 @@
 
             <div id="totalsummary" class="d-flex justify-content-between align-items-center">
                 <h2 class="f-lora color-expat fw-bold">Total Payment</h2>
-                <span>Rp. 38.000</span>
+                <span>Rp 
+                    <?php 
+                        $total -= 18000;
+                        echo number_format($total, 2);?>
+                </span>
             </div>
 
 

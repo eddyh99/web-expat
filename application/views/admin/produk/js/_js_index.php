@@ -26,6 +26,7 @@
 			},
 			{ data: 'nama' },
 			{ data: 'deskripsi' },
+			{ data: 'kategori' },
 			{ data: 'favorite' },
 			{ 
                 data: null, "mRender": function(data, type, full, meta) {

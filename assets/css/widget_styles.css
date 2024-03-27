@@ -237,7 +237,7 @@ body {
     accent-color: var(--expat-text-primary);
 }
 
-.app-content .app-member #detailorder .showprice{
+.app-content .app-member #detailorder .greenprice{
     color: var(--expat-text-primary);
 }
 
