@@ -39,6 +39,16 @@
             if(val < 1){
                 console.log("HILANGKAN PRODUK");
                 val = 1;
+                $.ajax({
+                    url: `<?=base_url()?>widget/order/remove_item/${id}/${val}`,
+                    type: "POST",
+                    success: function (response) {
+                        $('#itempreview'+id).remove();
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus);
+                    }
+                });
                 return val;
             }else{
                 $.ajax({

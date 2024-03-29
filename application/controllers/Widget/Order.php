@@ -9,12 +9,22 @@ class Order extends CI_Controller
 		parent::__construct();
 	}
 
-	public function index()
+	public function ordersummary($token)
 	{	
         $cookie = stripslashes($_COOKIE['variant']);
         $all_variant = json_decode($cookie, true);
 
-        // echo '<pre>'.print_r($all_variant,true).'</pre>';
+        // Killua BEARER TOKEN
+        // bbe287cf3a3bf23306bb175c8461ce86a16f6a75
+
+        // echo '<pre>'.print_r(getToken(),true).'</pre>';
+        // die;
+        // $token = 'bbe287cf3a3bf23306bb175c8461ce86a16f6a75';
+        // bbe287cf3a3bf23306bb175c8461ce86a16f6a75""
+        // $url 		= URLAPI . "/v1/member/get_bytoken?token=".$token;
+		// $response 	= expatAPI($url);
+
+        // echo '<pre>'.print_r($response,true).'</pre>';
         // die;
 
         $variant = array();
@@ -47,7 +57,8 @@ class Order extends CI_Controller
             'content'   => 'widget/order/order',
             'extra'		=> 'widget/order/js/_js_order',
             'variant'   => $variant, 
-            'all_variant'  => $all_variant
+            'all_variant'  => $all_variant, 
+            'token'        => $token
         );
         $this->load->view('layout/wrapper', $mdata);
 	}
@@ -73,6 +84,26 @@ class Order extends CI_Controller
         echo "SUKSES";
     }
 
+
+    public function remove_item($id, $jumlah = null)
+    {
+        $cookie = stripslashes($_COOKIE['variant']);
+        $all_variant = json_decode($cookie, true);
+
+        $new_variant = array();
+        foreach($all_variant as $av){
+            if($av['id_variant'] != $id){
+                array_push($new_variant, array('id_variant' => $av['id_variant'], 'jumlah' => $av['jumlah']));
+            }
+        }
+
+        $data = json_encode($new_variant);
+        setcookie('variant', "", time() - 3600);
+        setcookie('variant', $data, 2147483647, "/");
+
+        echo "Remove Item";
+    }
+
     public function detail()
     {
 
@@ -81,43 +112,6 @@ class Order extends CI_Controller
 
 
         $variantproduk = expatAPI(URLAPI . "/v1/produk/get_varianbyid?id=".$_GET['produk'])->result->messages;
-		// $resultoptional = expatAPI($urloptional)->result->messages;
-
-        // echo '<pre>'.print_r($variantproduk,true).'</pre>';
-        // print_r(json_encode($variantproduk));
-        // die;
-
-        // $cart_final = array();
-        // $cart = array(
-        //     'idvariant' =>  1,
-        //     'jumlah' =>  10
-        // );
-
-        // array_push($cart_final, $cart);
-        
-        // $cart2 = array(
-        //     'idvariant' =>  1,
-        //     'jumlah' =>  10
-        // );
-        
-        // array_push($cart_final, $cart2);
-
-        // $json = json_encode($cart_final);
-        // setcookie('variant', $json);
-
-
-        // $cookie = $_COOKIE['variant'];
-        // $cookie = stripslashes($cookie);
-        // $cart_show = json_decode($cookie, true);
-
-        // array_push($cart_show, $cart3);
-
-        // echo '<pre>'.print_r($json,true).'</pre>';
-        // echo '<pre>'.print_r( $cart_show,true).'</pre>';
-        // die;
-
-
-
 
         $mdata = array(
             'title'     => NAMETITLE . ' - Order Detail',
@@ -135,6 +129,8 @@ class Order extends CI_Controller
         $input = $this->input;
         $id = $this->security->xss_clean($input->post('id_variant'));
         $total = $this->security->xss_clean($input->post('total_variant'));
+        $idcabang = $this->security->xss_clean($input->post('idcabang'));
+        $idproduk = $this->security->xss_clean($input->post('idproduk'));
         
         
         if(isset($_COOKIE['variant'])){
@@ -144,7 +140,6 @@ class Order extends CI_Controller
             
             
             // array_push($variant_avail, $variant_show);
-            echo '<pre>'.print_r($variant_available,true).'</pre>';
             
             $mdata = array(
                 "id_variant"    => $id,
@@ -154,10 +149,9 @@ class Order extends CI_Controller
             array_push($variant_available, $mdata);
 
             $data = json_encode($variant_available);
-            setcookie('variant', "", time() - 3600);
+            setcookie('variant', "", time() - 3600, "/");
             setcookie('variant', $data, 2147483647, "/");
-
-            redirect('widget/order');
+            redirect('widget/order/detail?cabang='.$idcabang.'&produk='.$idproduk);
             // echo '<pre>'.print_r($variant_show,true).'</pre>';
             // die;
         }else{
@@ -171,31 +165,13 @@ class Order extends CI_Controller
             array_push($variant_empty, $mdata);
 
             $data = json_encode($variant_empty);
-            setcookie('variant', "", time() - 3600);
+            setcookie('variant', "", time() - 3600, "/");
             setcookie('variant', $data, 2147483647, "/");
-            redirect('widget/order');
+            redirect('widget/order/detail?cabang='.$idcabang.'&produk='.$idproduk);
         }
 
-
-
-        
-
-        // $data = json_encode($cart_final);
-        // setcookie('variant', "", time() - 3600);
-        // setcookie('variant', $data, 2147483647);
-        // redirect('widget/order/add_tocart');
     }
     
-    // public function add_tocart()
-    // {
-
-    //     $cookie = stripslashes($_COOKIE['variant']);
-    //     $variant_show = json_decode($cookie, true);
-
-    //     echo '<pre>'.print_r($variant_show,true).'</pre>';
-    //     die;
-    // }
-
     public function get_harga_produk()
     {
         $input = $this->input;
@@ -233,18 +209,19 @@ class Order extends CI_Controller
 
     public function detail_process()
     {
-        $input = $this->input;
-		$idvariant   = $this->security->xss_clean($input->post('id_variant'));
+        $input          = $this->input;
+		// $idmember       = $this->security->xss_clean($input->post('id_member'));
+		$idcabang       = $this->security->xss_clean($input->post('id_cabang'));
+		$idvariant      = $this->security->xss_clean($input->post('id_variant'));
 		$cartdelivery   = $this->security->xss_clean($input->post('cartdelivery'));
-		$jumlah         = $this->security->xss_clean($input->post('jumlah'));
-		// $cupsize = $this->security->xss_clean($input->post('cupsize'));
-		// $shot = $this->security->xss_clean($input->post('shot'));
-		// $injumlahcoffe = $this->security->xss_clean($input->post('injumlahcoffe'));
+		$jumlah         = $this->security->xss_clean($input->post('jumlah'));;
+		$token          = $this->security->xss_clean($input->post('usertoken'));;
+
 
         $temp_item = array();
 
         foreach($idvariant as $keyid => $valid){
-            $temp['id_variant']   = $valid; 
+            $temp['id_varian']   = $valid; 
             foreach($jumlah as $keyjmlh => $valjmlh){
                 $temp['jumlah']   = $valjmlh;
                 if(($keyid == $keyjmlh) && ($keyjmlh == $keyid)){
@@ -253,18 +230,48 @@ class Order extends CI_Controller
             }
         }
 
-        echo '<pre>'.print_r($idvariant,true).'</pre>';
-        echo '<pre>'.print_r($jumlah,true).'</pre>';
 
         $mdata = array(
-            'cartdelivery'  => $cartdelivery,
-            'items'          => $temp_item
-            // 'shot'          => $shot,
-            // 'jumlahcoffe'   => $injumlahcoffe
+            'id_pengiriman'  => $cartdelivery,
+            'id_cabang'      => $idcabang, 
+            'items'           => $temp_item
         );  
 
-        echo '<pre>'.print_r($mdata,true).'</pre>';
-        die;
+        
+        $url = URLAPI . "/v1/order/add_transaksi";
+		$response = mobileAPI($url, json_encode($mdata), $token);
+        $result = $response->result;
+
+        // echo '<pre>'.print_r($response,true).'</pre>';
+        // die;
+
+        if($response->status == 200){
+            setcookie('variant', "", time() - 3600, "/");
+			redirect('widget/order/notif/'.$token);
+			return;
+        }else{
+            // $this->session->set_flashdata('error', $result->messages->error);
+            redirect('widget/order/ordersummary/'.$token.'?cabang='.$idcabang);
+            return;
+        }
     }
-	
+
+    public function notif($token)
+    {
+        setcookie('variant', "", time() - 3600);
+        $url = URLAPI . "/v1/order/list_transaksi";
+		$response = mobileAPI($url, $mdata = NULL, $token);
+        $result = $response->result->messages;
+
+        // echo '<pre>'.print_r($result,true).'</pre>';
+        // die;
+
+        $mdata = array(
+            'title'     => NAMETITLE . ' - Order Detail',
+            'content'   => 'widget/order/notif',
+            'extra'		=> 'widget/order/js/_js_index',
+
+        );
+        $this->load->view('layout/wrapper', $mdata);
+    }
 }

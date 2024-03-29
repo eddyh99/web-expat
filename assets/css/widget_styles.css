@@ -54,6 +54,10 @@ body {
     -o-border-radius: 9999999px !important;
 }
 
+.btn-expat.add-tocart {
+    font-size: 12px;
+}
+
 .btn-white{
     color: #303336;
     background-color: #fff;
@@ -294,3 +298,19 @@ body {
     -o-border-radius: 6px;
 }
 
+.toast{
+    --bs-toast-bg: #000000 !important;
+} 
+
+
+#edit-in-address a {
+    font-size: 12px;
+}
+
+
+@media (min-width: 425px) {
+    .btn-expat.add-tocart {
+        font-size: 16px;
+    }
+    
+}

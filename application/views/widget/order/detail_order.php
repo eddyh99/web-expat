@@ -4,12 +4,28 @@
 <div class="app-content px-2 row  mb-5 pb-5">
     <div class="app-member mx-auto col-12 col-lg-8  border-1 border-white">
         <form id="detailorder" action="<?= base_url()?>widget/order/setcookie_add_tocart" method="POST">
+            <input type="hidden" name="idcabang" value="<?= $_GET['cabang']?>">
+            <input type="hidden" name="idproduk" value="<?= $_GET['produk']?>">
             <input type="hidden" name="id_variant" id="id_variant">
             <input type="hidden" name="total_variant" id="total_variant">
             <div class="mt-3">
                 <h1><?= $produk->nama?></h1>
                 <span class="desc"><?= $produk->deskripsi?></span>
                 <h3 class="greenprice">Rp <span class="showprice">-</span></h3>
+            </div>
+            <!-- <button type="button" class="btn btn-primary" id="liveToastBtn">Show live toast</button> -->
+
+            <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
+                <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <i class="fas fa-cart-plus me-2"></i>
+                        <strong class="me-auto">Adding to cart</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        Please check your menu
+                    </div>
+                </div>
             </div>
             <hr style="border-bottom: 8px solid #fff;">
             <div class="mt-3 mb-4">
@@ -170,7 +186,7 @@
                         <i class="fas fa-plus-circle fs-3" style="cursor: pointer;"></i>
                     </div>
                     <div class="w-90 d-flex justify-content-end ps-4">
-                        <button type="submit" class="btn btn-expat px-5 w-100">ADD TO CHART</button>
+                        <button type="submit" class="btn btn-expat add-tocart px-5 w-100">ADD TO CHART</button>
                     </div>
                 </div>
             </div>

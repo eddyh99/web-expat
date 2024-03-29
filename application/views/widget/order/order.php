@@ -2,7 +2,9 @@
 <div class="app-content px-2 row  mb-5 pb-5">
     <div class="app-member mx-auto col-12 col-lg-8  border-1 border-white">
         <form id="orderchart" action="<?= base_url()?>widget/order/detail_process" method="POST">
-            
+            <input type="hidden" name="id_cabang" value="<?= $_GET['cabang']?>">
+            <input type="hidden" name="usertoken" value="<?= $token?>">
+
             <div class="chart-delivery row mx-auto mt-5 p-2">
                 <label id="labelpickup" class="col-6 d-flex justify-content-center align-items-center" for="pickup">
                     <div class="">
@@ -50,7 +52,7 @@
 
             <hr style="border-bottom: 2px solid #fff;">
             <?php foreach($variant as $vr){?>
-                <div class="item-preview-order d-flex align-items-center justify-content-between my-4">
+                <div id="itempreview<?= $vr['id']?>" class="item-preview-order d-flex align-items-center justify-content-between my-4">
                     <div class="d-flex align-items-center">
                         <img src="<?= $vr['picture']?>" alt="img">
                         <div class="item-detail ms-3">
@@ -64,7 +66,7 @@
                         <!-- <input type="hidden" name="injumlahcoffe" id="injumlahcoffe"> -->
                         <span class="d-block" style="width: 50px;">
                             <input type="hidden" name="id_variant[]" value="<?= $vr['id']?>">
-                            <input type="number" name="jumlah[]" class="text-end w-100 border-0 bg-transparent text-white" id="jumlah<?= $vr['id']?>" value="<?= $vr['jumlah']?>">
+                            <input type="number" name="jumlah[]" class="text-center w-100 border-0 bg-transparent text-white" id="jumlah<?= $vr['id']?>" value="<?= $vr['jumlah']?>">
                         </span>
                         <i onclick="pluscart('<?= $vr['id']?>')"  class="fas fa-plus-circle plus-<?= $vr['id']?> fs-3" style="cursor: pointer;"></i>
                     </div>
