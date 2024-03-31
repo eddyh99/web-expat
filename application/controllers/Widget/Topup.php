@@ -17,9 +17,7 @@ class Topup extends CI_Controller
 		$url 		= URLAPI . "/auth/logintoken?token=".$token;
 		$response 	= expatAPI($url);
 
-echo '<pre>'.print_r(getToken(),true).'</pre>';
-echo '<pre>'.print_r($response,true).'</pre>';
-die;
+
 		if($response->status == 200) {		
 			$mdata = array(
 				'title'     => NAMETITLE . ' - Topup',

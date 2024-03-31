@@ -21,10 +21,21 @@ class Order extends CI_Controller
         // die;
         // $token = 'bbe287cf3a3bf23306bb175c8461ce86a16f6a75';
         // bbe287cf3a3bf23306bb175c8461ce86a16f6a75""
-        // $url 		= URLAPI . "/v1/member/get_bytoken?token=".$token;
-		// $response 	= expatAPI($url);
 
-        // echo '<pre>'.print_r($response,true).'</pre>';
+        $mdata = array(
+            "alamat"    => "Jln Denpasar Singaraja, Mengwi",
+            "phone"     => "085123123123",
+        );
+
+        $urlAddress 		= URLAPI . "/v1/order/last_address";
+		$responseAddress 	= mobileAPI($urlAddress, $mdata = NULL, $token);
+        $resultAddress      = $responseAddress->result->messages;
+
+
+        $urlCabang 		= URLAPI . "/v1/outlet/getcabang_byid?id=".$_GET['cabang'];
+		$responseCabang 	= expatAPI($urlCabang);
+        $resultCabang      = $responseCabang->result->messages;
+        // echo '<pre>'.print_r($resultCabang,true).'</pre>';
         // die;
 
         $variant = array();
@@ -53,12 +64,14 @@ class Order extends CI_Controller
         // die;
 
         $mdata = array(
-            'title'     => NAMETITLE . ' - Order',
-            'content'   => 'widget/order/order',
-            'extra'		=> 'widget/order/js/_js_order',
-            'variant'   => $variant, 
-            'all_variant'  => $all_variant, 
-            'token'        => $token
+            'title'         => NAMETITLE . ' - Order',
+            'content'       => 'widget/order/order',
+            'extra'		    => 'widget/order/js/_js_order',
+            'variant'       => $variant, 
+            'all_variant'   => $all_variant,
+            'address'       => $resultAddress, 
+            'cabang'        => $resultCabang, 
+            'token'         => $token
         );
         $this->load->view('layout/wrapper', $mdata);
 	}
@@ -109,7 +122,9 @@ class Order extends CI_Controller
 
         $urlproduk = URLAPI . "/v1/produk/getproduk_byid?id=".$_GET['produk'];
 		$resultproduk = expatAPI($urlproduk)->result->messages;
-
+        
+        // echo '<pre>'.print_r($resultproduk,true).'</pre>';
+        // die;
 
         $variantproduk = expatAPI(URLAPI . "/v1/produk/get_varianbyid?id=".$_GET['produk'])->result->messages;
 
@@ -207,16 +222,50 @@ class Order extends CI_Controller
         echo json_encode(@$datas);
     }
 
+    public function loadaddress($token)
+    {
+        $url = URLAPI . "/v1/order/last_address";
+		$result = mobileAPI($url, $mdata=NULL, $token)->result->messages;
+        echo json_encode($result);  
+        die;    
+    }
+
+    public function editaddress_process()
+    {
+        $input          = $this->input;
+		$token          = $this->security->xss_clean($input->post('token'));
+		$idaddress      = $this->security->xss_clean($input->post('idaddress'));
+		$nameaddress        = $this->security->xss_clean($input->post('nameaddress'));
+		$address        = $this->security->xss_clean($input->post('address'));
+		$phone          = $this->security->xss_clean($input->post('phone'));
+
+
+        $mdata = array(
+            'title'         => $nameaddress,
+            'alamat'        => $address,
+            'phone'         => $phone,
+            'is_primary'    => 'yes'
+        );
+
+        $url = URLAPI . "/v1/order/update_address?id=".$idaddress;
+		$response = mobileAPI($url, json_encode($mdata), $token);
+        $result = $response->result;
+
+        echo '<pre>'.print_r($result,true).'</pre>';
+        die;
+
+    }
+
     public function detail_process()
     {
         $input          = $this->input;
 		// $idmember       = $this->security->xss_clean($input->post('id_member'));
 		$idcabang       = $this->security->xss_clean($input->post('id_cabang'));
 		$idvariant      = $this->security->xss_clean($input->post('id_variant'));
-		$cartdelivery   = $this->security->xss_clean($input->post('cartdelivery'));
+		$idpengiriman   = $this->security->xss_clean($input->post('idpengiriman'));
 		$jumlah         = $this->security->xss_clean($input->post('jumlah'));;
 		$token          = $this->security->xss_clean($input->post('usertoken'));;
-
+		$note          = $this->security->xss_clean($input->post('inptnote'));
 
         $temp_item = array();
 
@@ -231,19 +280,30 @@ class Order extends CI_Controller
         }
 
 
-        $mdata = array(
-            'id_pengiriman'  => $cartdelivery,
-            'id_cabang'      => $idcabang, 
-            'items'           => $temp_item
-        );  
+        if($idpengiriman != null){
+            $mdata = array(
+                'id_pengiriman'  => $idpengiriman,
+                'id_cabang'      => $idcabang, 
+                'is_pickup'     => 'No',
+                'note'          => ($note == null ? 'null' : $note),
+                'items'           => $temp_item
+            );  
+        }else{
+            $mdata = array(
+                'id_pengiriman'  => 'null',
+                'id_cabang'      => $idcabang, 
+                'is_pickup'     => 'Yes',
+                'note'          => ($note == null ? 'null' : $note),
+                'items'           => $temp_item
+            );  
+        }
 
+        // echo '<pre>'.print_r($mdata,true).'</pre>';
+        // die;
         
         $url = URLAPI . "/v1/order/add_transaksi";
 		$response = mobileAPI($url, json_encode($mdata), $token);
         $result = $response->result;
-
-        // echo '<pre>'.print_r($response,true).'</pre>';
-        // die;
 
         if($response->status == 200){
             setcookie('variant', "", time() - 3600, "/");
