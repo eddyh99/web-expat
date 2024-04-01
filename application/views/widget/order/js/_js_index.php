@@ -61,7 +61,7 @@
             }
 
             $.ajax({
-                url: "<?=base_url()?>widget/order/get_harga_produk?produk=<?= $_GET['produk']?>&cabang=<?= $_GET['cabang']?>",
+                url: "<?=base_url()?>widget/order/get_harga_produk?produk=<?= $_GET['product']?>&cabang=<?= $_GET['cabang']?>",
                 type: "POST",
                 data: rdata,
                 success: function (response) {
@@ -98,7 +98,7 @@
             }
 
             $.ajax({
-                url: "<?=base_url()?>widget/order/get_harga_produk?produk=<?= $_GET['produk']?>&cabang=<?= $_GET['cabang']?>",
+                url: "<?=base_url()?>widget/order/get_harga_produk?produk=<?= $_GET['product']?>&cabang=<?= $_GET['cabang']?>",
                 type: "POST",
                 data: mdata,
                 success: function (response) {
