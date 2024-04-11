@@ -120,19 +120,19 @@ class Order extends CI_Controller
     public function detail()
     {
 
-        $urlproduk = URLAPI . "/v1/produk/getproduk_byid?id=".$_GET['produk'];
+        $urlproduk = URLAPI . "/v1/produk/getproduk_byid?id=".$_GET['product'];
 		$resultproduk = expatAPI($urlproduk)->result->messages;
         
         // echo '<pre>'.print_r($resultproduk,true).'</pre>';
         // die;
 
-        $variantproduk = expatAPI(URLAPI . "/v1/produk/get_varianbyid?id=".$_GET['produk'])->result->messages;
+        $variantproduk = expatAPI(URLAPI . "/v1/produk/get_varianbyid?id=".$_GET['product'])->result->messages;
 
         $mdata = array(
             'title'     => NAMETITLE . ' - Order Detail',
             'content'   => 'widget/order/detail_order',
             'extra'		=> 'widget/order/js/_js_index',
-            'produk'    => $resultproduk,
+            'product'    => $resultproduk,
             'variant'   => $variantproduk
 
         );
@@ -200,7 +200,7 @@ class Order extends CI_Controller
             'id_additional' => $id_additional
         );
 
-        $url = URLAPI . "/v1/produk/get_varianbyid?id=".$_GET['produk'];
+        $url = URLAPI . "/v1/produk/get_varianbyid?id=".$_GET['product'];
 		$result = expatAPI($url)->result->messages;
         
         $harga;

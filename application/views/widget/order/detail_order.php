@@ -1,16 +1,16 @@
 <div class="w-100 header-detail-order position-relative">
-    <img class="img-fluid" src="<?= $produk->picture?>" alt="img">
+    <img class="img-fluid" src="<?= $product->picture?>" alt="img">
 </div>
 <div class="app-content px-2 row  mb-5 pb-5">
     <div class="app-member mx-auto col-12 col-lg-8  border-1 border-white">
         <form id="detailorder" action="<?= base_url()?>widget/order/setcookie_add_tocart" method="POST">
             <input type="hidden" name="idcabang" value="<?= $_GET['cabang']?>">
-            <input type="hidden" name="idproduk" value="<?= $_GET['produk']?>">
+            <input type="hidden" name="idproduk" value="<?= $_GET['product']?>">
             <input type="hidden" name="id_variant" id="id_variant">
             <input type="hidden" name="total_variant" id="total_variant">
             <div class="mt-3">
-                <h1><?= $produk->nama?></h1>
-                <span class="desc"><?= $produk->deskripsi?></span>
+                <h1><?= $product->nama?></h1>
+                <span class="desc"><?= $product->deskripsi?></span>
                 <h3 class="greenprice">Rp <span class="showprice">-</span></h3>
             </div>
             <!-- <button type="button" class="btn btn-primary" id="liveToastBtn">Show live toast</button> -->
@@ -79,10 +79,10 @@
             <hr style="border-bottom: 2px solid #fff;">
             <div class="mt-3 mb-4">
                 <?php 
-                    if($produk->kategori == "drink"){
+                    if($product->kategori == "drink"){
                 ?>
                     <h3 class="f-lora">Cup Size</h3>
-                <?php } else if($produk->kategori == "food"){?>
+                <?php } else if($product->kategori == "food"){?>
                     <h3 class="f-lora">Portion Of Food</h3>
                 <?php } else {?>
                     <h3 class="f-lora">Retail</h3>
