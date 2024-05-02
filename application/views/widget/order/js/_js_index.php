@@ -3,7 +3,7 @@
 
 
 
-<script>
+<script type="text/javascript">
     const toastTrigger = document.getElementById('liveToastBtn')
     const toastLiveExample = document.getElementById('liveToast')
 
@@ -24,7 +24,6 @@
     
     $('.fa-plus-circle').on('click', function(){
         jumlah++;
-        console.log(jumlah);
         $("#total_variant").val(jumlah);
         $(".showprice").text((harga * jumlah).toLocaleString('en-US'));
         $('#jumlahcoffe').text(jumlah);
@@ -61,12 +60,11 @@
             }
 
             $.ajax({
-                url: "<?=base_url()?>widget/order/get_harga_produk?produk=<?= $_GET['product']?>&cabang=<?= $_GET['cabang']?>",
+                url: "<?=base_url()?>widget/order/get_harga_produk?product=<?= $_GET['product']?>&cabang=<?= $_GET['cabang']?>",
                 type: "POST",
                 data: rdata,
                 success: function (response) {
                     let result = JSON.parse(response)
-                    console.log(result);
                     if(result != null){
                         $("#id_variant").val(result.id_variant);
                         harga = Number(result.harga);
@@ -98,12 +96,11 @@
             }
 
             $.ajax({
-                url: "<?=base_url()?>widget/order/get_harga_produk?produk=<?= $_GET['product']?>&cabang=<?= $_GET['cabang']?>",
+                url: "<?=base_url()?>widget/order/get_harga_produk?product=<?= $_GET['product']?>&cabang=<?= $_GET['cabang']?>",
                 type: "POST",
                 data: mdata,
                 success: function (response) {
                     let result = JSON.parse(response)
-                    console.log(result);
                     if(result != null){
                         $("#id_variant").val(result.id_variant);
                         harga = Number(result.harga);
@@ -126,6 +123,13 @@
         toastBootstrap.show();
         // event.preventDefault();
     });
+
+
+    function postMessage(){
+        Total.postMessage('<?= @$totalorder?>');
+        // console.log('<?= @$totalorder?>');
+    }
+    postMessage();
 
 
 </script>

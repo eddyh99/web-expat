@@ -14,6 +14,8 @@ class Order extends CI_Controller
         $cookie = stripslashes($_COOKIE['variant']);
         $all_variant = json_decode($cookie, true);
 
+        // echo '<pre>'.print_r($all_variant,true).'</pre>';
+        // die;
         // Killua BEARER TOKEN
         // bbe287cf3a3bf23306bb175c8461ce86a16f6a75
 
@@ -22,17 +24,19 @@ class Order extends CI_Controller
         // $token = 'bbe287cf3a3bf23306bb175c8461ce86a16f6a75';
         // bbe287cf3a3bf23306bb175c8461ce86a16f6a75""
 
-        $mdata = array(
-            "alamat"    => "Jln Denpasar Singaraja, Mengwi",
-            "phone"     => "085123123123",
-        );
+        // $mdata = array(
+        //     "alamat"    => "Jln Denpasar Singaraja, Mengwi",
+        //     "phone"     => "085123123123",
+        // );
 
-        $urlAddress 		= URLAPI . "/v1/order/last_address";
+        $urlAddress 		= URLAPI . "/v1/mobile/order/last_address";
 		$responseAddress 	= mobileAPI($urlAddress, $mdata = NULL, $token);
         $resultAddress      = $responseAddress->result->messages;
 
+        // echo '<pre>'.print_r($responseAddress,true).'</pre>';
+        // die;
 
-        $urlCabang 		= URLAPI . "/v1/outlet/getcabang_byid?id=".$_GET['cabang'];
+        $urlCabang 		= URLAPI . "/v1/mobile/outlet/getcabang_byid?id=".$_GET['cabang'];
 		$responseCabang 	= expatAPI($urlCabang);
         $resultCabang      = $responseCabang->result->messages;
         // echo '<pre>'.print_r($resultCabang,true).'</pre>';
@@ -40,8 +44,8 @@ class Order extends CI_Controller
 
         $variant = array();
         foreach($all_variant as $av){
-            $detail_variant = expatAPI(URLAPI . "/v1/produk/get_detailbyid?id=".$av['id_variant'])->result->messages;
-            $detail_produk  = expatAPI(URLAPI . "/v1/produk/getproduk_byid?id=".$detail_variant->id_produk)->result->messages;
+            $detail_variant = expatAPI(URLAPI . "/v1/mobile/produk/get_detailbyid?id=".$av['id_variant'])->result->messages;
+            $detail_produk  = expatAPI(URLAPI . "/v1/mobile/produk/getproduk_byid?id=".$detail_variant->id_produk)->result->messages;
             $data = array(
                 "id"                => $detail_variant->id,
                 "id_produk"         => $detail_variant->id_produk,
@@ -120,6 +124,13 @@ class Order extends CI_Controller
     public function detail()
     {
 
+        $cookie = stripslashes($_COOKIE['variant']);
+        $all_variant = json_decode($cookie, true);
+
+        // echo '<pre>'.print_r( count($all_variant),true).'</pre>';
+        // die;
+
+        
         $urlproduk = URLAPI . "/v1/produk/getproduk_byid?id=".$_GET['product'];
 		$resultproduk = expatAPI($urlproduk)->result->messages;
         
@@ -129,11 +140,12 @@ class Order extends CI_Controller
         $variantproduk = expatAPI(URLAPI . "/v1/produk/get_varianbyid?id=".$_GET['product'])->result->messages;
 
         $mdata = array(
-            'title'     => NAMETITLE . ' - Order Detail',
-            'content'   => 'widget/order/detail_order',
-            'extra'		=> 'widget/order/js/_js_index',
-            'product'    => $resultproduk,
-            'variant'   => $variantproduk
+            'title'         => NAMETITLE . ' - Order Detail',
+            'content'       => 'widget/order/detail_order',
+            'extra'		    => 'widget/order/js/_js_index',
+            'product'       => $resultproduk,
+            'variant'       => $variantproduk,
+            'totalorder'    => count(@$all_variant)
 
         );
         $this->load->view('layout/wrapper', $mdata);
@@ -166,9 +178,7 @@ class Order extends CI_Controller
             $data = json_encode($variant_available);
             setcookie('variant', "", time() - 3600, "/");
             setcookie('variant', $data, 2147483647, "/");
-            redirect('widget/order/detail?cabang='.$idcabang.'&produk='.$idproduk);
-            // echo '<pre>'.print_r($variant_show,true).'</pre>';
-            // die;
+            redirect('widget/order/detail?cabang='.$idcabang.'&product='.$idproduk);
         }else{
             $variant_empty = array();
 
@@ -182,7 +192,7 @@ class Order extends CI_Controller
             $data = json_encode($variant_empty);
             setcookie('variant', "", time() - 3600, "/");
             setcookie('variant', $data, 2147483647, "/");
-            redirect('widget/order/detail?cabang='.$idcabang.'&produk='.$idproduk);
+            redirect('widget/order/detail?cabang='.$idcabang.'&product='.$idproduk);
         }
 
     }
@@ -203,6 +213,7 @@ class Order extends CI_Controller
         $url = URLAPI . "/v1/produk/get_varianbyid?id=".$_GET['product'];
 		$result = expatAPI($url)->result->messages;
         
+
         $harga;
         foreach($result as $dt){        
             if($_GET['cabang'] == $dt->id_cabang){
@@ -224,7 +235,7 @@ class Order extends CI_Controller
 
     public function loadaddress($token)
     {
-        $url = URLAPI . "/v1/order/last_address";
+        $url = URLAPI . "/v1/mobile/order/last_address";
 		$result = mobileAPI($url, $mdata=NULL, $token)->result->messages;
         echo json_encode($result);  
         die;    
@@ -285,7 +296,7 @@ class Order extends CI_Controller
                 'id_pengiriman'  => $idpengiriman,
                 'id_cabang'      => $idcabang, 
                 'is_pickup'     => 'No',
-                'note'          => ($note == null ? 'null' : $note),
+                'note'          => ($note == null ? null : $note),
                 'items'           => $temp_item
             );  
         }else{
@@ -293,7 +304,7 @@ class Order extends CI_Controller
                 'id_pengiriman'  => 'null',
                 'id_cabang'      => $idcabang, 
                 'is_pickup'     => 'Yes',
-                'note'          => ($note == null ? 'null' : $note),
+                'note'          => ($note == null ? null : $note),
                 'items'           => $temp_item
             );  
         }
