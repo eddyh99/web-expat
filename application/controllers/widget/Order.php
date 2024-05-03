@@ -33,8 +33,12 @@ class Order extends CI_Controller
 		$responseAddress 	= mobileAPI($urlAddress, $mdata = NULL, $token);
         $resultAddress      = $responseAddress->result->messages;
 
-        // echo '<pre>'.print_r($responseAddress,true).'</pre>';
+        // echo '<pre>'.print_r($resultAddress,true).'</pre>';
         // die;
+        // if(empty($resultAddress)){
+        //     echo '<pre>'.print_r("MASUK SINI",true).'</pre>';
+        //     die;
+        // }
 
         $urlCabang 		= URLAPI . "/v1/mobile/outlet/getcabang_byid?id=".$_GET['cabang'];
 		$responseCabang 	= expatAPI($urlCabang);
@@ -42,6 +46,9 @@ class Order extends CI_Controller
         // echo '<pre>'.print_r($resultCabang,true).'</pre>';
         // die;
 
+            // if(isset($all_variant)){
+                
+            // }
         $variant = array();
         foreach($all_variant as $av){
             $detail_variant = expatAPI(URLAPI . "/v1/mobile/produk/get_detailbyid?id=".$av['id_variant'])->result->messages;
@@ -124,10 +131,10 @@ class Order extends CI_Controller
     public function detail()
     {
 
-        $cookie = stripslashes($_COOKIE['variant']);
+        $cookie = stripslashes(@$_COOKIE['variant']);
         $all_variant = json_decode($cookie, true);
 
-        // echo '<pre>'.print_r( count($all_variant),true).'</pre>';
+        // echo '<pre>'.print_r($all_variant,true).'</pre>';
         // die;
 
         
@@ -145,7 +152,7 @@ class Order extends CI_Controller
             'extra'		    => 'widget/order/js/_js_index',
             'product'       => $resultproduk,
             'variant'       => $variantproduk,
-            'totalorder'    => count(@$all_variant)
+            'totalorder'    => @count(@$all_variant)
 
         );
         $this->load->view('layout/wrapper', $mdata);
@@ -241,6 +248,31 @@ class Order extends CI_Controller
         die;    
     }
 
+    public function addaddress_process()
+    {
+        $input          = $this->input;
+		$token          = $this->security->xss_clean($input->post('token'));
+		$nameaddress        = $this->security->xss_clean($input->post('nameaddress'));
+		$address        = $this->security->xss_clean($input->post('address'));
+		$phone          = $this->security->xss_clean($input->post('phone'));
+
+
+        $mdata = array(
+            'title'         => $nameaddress,
+            'alamat'        => $address,
+            'phone'         => $phone,
+            'is_primary'    => 'yes'
+        );
+
+        $url = URLAPI . "/v1/mobile/order/add_address";
+		$response = mobileAPI($url, json_encode($mdata), $token);
+        $result = $response->result;
+
+        echo '<pre>'.print_r($result,true).'</pre>';
+        die;
+
+    }
+
     public function editaddress_process()
     {
         $input          = $this->input;
@@ -258,7 +290,7 @@ class Order extends CI_Controller
             'is_primary'    => 'yes'
         );
 
-        $url = URLAPI . "/v1/order/update_address?id=".$idaddress;
+        $url = URLAPI . "/v1/mobile/order/update_address?id=".$idaddress;
 		$response = mobileAPI($url, json_encode($mdata), $token);
         $result = $response->result;
 
@@ -312,7 +344,7 @@ class Order extends CI_Controller
         // echo '<pre>'.print_r($mdata,true).'</pre>';
         // die;
         
-        $url = URLAPI . "/v1/order/add_transaksi";
+        $url = URLAPI . "/v1/mobile/order/add_transaksi";
 		$response = mobileAPI($url, json_encode($mdata), $token);
         $result = $response->result;
 
@@ -330,7 +362,7 @@ class Order extends CI_Controller
     public function notif($token)
     {
         setcookie('variant', "", time() - 3600);
-        $url = URLAPI . "/v1/order/list_transaksi";
+        $url = URLAPI . "/v1/mobile/order/list_transaksi";
 		$response = mobileAPI($url, $mdata = NULL, $token);
         $result = $response->result->messages;
 

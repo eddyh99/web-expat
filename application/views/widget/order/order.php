@@ -6,7 +6,8 @@
             <input type="hidden" id="usertoken" name="usertoken" value="<?= $token?>">
             
             <div class="chart-delivery row mx-auto mt-5 p-2">
-                <input type="hidden" id="idpengiriman" name="idpengiriman" value="<?= $address->id?>">
+                <input type="hidden" id="idpengiriman" name="idpengiriman" value="<?= @$address->id?>">
+           
                 <label id="labelpickup" class="col-6 d-flex justify-content-center align-items-center" for="pickup">
                     <div class="">
                         <span>PICK UP</span>
@@ -20,6 +21,41 @@
                     </div>
                 </label>
             </div>
+
+            <?php if(empty($address)){?>
+                <div class="modal" id="addaddress" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="false">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4>Add Your Address</h4>
+                                <!-- <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                            </div>
+                            <div class="modal-body text-white p-2">
+                                <div class="my-4">
+                                    <label for="addinptname">Name Location</label>
+                                    <input type="text" id="addinptname" name="addinptname" class="form-control" >
+                                </div>
+                                <div class="my-4">
+                                    <label for="addinptaddress">Address</label>
+                                    <input type="text" id="addinptaddress" name="addinptaddress" class="form-control" >
+                                </div>
+                                <div class="my-4">
+                                    <label for="addinptphone">Phone</label>
+                                    <input type="text" id="addinptphone" name="addinptphone" class="form-control" >
+                                </div>
+                                <div class="my-4">
+                                    <a id="btnaddaddress" class="btn btn-expat">Add Address</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script type="text/javascript">
+                    setTimeout(function(){
+                        $('#addaddress').modal('show');
+                    }, 100);
+                </script>
+            <?php }?>
 
             <!-- <div id="editaddress" class="d-flex justify-content-center align-items-center p-3">
                 <a class="btn btn-white px-3 m-3" href="">Add Address</a>
@@ -62,18 +98,18 @@
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body text-white p-2">
-                                    <input type="hidden" id="idaddress" name="idaddress" value="<?= $address->id?>">
+                                    <input type="hidden" id="idaddress" name="idaddress" value="<?= @$address->id?>">
                                     <div class="my-4">
                                         <label for="inptname">Name Location</label>
-                                        <input type="text" id="inptname" name="inptname" class="form-control" value="<?= $address->title?>">
+                                        <input type="text" id="inptname" name="inptname" class="form-control" value="<?= @$address->title?>">
                                     </div>
                                     <div class="my-4">
                                         <label for="inptaddress">Address</label>
-                                        <input type="text" id="inptaddress" name="inptaddress" class="form-control" value="<?= $address->alamat?>">
+                                        <input type="text" id="inptaddress" name="inptaddress" class="form-control" value="<?= @$address->alamat?>">
                                     </div>
                                     <div class="my-4">
                                         <label for="inptphone">Phone</label>
-                                        <input type="text" id="inptphone" name="inptphone" class="form-control" value="<?= $address->phone?>">
+                                        <input type="text" id="inptphone" name="inptphone" class="form-control" value="<?= @$address->phone?>">
                                     </div>
                                     <div class="my-4">
                                         <a id="updateaddress" class="btn btn-expat">Update Address</a>
