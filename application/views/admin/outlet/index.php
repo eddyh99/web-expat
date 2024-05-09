@@ -25,6 +25,7 @@
                                 <th>No</th>
                                 <th>Outlet</th>
                                 <th class="th-outlet-address">Address</th>
+                                <th>Provinsi</th>
                                 <th>Opening</th>
                                 <th>Contact</th>
                                 <th>Action</th>
@@ -37,6 +38,7 @@
                                 <th>No</th>
                                 <th>Outlet</th>
                                 <th>Address</th>
+                                <th>Provinsi</th>
                                 <th>Opening</th>
                                 <th>Contact</th>
                                 <th>Action</th>
