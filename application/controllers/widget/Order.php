@@ -248,13 +248,36 @@ class Order extends CI_Controller
         die;    
     }
 
-    public function addaddress_process()
+    
+    public function addaddress($token)
+    {  
+        $urlAddress 		= URLAPI . "/v1/mobile/order/last_address";
+		$responseAddress 	= mobileAPI($urlAddress, $mdata = NULL, $token);
+        $resultAddress      = $responseAddress->result->messages;
+
+        // echo '<pre>'.print_r($this->uri->segment('4'),true).'</pre>';
+
+
+        $mdata = array(
+            'title'         => NAMETITLE . ' - Add Address',
+            'content'       => 'widget/address/add_address',
+            // 'extra'		    => 'widget/address/js/_js_addaddress',
+            'address'       => $resultAddress,
+            'token'         => $token
+        );
+
+        $this->load->view('layout/wrapper', $mdata);
+    }
+
+    public function addaddress_process($token)
     {
         $input          = $this->input;
-		$token          = $this->security->xss_clean($input->post('token'));
-		$nameaddress        = $this->security->xss_clean($input->post('nameaddress'));
+		// $token          = $this->security->xss_clean($input->post('token'));
+        $idaddress      = $this->security->xss_clean($input->post('idaddress'));
+		$nameaddress    = $this->security->xss_clean($input->post('nameaddress'));
 		$address        = $this->security->xss_clean($input->post('address'));
 		$phone          = $this->security->xss_clean($input->post('phone'));
+        $idcabang       = $this->security->xss_clean($input->post('idcabang'));
 
 
         $mdata = array(
@@ -268,19 +291,45 @@ class Order extends CI_Controller
 		$response = mobileAPI($url, json_encode($mdata), $token);
         $result = $response->result;
 
-        echo '<pre>'.print_r($result,true).'</pre>';
-        die;
+        if($response->status == 200){
+			redirect('widget/order/ordersummary/'.$token.'?cabang='.$idcabang);
+			return;
+        }else{
+            $this->session->set_flashdata('error', $result->messages->error);
+            return;
+        }
 
     }
 
-    public function editaddress_process()
+    public function editaddress($token)
+    {  
+        $urlAddress 		= URLAPI . "/v1/mobile/order/last_address";
+		$responseAddress 	= mobileAPI($urlAddress, $mdata = NULL, $token);
+        $resultAddress      = $responseAddress->result->messages;
+
+        // echo '<pre>'.print_r($this->uri->segment('4'),true).'</pre>';
+
+
+        $mdata = array(
+            'title'         => NAMETITLE . ' - Edit Address',
+            'content'       => 'widget/address/edit_address',
+            'extra'		    => 'widget/address/js/_js_editaddress',
+            'address'       => $resultAddress,
+            'token'         => $token
+        );
+
+        $this->load->view('layout/wrapper', $mdata);
+    }
+
+    public function editaddress_process($token)
     {
         $input          = $this->input;
-		$token          = $this->security->xss_clean($input->post('token'));
+		// $token          = $this->security->xss_clean($input->post('token'));
 		$idaddress      = $this->security->xss_clean($input->post('idaddress'));
-		$nameaddress        = $this->security->xss_clean($input->post('nameaddress'));
+		$nameaddress    = $this->security->xss_clean($input->post('nameaddress'));
 		$address        = $this->security->xss_clean($input->post('address'));
 		$phone          = $this->security->xss_clean($input->post('phone'));
+		$idcabang       = $this->security->xss_clean($input->post('idcabang'));
 
 
         $mdata = array(
@@ -290,12 +339,19 @@ class Order extends CI_Controller
             'is_primary'    => 'yes'
         );
 
+
         $url = URLAPI . "/v1/mobile/order/update_address?id=".$idaddress;
 		$response = mobileAPI($url, json_encode($mdata), $token);
         $result = $response->result;
 
-        echo '<pre>'.print_r($result,true).'</pre>';
-        die;
+        if($response->status == 200){
+			redirect('widget/order/ordersummary/'.$token.'?cabang='.$idcabang);
+			return;
+        }else{
+            $this->session->set_flashdata('error', $result->messages->error);
+            return;
+        }
+    
 
     }
 

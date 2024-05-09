@@ -22,45 +22,6 @@
                 </label>
             </div>
 
-            <?php if(empty($address)){?>
-                <div class="modal" id="addaddress" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="false">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4>Add Your Address</h4>
-                                <!-- <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button> -->
-                            </div>
-                            <div class="modal-body text-white p-2">
-                                <div class="my-4">
-                                    <label for="addinptname">Name Location</label>
-                                    <input type="text" id="addinptname" name="addinptname" class="form-control" >
-                                </div>
-                                <div class="my-4">
-                                    <label for="addinptaddress">Address</label>
-                                    <input type="text" id="addinptaddress" name="addinptaddress" class="form-control" >
-                                </div>
-                                <div class="my-4">
-                                    <label for="addinptphone">Phone</label>
-                                    <input type="text" id="addinptphone" name="addinptphone" class="form-control" >
-                                </div>
-                                <div class="my-4">
-                                    <a id="btnaddaddress" class="btn btn-expat">Add Address</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <script type="text/javascript">
-                    setTimeout(function(){
-                        $('#addaddress').modal('show');
-                    }, 100);
-                </script>
-            <?php }?>
-
-            <!-- <div id="editaddress" class="d-flex justify-content-center align-items-center p-3">
-                <a class="btn btn-white px-3 m-3" href="">Add Address</a>
-                <a class="btn btn-white px-3 m-3" href="">Add Note</a>
-            </div> -->
 
             <div id="pickupoutlet" class="preview-cabang my-4" style="display: none;">
                 <h2>Pickup Outlet</h2>
@@ -77,47 +38,30 @@
 
             <div id="address" class="pt-1 mt-5">
                 <h2>Delivery Address</h2>
-                <h4 class="color-expat" id="shownameaddress"></h4>
-                <span class="color-expat-secondary" id="showaddress"></span><br>
-                <span class="color-expat-secondary" id="showphone"></span><br>
+                <h4 class="color-expat" id="shownameaddress"><?= @$address->title?></h4>
+                <span class="color-expat-secondary" id="showaddress"><?= @$address->alamat?></span><br>
+                <span class="color-expat-secondary" id="showphone"><?= @$address->phone?></span><br>
                 <span class="color-expat-secondary fst-italic" id="shownote"></span>
                 <div id="edit-in-address" class="d-flex justify-content-start align-items-center mt-2">
-                    <a class="btn btn-white d-flex align-items-center" href="" data-bs-toggle="modal" data-bs-target="#editaddress">
-                        <svg class="me-2" width="18" height="18" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M6.70399 1.62683H4.52291C2.72916 1.62683 1.60449 2.89675 1.60449 4.69458V9.54441C1.60449 11.3422 2.72391 12.6122 4.52291 12.6122H9.67024C11.4698 12.6122 12.5892 11.3422 12.5892 9.54441V7.19475" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M5.14986 6.37049L9.50911 2.01125C10.0522 1.46875 10.9324 1.46875 11.4755 2.01125L12.1854 2.72116C12.7285 3.26425 12.7285 4.14508 12.1854 4.68758L7.80519 9.06783C7.56778 9.30525 7.24578 9.43883 6.90978 9.43883H4.72461L4.77944 7.23383C4.78761 6.9095 4.92003 6.60033 5.14986 6.37049Z" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M8.84668 2.68481L11.5102 5.34831" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        Edit Address
-                    </a>
-                    <div class="modal fade" id="editaddress" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4>Edit Address</h4>
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body text-white p-2">
-                                    <input type="hidden" id="idaddress" name="idaddress" value="<?= @$address->id?>">
-                                    <div class="my-4">
-                                        <label for="inptname">Name Location</label>
-                                        <input type="text" id="inptname" name="inptname" class="form-control" value="<?= @$address->title?>">
-                                    </div>
-                                    <div class="my-4">
-                                        <label for="inptaddress">Address</label>
-                                        <input type="text" id="inptaddress" name="inptaddress" class="form-control" value="<?= @$address->alamat?>">
-                                    </div>
-                                    <div class="my-4">
-                                        <label for="inptphone">Phone</label>
-                                        <input type="text" id="inptphone" name="inptphone" class="form-control" value="<?= @$address->phone?>">
-                                    </div>
-                                    <div class="my-4">
-                                        <a id="updateaddress" class="btn btn-expat">Update Address</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <?php if(empty($address)){?>
+                        <a class="btn btn-white d-flex align-items-center" href="<?= base_url()?>widget/order/addaddress/<?= $token?>" >
+                            <svg class="me-2" width="18" height="18" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M6.70399 1.62683H4.52291C2.72916 1.62683 1.60449 2.89675 1.60449 4.69458V9.54441C1.60449 11.3422 2.72391 12.6122 4.52291 12.6122H9.67024C11.4698 12.6122 12.5892 11.3422 12.5892 9.54441V7.19475" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M5.14986 6.37049L9.50911 2.01125C10.0522 1.46875 10.9324 1.46875 11.4755 2.01125L12.1854 2.72116C12.7285 3.26425 12.7285 4.14508 12.1854 4.68758L7.80519 9.06783C7.56778 9.30525 7.24578 9.43883 6.90978 9.43883H4.72461L4.77944 7.23383C4.78761 6.9095 4.92003 6.60033 5.14986 6.37049Z" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M8.84668 2.68481L11.5102 5.34831" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Add Address
+                        </a>
+                    <?php } else {?>
+                        <a class="btn btn-white d-flex align-items-center" href="<?= base_url()?>widget/order/editaddress/<?= $token?>?idcabang=<?= $_GET['cabang']?>" >
+                            <svg class="me-2" width="18" height="18" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M6.70399 1.62683H4.52291C2.72916 1.62683 1.60449 2.89675 1.60449 4.69458V9.54441C1.60449 11.3422 2.72391 12.6122 4.52291 12.6122H9.67024C11.4698 12.6122 12.5892 11.3422 12.5892 9.54441V7.19475" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M5.14986 6.37049L9.50911 2.01125C10.0522 1.46875 10.9324 1.46875 11.4755 2.01125L12.1854 2.72116C12.7285 3.26425 12.7285 4.14508 12.1854 4.68758L7.80519 9.06783C7.56778 9.30525 7.24578 9.43883 6.90978 9.43883H4.72461L4.77944 7.23383C4.78761 6.9095 4.92003 6.60033 5.14986 6.37049Z" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M8.84668 2.68481L11.5102 5.34831" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Edit Address
+                        </a>
+                    <?php } ?>
                   
                     <a class="btn btn-white mx-3 d-flex align-items-center" href="" data-bs-toggle="modal" data-bs-target="#addnotemodal">
                         <svg class="me-2" width="18" height="18" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">

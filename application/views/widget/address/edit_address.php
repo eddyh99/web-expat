@@ -1,0 +1,30 @@
+<div class="app-content px-2 row  mb-5 pb-5">
+    <div class="app-member mx-auto col-12 col-lg-8 my-5 border-1 border-white">
+        <?php if (@isset($_SESSION["error"])) { ?>
+            <div class="col-12 alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="notif-login f-poppins"><?= $_SESSION["error"] ?></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php } ?>
+        <h4>Edit Address</h4>
+        <form id="detailorder" action="<?= base_url()?>widget/order/editaddress_process/<?= $token?>" method="POST">
+            <input type="hidden" id="idaddress" name="idaddress" value="<?= @$address->id?>">
+            <input type="hidden" id="idcabang" name="idcabang" value="<?= $_GET['idcabang']?>">
+            <div class="my-4">
+                <label for="nameaddress">Name Location</label>
+                <input type="text" id="nameaddress" name="nameaddress" class="form-control" value="<?= @$address->title?>">
+            </div>
+            <div class="my-4">
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address" class="form-control" value="<?= @$address->alamat?>">
+            </div>
+            <div class="my-4">
+                <label for="phone">Phone</label>
+                <input type="text" id="phone" name="phone" class="form-control" value="<?= @$address->phone?>">
+            </div>
+            <div class="my-4">
+                <button type="submit" class="btn btn-expat">Update Address</button>
+            </div>
+        </form>
+    </div>
+</div>
