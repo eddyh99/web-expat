@@ -14,6 +14,10 @@ class Order extends CI_Controller
         $cookie = stripslashes($_COOKIE['variant']);
         $all_variant = json_decode($cookie, true);
 
+        if(empty($cookie)){
+            echo '<pre>'.print_r("KOSONG KOOKIE",true).'</pre>';
+        }
+
         // echo '<pre>'.print_r($all_variant,true).'</pre>';
         // die;
         // Killua BEARER TOKEN
@@ -24,31 +28,20 @@ class Order extends CI_Controller
         // $token = 'bbe287cf3a3bf23306bb175c8461ce86a16f6a75';
         // bbe287cf3a3bf23306bb175c8461ce86a16f6a75""
 
-        // $mdata = array(
-        //     "alamat"    => "Jln Denpasar Singaraja, Mengwi",
-        //     "phone"     => "085123123123",
-        // );
 
         $urlAddress 		= URLAPI . "/v1/mobile/order/last_address";
 		$responseAddress 	= mobileAPI($urlAddress, $mdata = NULL, $token);
         $resultAddress      = $responseAddress->result->messages;
 
-        // echo '<pre>'.print_r($resultAddress,true).'</pre>';
-        // die;
-        // if(empty($resultAddress)){
-        //     echo '<pre>'.print_r("MASUK SINI",true).'</pre>';
-        //     die;
-        // }
+        $urlUser 		= URLAPI . "/v1/mobile/member/get_userdetail";
+		$responseUser 	= mobileAPI($urlUser, $mdata = NULL, $token);
+        $resultUser      = $responseUser->result->messages;
+
 
         $urlCabang 		= URLAPI . "/v1/mobile/outlet/getcabang_byid?id=".$_GET['cabang'];
 		$responseCabang 	= expatAPI($urlCabang);
         $resultCabang      = $responseCabang->result->messages;
-        // echo '<pre>'.print_r($resultCabang,true).'</pre>';
-        // die;
 
-            // if(isset($all_variant)){
-                
-            // }
         $variant = array();
         foreach($all_variant as $av){
             $detail_variant = expatAPI(URLAPI . "/v1/mobile/produk/get_detailbyid?id=".$av['id_variant'])->result->messages;
@@ -82,6 +75,7 @@ class Order extends CI_Controller
             'all_variant'   => $all_variant,
             'address'       => $resultAddress, 
             'cabang'        => $resultCabang, 
+            'user'          => $resultUser,
             'token'         => $token
         );
         $this->load->view('layout/wrapper', $mdata);
@@ -351,11 +345,10 @@ class Order extends CI_Controller
             $this->session->set_flashdata('error', $result->messages->error);
             return;
         }
-    
 
     }
 
-    public function detail_process()
+    public function enterpin()
     {
         $input          = $this->input;
 		// $idmember       = $this->security->xss_clean($input->post('id_member'));
@@ -397,27 +390,113 @@ class Order extends CI_Controller
             );  
         }
 
+        $this->session->set_userdata('ordersummary', $mdata);
+
         // echo '<pre>'.print_r($mdata,true).'</pre>';
+        // echo '<pre>'.print_r($token,true).'</pre>';
         // die;
         
-        $url = URLAPI . "/v1/mobile/order/add_transaksi";
-		$response = mobileAPI($url, json_encode($mdata), $token);
-        $result = $response->result;
 
-        if($response->status == 200){
-            setcookie('variant', "", time() - 3600, "/");
-			redirect('widget/order/notif/'.$token);
-			return;
+        
+        $mdata = array(
+            'title'         => NAMETITLE . ' - Enter PIN',
+            'content'       => 'widget/order/enterpin',
+            'extra'		    => 'widget/order/js/_js_pin',
+            'token'         => $token
+        );
+
+        $this->load->view('layout/wrapper', $mdata);
+        
+    }
+
+
+    public function detail_process()
+    {
+        $input          = $this->input;
+		$enterpin       = $this->security->xss_clean($input->post('enterpin'));
+		$token          = $this->security->xss_clean($input->post('usertoken'));
+		// // $idmember       = $this->security->xss_clean($input->post('id_member'));
+		// $idcabang       = $this->security->xss_clean($input->post('id_cabang'));
+		// $idvariant      = $this->security->xss_clean($input->post('id_variant'));
+		// $idpengiriman   = $this->security->xss_clean($input->post('idpengiriman'));
+		// $jumlah         = $this->security->xss_clean($input->post('jumlah'));;
+		// $note          = $this->security->xss_clean($input->post('inptnote'));
+
+        // $temp_item = array();
+
+        // foreach($idvariant as $keyid => $valid){
+        //     $temp['id_varian']   = $valid; 
+        //     foreach($jumlah as $keyjmlh => $valjmlh){
+        //         $temp['jumlah']   = $valjmlh;
+        //         if(($keyid == $keyjmlh) && ($keyjmlh == $keyid)){
+        //             array_push($temp_item, $temp);
+        //         } 
+        //     }
+        // }
+
+
+        // if($idpengiriman != null){
+        //     $mdata = array(
+        //         'id_pengiriman'  => $idpengiriman,
+        //         'id_cabang'      => $idcabang, 
+        //         'is_pickup'     => 'No',
+        //         'note'          => ($note == null ? null : $note),
+        //         'items'           => $temp_item
+        //     );  
+        // }else{
+        //     $mdata = array(
+        //         'id_pengiriman'  => 'null',
+        //         'id_cabang'      => $idcabang, 
+        //         'is_pickup'     => 'Yes',
+        //         'note'          => ($note == null ? null : $note),
+        //         'items'           => $temp_item
+        //     );  
+        // }
+        
+
+        if(!empty($enterpin)){
+
+            $pin = array(
+                "pin"   => sha1($enterpin)
+            );
+
+            $url = URLAPI . "/v1/mobile/member/check_pin";
+            $response = mobileAPI($url,  json_encode($pin), $token);
+            $result = $response->result;
+
+            if($result->status == 200){
+                if(!empty($_SESSION['ordersummary'])){
+                    $url = URLAPI . "/v1/mobile/order/add_transaksi";
+                    $response = mobileAPI($url, json_encode($_SESSION['ordersummary']), $token);
+                    $result = $response->result;
+            
+                    if($response->status == 200){
+                        setcookie('variant', "", time() - 3600, "/");
+                        redirect('widget/order/notif/'.$token);
+                        return;
+                    }else{
+                        redirect('widget/order/ordersummary/'.$token.'?cabang='.$idcabang);
+                        return;
+                    }
+                }
+            }else{
+                echo '<pre>'.print_r("SALAH PIN",true).'</pre>';
+                die;
+            }
         }else{
-            // $this->session->set_flashdata('error', $result->messages->error);
-            redirect('widget/order/ordersummary/'.$token.'?cabang='.$idcabang);
-            return;
+            echo '<pre>'.print_r("PIN KOSONG",true).'</pre>';
+            die;
         }
+    }
+
+    public function removecookie()
+    {
+        setcookie('variant', "", time() - 3600, "/");
     }
 
     public function notif($token)
     {
-        setcookie('variant', "", time() - 3600);
+        setcookie('variant', "", time() - 3600, "/");
         $url = URLAPI . "/v1/mobile/order/list_transaksi";
 		$response = mobileAPI($url, $mdata = NULL, $token);
         $result = $response->result->messages;

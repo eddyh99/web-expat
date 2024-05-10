@@ -1,7 +1,7 @@
 
 <div class="app-content px-2 row  mb-5 pb-5">
     <div class="app-member mx-auto col-12 col-lg-8  border-1 border-white">
-        <form id="orderchart" action="<?= base_url()?>widget/order/detail_process" method="POST">
+        <form id="orderchart" action="<?= base_url()?>widget/order/enterpin" method="POST">
             <input type="hidden" name="id_cabang" value="<?= $_GET['cabang']?>">
             <input type="hidden" id="usertoken" name="usertoken" value="<?= $token?>">
             
@@ -134,6 +134,19 @@
            -->
             <hr style="border-bottom: 8px solid #fff;">
 
+            <div>
+                <div class="d-flex justify-content-between mt-2">
+                    <label for="" class="label-input-voucher">
+                        <img height="30" src="<?= base_url()?>assets/img/widget/icon-voucher.png" alt="icon">
+                        <input type="text" placeholder="Have a promotion code ?" class="form-input-voucher">
+                    </label>
+                    <!-- Todo: CHECK KODE VOUCHER VALID OR NOT -->
+                    <a class="btn btn-primary rounded-1" style="font-size: 14px;" href="">Apply</a>
+                </div>
+            </div>
+
+            <hr style="border-bottom: 2px solid #fff;">
+
             <div id="summaryorder">
                 <h2>Payment Summary</h2>
                 <div class="price d-flex justify-content-between align-items-center">
@@ -161,7 +174,7 @@
             <hr style="border-bottom: 2px solid #fff;">
 
             <div id="totalsummary" class="d-flex justify-content-between align-items-center">
-                <h2 class="f-lora color-expat fw-bold">Total Payment</h2>
+                <h3 class="f-lora color-expat fw-bold">Total Payment</h3>
                 <span>Rp 
                     <?php 
                         $total -= 18000;
@@ -170,8 +183,11 @@
             </div>
 
 
-            <div id="paymentmethod" class="d-flex justify-content-between align-items-center mt-3">
-                <a class="btn btn-white px-4 py-1" href="">CASH</a>
+            <div id="balanceuser" class="d-flex justify-content-between align-items-center mt-3">
+                <a class="btn btn-expat px-3 py-1">
+                    <span>Your Balance</span>
+                   Rp <?php echo number_format($user->saldo, 2) ?>
+                </a>
             </div>
 
             <div id="button-order" class="d-flex w-100 mt-3">

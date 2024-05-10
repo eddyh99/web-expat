@@ -322,6 +322,38 @@ body {
     font-size: 12px;
 }
 
+.app-content .app-member .label-input-voucher {
+    border-bottom: 1px solid #c2c2c2;
+    width: 100%;
+    margin-right: 1rem;
+    /* padding-left: 0.5rem; */
+}
+
+.app-content .app-member .label-input-voucher .form-input-voucher {
+    background-color: transparent;
+    border: none;
+    color: #FFFFFF;
+    width: 70%;
+}
+
+
+.app-content .app-member .label-input-voucher .form-input-voucher:focus {
+    outline: none;
+}
+
+.app-content .app-member .label-input-voucher .form-input-voucher::placeholder {
+    font-size: 12px;
+}
+
+.app-content .app-member .text-span-voucher {
+    font-size: 14px;
+    color: #cacaca;
+}
+
+.app-content .app-member #balanceuser a {
+    font-size: 12px;
+    font-weight: 700;
+} 
 
 @media (min-width: 425px) {
     .btn-expat.add-tocart {
