@@ -14,7 +14,11 @@ class Order extends CI_Controller
         $cookie = stripslashes($_COOKIE['variant']);
         $all_variant = json_decode($cookie, true);
 
-        if(empty($cookie)){
+        // echo '<pre>'.print_r($all_variant,true).'</pre>';
+        // die;
+
+
+        if(empty($all_variant)){
             echo '<pre>'.print_r("KOSONG KOOKIE",true).'</pre>';
         }
 
@@ -96,7 +100,7 @@ class Order extends CI_Controller
         }
         
         $data = json_encode($new_variant);
-        setcookie('variant', "", time() - 3600);
+        setcookie('variant', "", time() - 3600, "/");
         setcookie('variant', $data, 2147483647, "/");
 
         echo "SUKSES";
@@ -116,7 +120,7 @@ class Order extends CI_Controller
         }
 
         $data = json_encode($new_variant);
-        setcookie('variant', "", time() - 3600);
+        setcookie('variant', "", time() - 3600, "/");
         setcookie('variant', $data, 2147483647, "/");
 
         echo "Remove Item";
@@ -480,12 +484,12 @@ class Order extends CI_Controller
                     }
                 }
             }else{
-                echo '<pre>'.print_r("SALAH PIN",true).'</pre>';
-                die;
+                $this->session->set_flashdata('error', $result->messages->error);
+                return;
             }
         }else{
-            echo '<pre>'.print_r("PIN KOSONG",true).'</pre>';
-            die;
+            $this->session->set_flashdata('error', $result->messages->error);
+            return;
         }
     }
 

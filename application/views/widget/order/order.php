@@ -191,7 +191,7 @@
             </div>
 
             <div id="button-order" class="d-flex w-100 mt-3">
-                <button type="submit" class="btn btn-expat w-100 py-3">ORDER</button>
+                <button type="submit" class="btn btn-expat w-100 py-3 <?= (empty($all_variant)) ? "disabled": ""?>">ORDER</button>
             </div>
 
         </form>
