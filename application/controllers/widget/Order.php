@@ -413,12 +413,36 @@ class Order extends CI_Controller
         
     }
 
+	public function getsignature($clientId, $requestDate, $requestId, $requestBody){
+		$targetPath = "/checkout/v1/payment"; 
+		$secretKey = "SK-KHUvvn4fm3zXRIip0UWY";
+
+		// Generate Digest
+		$digestValue = base64_encode(hash('sha256', json_encode($requestBody), true));
+		
+		// Prepare Signature Component
+		$componentSignature = "Client-Id:" . $clientId . "\n" . 
+							  "Request-Id:" . $requestId . "\n" .
+							  "Request-Timestamp:" . $requestDate . "\n" . 
+							  "Request-Target:" . $targetPath . "\n" .
+							  "Digest:" . $digestValue;
+
+		// Calculate HMAC-SHA256 base64 from all the components above
+		$signature = base64_encode(hash_hmac('sha256', $componentSignature, $secretKey, true));
+		return $signature;
+
+	}
+	
+	
 
     public function detail_process()
     {
         $input          = $this->input;
 		$enterpin       = $this->security->xss_clean($input->post('enterpin'));
 		$token          = $this->security->xss_clean($input->post('usertoken'));
+		$method		    = $this->security->xss_clean($input->post('methodpayment'));
+		$amount         = "//amount total";
+		$email          = "//customer email";
 		// // $idmember       = $this->security->xss_clean($input->post('id_member'));
 		// $idcabang       = $this->security->xss_clean($input->post('id_cabang'));
 		// $idvariant      = $this->security->xss_clean($input->post('id_variant'));
@@ -475,9 +499,142 @@ class Order extends CI_Controller
                     $result = $response->result;
             
                     if($response->status == 200){
+
+
+		
+                		$invoiceID	= $response->messages;
+                		//echo "<pre>".print_r($_POST,true)."</pre>";
+                		if ($method=="credit"){
+                			$bodyreq = array (
+                						'order' => array (
+                							'amount' 		 => $amount+($amount*0.03),
+                							'invoice_number' => $invoiceID,
+                							'currency' 		 => 'IDR',
+                							'callback_url' 	 => base_url()."widget/order/success".$token,
+                							"callback_url_cancel"	=> base_url()."widget/order/cancel",
+                							"auto_redirect"			=> true,
+                							"disable_retry_payment" => true,
+                						),
+                						"customer" => array(
+                							  "email"	=> $email,
+                						),				
+                						'payment' => array (
+                							'payment_due_date' => 60,
+                							"payment_method_types" => [
+                								"CREDIT_CARD"
+                							]
+                						),
+                			);
+                		}elseif ($method=="virtual"){
+                			$bodyreq = array (
+                						'order' => array (
+                							'amount' 		 => $amount,
+                							'invoice_number' => $invoiceID,
+                							'currency' 		 => 'IDR',
+                							'callback_url' 	 => base_url()."widget/order/success".$token,
+                							"callback_url_cancel"	=> base_url()."widget/order/cancel",
+                							"auto_redirect"			=> true,
+                							"disable_retry_payment" => true,
+                						),
+                						"customer" => array(
+                							  "email"	=> $email,
+                						),				
+                						'payment' => array (
+                							'payment_due_date' => 60,
+                							"payment_method_types" => [
+                								"VIRTUAL_ACCOUNT_BCA",
+                								"VIRTUAL_ACCOUNT_BANK_MANDIRI",
+                								"VIRTUAL_ACCOUNT_BANK_SYARIAH_MANDIRI",
+                								"VIRTUAL_ACCOUNT_DOKU",
+                								"VIRTUAL_ACCOUNT_BRI",
+                								"VIRTUAL_ACCOUNT_BNI",
+                								"VIRTUAL_ACCOUNT_BANK_PERMATA",
+                								"VIRTUAL_ACCOUNT_BANK_CIMB",
+                								"VIRTUAL_ACCOUNT_BANK_DANAMON"
+                							]
+                						),
+                			);
+                		}elseif($method=="wallet"){
+                			$bodyreq = array (
+                						'order' => array (
+                							'amount' 		 => $amount,
+                							'invoice_number' => $invoiceID,
+                							'currency' 		 => 'IDR',
+                							'callback_url' 	 => base_url()."widget/order/success".$token,
+                							"callback_url_cancel"	=> base_url()."widget/order/cancel",
+                							"auto_redirect"			=> true,
+                							"disable_retry_payment" => true,
+                						),
+                						"customer" => array(
+                							  "email"	=> $email,
+                						),				
+                						'payment' => array (
+                							'payment_due_date' => 60,
+                							"payment_method_types" => [
+                								"EMONEY_SHOPEEPAY",
+                							  	"EMONEY_OVO",
+                							  	"EMONEY_DANA",
+                							]
+                						),
+                			);
+                		}else{
+                			$bodyreq = array (
+                						'order' => array (
+                							'amount' 		 => $amount,
+                							'invoice_number' => $invoiceID,
+                							'currency' 		 => 'IDR',
+                							'callback_url' 	 => base_url()."widget/order/success".$token,
+                							"callback_url_cancel"	=> base_url()."widget/order/cancel",
+                							"auto_redirect"			=> true,
+                							"disable_retry_payment" => true,
+                						),
+                						"customer" => array(
+                							  "email"	=> $email,
+                						),				
+                						'payment' => array (
+                							'payment_due_date' => 60,
+                							"payment_method_types" => [
+                								"QRIS",
+                							]
+                						),
+                			);
+                		}
+                
+                		$clientID		= "MCH-1352-1634273860130";
+                		$dateTime 		= gmdate("Y-m-d H:i:s");
+                		$isoDateTime 	= date(DATE_ISO8601, strtotime($dateTime));
+                		$requestTime 	= substr($isoDateTime, 0, 19) . "Z";
+                		$requestID		= time().uniqid();
+
+                		$signature = $this->getsignature($clientID, $requestTime, $requestID, $bodyreq);
+                		$url	= "https://api-sandbox.doku.com/checkout/v1/payment";
+                		$ch = curl_init($url);
+                		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($bodyreq));
+                		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+                		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                
+                		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                			'Content-Type: application/json',
+                			'Client-Id:' . $clientID,
+                			'Request-Id:' . $requestID,
+                			'Request-Timestamp:' . $requestTime,
+                			'Signature:' . "HMACSHA256=" . $signature,
+                		));
+                
+                		// Set response json
+                		$result = json_decode(curl_exec($ch));
+                		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                
+                		curl_close($ch);
                         setcookie('variant', "", time() - 3600, "/");
-                        redirect('widget/order/notif/'.$token);
-                        return;
+                		//echo "<pre>".print_r($result,true)."</pre>";
+                		//die;
+                		if ($result->message[0]=="SUCCESS"){
+                			redirect($result->response->payment->url);
+                		}else{
+                			$this->session->set_flashdata("error","Your topup cannot be processed");
+                			redirect(base_url()."widget/topup/membertopup/".$token);
+                		}
                     }else{
                         redirect('widget/order/ordersummary/'.$token.'?cabang='.$idcabang);
                         return;
@@ -492,6 +649,7 @@ class Order extends CI_Controller
             return;
         }
     }
+
 
     public function removecookie()
     {
