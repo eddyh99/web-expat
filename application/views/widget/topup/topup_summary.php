@@ -1,5 +1,5 @@
 
-<div class="app-content px-2 row  mb-5 pb-5">
+<div class="app-content px-2 row  my-5 py-5">
     <div class="app-member mx-auto col-12 col-lg-8  border-1 border-white">
         <form id="orderchart" action="<?= base_url()?>widget/topup/confirm" method="POST">
             <input type="hidden" name="token" value="<?= $data['token']?>">
@@ -7,7 +7,7 @@
             <input type="hidden" name="email" value="<?= $data['email']?>">
             <input type="hidden" name="methodpayment" value="<?= $data['method']?>">
 
-            <div class="d-flex flex-column justify-content-center align-items-center vh-100 w-100">
+            <div class="d-flex flex-column justify-content-start align-items-center w-100">
                 <h1 class="f-lora color-expat fw-bolder ">SUMMARY</h1>
                 <hr style="border-bottom: 2px solid #fff; width: 100%;">
                 <div class="d-flex justify-content-between align-items-center w-100 my-3">

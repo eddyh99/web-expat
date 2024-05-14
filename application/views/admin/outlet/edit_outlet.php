@@ -36,44 +36,35 @@
                         <div class="mb-3">
                             <label for="address" class="form-label">Cabang</label>
                             <select class="addprovinsi-select2" id="provinsi" name="provinsi" required>
-                                <option value="Aceh" <?= (@$outlet->provinsi == "Aceh") ? 'selected' : "" ?>>Aceh</option>
+                                <option value="Banda Aceh" <?= (@$outlet->provinsi == "Banda Aceh") ? 'selected' : "" ?>>Banda Aceh</option>
                                 <option value="Bali" <?= (@$outlet->provinsi == "Bali") ? 'selected' : "" ?>>Bali</option>
-                                <option value="Bangka Belitung" <?= (@$outlet->provinsi == "Bangka Belitung") ? 'selected' : "" ?>>Bangka Belitung</option>
-                                <option value="Banten" <?= (@$outlet->provinsi == "Banten") ? 'selected' : "" ?>>Banten</option>
-                                <option value="Bengkulu"  <?= (@$outlet->provinsi == "Bengkulu") ? 'selected' : "" ?>>Bengkulu</option>
-                                <option value="Jawa Tengah"  <?= (@$outlet->provinsi == "Jawa Tengah") ? 'selected' : "" ?>>Jawa Tengah</option>
-                                <option value="Kalimantan Tengah"  <?= (@$outlet->provinsi == "Kalimantan Tengah") ? 'selected' : "" ?>>Kalimantan Tengah</option>
-                                <option value="Sulawesi Tengah"  <?= (@$outlet->provinsi == "Sulawesi Tengah") ? 'selected' : "" ?>>Sulawesi Tengah</option>
-                                <option value="Jawa Timur"  <?= (@$outlet->provinsi == "Jawa Timur") ? 'selected' : "" ?>>Jawa Timur</option>
-                                <option value="Kalimantan Timur"  <?= (@$outlet->provinsi == "Kalimantan Timur") ? 'selected' : "" ?>>Kalimantan Timur</option>
-                                <option value="Nusa Tenggara Timur"  <?= (@$outlet->provinsi == "Nusa Tenggara Timur") ? 'selected' : "" ?>>Nusa Tenggara Timur</option>
-                                <option value="Gorontalo"  <?= (@$outlet->provinsi == "Banten") ? 'Gorontalo' : "" ?>>Gorontalo</option>
-                                <option value="DKI Jakarta"  <?= (@$outlet->provinsi == "DKI Jakarta") ? 'selected' : "" ?>>DKI Jakarta</option>
-                                <option value="Surabaya"  <?= (@$outlet->provinsi == "Surabaya") ? 'selected' : "" ?>>Surabaya</option>
-                                <option value="Jambi"  <?= (@$outlet->provinsi == "Jambi") ? 'selected' : "" ?>>Jambi</option>
-                                <option value="Lampung"  <?= (@$outlet->provinsi == "Lampung") ? 'selected' : "" ?>>Lampung</option>
-                                <option value="Maluku"  <?= (@$outlet->provinsi == "Maluku") ? 'selected' : "" ?>>Maluku</option>
-                                <option value="Kalimantan Utara"  <?= (@$outlet->provinsi == "Kalimantan Utara") ? 'selected' : "" ?>>Kalimantan Utara</option>
-                                <option value="Maluku Utara"  <?= (@$outlet->provinsi == "Maluku Utara") ? 'selected' : "" ?>>Maluku Utara</option>
-                                <option value="Sulawesi Utara"  <?= (@$outlet->provinsi == "Sulawesi Utara") ? 'selected' : "" ?>>Sulawesi Utara</option>
-                                <option value="Papua"  <?= (@$outlet->provinsi == "Papua") ? 'selected' : "" ?>>Papua</option>
-                                <option value="Riau"  <?= (@$outlet->provinsi == "Riau") ? 'selected' : "" ?>>Riau</option>
-                                <option value="Kepulauan Riau"  <?= (@$outlet->provinsi == "Kepulauan Riau") ? 'selected' : "" ?>>Kepulauan Riau</option>
-                                <option value="Sulawesi Tenggara" <?= (@$outlet->provinsi == "Sulawesi Tenggara") ? 'selected' : "" ?>>Sulawesi Tenggara</option>
-                                <option value="Kalimantan Selatan"  <?= (@$outlet->provinsi == "Kalimantan Selatan") ? 'selected' : "" ?>>Kalimantan Selatan</option>
-                                <option value="Sulawesi Selatan"  <?= (@$outlet->provinsi == "Sulawesi Selatan") ? 'selected' : "" ?>>Sulawesi Selatan</option>
-                                <option value="Sumatera Selatan"  <?= (@$outlet->provinsi == "Sumatra Selatan") ? 'selected' : "" ?>>Sumatera Selatan</option>
-                                <option value="Jawa Barat"  <?= (@$outlet->provinsi == "Jawa Barat") ? 'selected' : "" ?>>Jawa Barat</option>
-                                <option value="Kalimantan Barat"  <?= (@$outlet->provinsi == "Kalimantan Barat") ? 'selected' : "" ?>>Kalimantan Barat</option>
-                                <option value="Nusa Tenggara Barat"  <?= (@$outlet->provinsi == "Nusa Tenggara Barat") ? 'selected' : "" ?>>Nusa Tenggara Barat</option>
-                                <option value="Papua Barat"  <?= (@$outlet->provinsi == "Papua Barat") ? 'selected' : "" ?>>Papua Barat</option>
-                                <option value="Sulawesi Barat"  <?= (@$outlet->provinsi == "Sulawesi Barat") ? 'selected' : "" ?>>Sulawesi Barat</option>
-                                <option value="Sumatera Barat"  <?= (@$outlet->provinsi == "Sumatra Barat") ? 'selected' : "" ?>>Sumatera Barat</option>
-                                <option value="Daerah Istimewa Yogyakarta"  <?= (@$outlet->provinsi == "Daerah Istimewa Yogyakarta") ? 'selected' : "" ?>>Daerah Istimewa Yogyakarta</option>
-                                <option value="Papua Selatan"  <?= (@$outlet->provinsi == "Papua Selatan") ? 'selected' : "" ?>>Papua Selatan</option>
-                                <option value="Papua Tengah"  <?= (@$outlet->provinsi == "Papua Tengah") ? 'selected' : "" ?>>Papua Tengah</option>
-                                <option value="Papua Pegunungan"  <?= (@$outlet->provinsi == "Papua Pegunungan") ? 'selected' : "" ?>>Papua Pegunungan</option>
-                                <option value="Papua Barat Daya"  <?= (@$outlet->provinsi == "Papua Barat Daya") ? 'selected' : "" ?>>Papua Barat Daya</option>
+                                <option value="Jakarta" <?= (@$outlet->provinsi == "Jakarta") ? 'selected' : "" ?>>Jakarta</option>
+                                <option value="Tanggerang" <?= (@$outlet->provinsi == "Tanggerang") ? 'selected' : "" ?>>Tanggerang</option>
+                                <option value="Yogyakarta" <?= (@$outlet->provinsi == "Yogyakarta") ? 'selected' : "" ?>>Yogyakarta</option>
+                                <option value="Surabaya" <?= (@$outlet->provinsi == "Surabaya") ? 'selected' : "" ?>>Surabaya</option>
+                                <option value="Makassar" <?= (@$outlet->provinsi == "Makassar") ? 'selected' : "" ?>>Makassar</option>
+                                <option value="Medan" <?= (@$outlet->provinsi == "Medan") ? 'selected' : "" ?>>Medan</option>
+                                <option value="Gorontalo" <?= (@$outlet->provinsi == "Gorontalo") ? 'selected' : "" ?>>Gorontalo</option>
+                                <option value="Jambi" <?= (@$outlet->provinsi == "Jambi") ? 'selected' : "" ?>>Jambi</option>
+                                <option value="Bandung" <?= (@$outlet->provinsi == "Bandung") ? 'selected' : "" ?>>Bandung</option>
+                                <option value="Bekasi" <?= (@$outlet->provinsi == "Bekasi") ? 'selected' : "" ?>>Bekasi</option>
+                                <option value="Bogor" <?= (@$outlet->provinsi == "Bogor") ? 'selected' : "" ?>>Bogor</option>
+                                <option value="Depok" <?= (@$outlet->provinsi == "Depok") ? 'selected' : "" ?>>Depok</option>
+                                <option value="Salatiga" <?= (@$outlet->provinsi == "Salatiga") ? 'selected' : "" ?>>Salatiga</option>
+                                <option value="Semarang" <?= (@$outlet->provinsi == "Semarang") ? 'selected' : "" ?>>Semarang</option>
+                                <option value="Surakarta" <?= (@$outlet->provinsi == "Surakarta") ? 'selected' : "" ?>>Surakarta</option>
+                                <option value="Kediri" <?= (@$outlet->provinsi == "Kediri") ? 'selected' : "" ?>>Kediri</option>
+                                <option value="Malang" <?= (@$outlet->provinsi == "Malang") ? 'selected' : "" ?>>Malang</option>
+                                <option value="Mojokerto" <?= (@$outlet->provinsi == "Mojokerto") ? 'selected' : "" ?>>Mojokerto</option>
+                                <option value="Pontianak" <?= (@$outlet->provinsi == "Pontianak") ? 'selected' : "" ?>>Pontianak</option>
+                                <option value="Banjarmasin" <?= (@$outlet->provinsi == "Banjarmasin") ? 'selected' : "" ?>>Banjarmasin</option>
+                                <option value="Balikpapan" <?= (@$outlet->provinsi == "Balikpapan") ? 'selected' : "" ?>>Balikpapan</option>
+                                <option value="Samarinda" <?= (@$outlet->provinsi == "Samarinda") ? 'selected' : "" ?>>Samarinda</option>
+                                <option value="IKN" <?= (@$outlet->provinsi == "IKN") ? 'selected' : "" ?>>IKN</option>
+                                <option value="Manado" <?= (@$outlet->provinsi == "Manado") ? 'selected' : "" ?>>Manado</option>
+                                <option value="Padang" <?= (@$outlet->provinsi == "Padang") ? 'selected' : "" ?>>Padang</option>
+                                <option value="Jayapura" <?= (@$outlet->provinsi == "Jayapura") ? 'selected' : "" ?>>Jayapura</option>
+                               
                             </select>
                         </div>
                         <div class="mb-3">
