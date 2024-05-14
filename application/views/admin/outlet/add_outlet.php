@@ -33,6 +33,39 @@
                             <input type="text" class="form-control" id="address" name="address" placeholder="Enter address..." required autocomplete="off">
                         </div>
                         <div class="mb-3">
+                            <label for="address" class="form-label">Cabang</label>
+                            <select class="addprovinsi-select2" id="provinsi" name="provinsi" >
+                                <option value="Banda Aceh">Banda Aceh</option>
+                                <option value="Bali">Bali</option>
+                                <option value="Jakarta">Jakarta</option>
+                                <option value="Tanggerang">Tanggerang</option>
+                                <option value="Yogyakarta">Yogyakarta</option>
+                                <option value="Surabaya">Surabaya</option>
+                                <option value="Makassar">Makassar</option>
+                                <option value="Medan">Medan</option>
+                                <option value="Gorontalo">Gorontalo</option>
+                                <option value="Jambi">Jambi</option>
+                                <option value="Bandung">Bandung</option>
+                                <option value="Bekasi">Bekasi</option>
+                                <option value="Bogor">Bogor</option>
+                                <option value="Depok">Depok</option>
+                                <option value="Salatiga">Salatiga</option>
+                                <option value="Semarang">Semarang</option>
+                                <option value="Surakarta">Surakarta</option>
+                                <option value="Kediri">Kediri</option>
+                                <option value="Malang">Malang</option>
+                                <option value="Mojokerto">Mojokerto</option>
+                                <option value="Pontianak">Pontianak</option>
+                                <option value="Banjarmasin">Banjarmasin</option>
+                                <option value="Balikpapan">Balikpapan</option>
+                                <option value="Samarinda">Samarinda</option>
+                                <option value="IKN">IKN</option>
+                                <option value="Manado">Manado</option>
+                                <option value="Padang">Padang</option>
+                                <option value="Jayapura">Jayapura</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
                             <label for="opening" class="form-label">Opening</label>
                             <input type="text" class="form-control" id="opening" name="opening" placeholder="Ex: Monday to Sunday, 7 AM - 7 PM" required autocomplete="off">
                         </div>

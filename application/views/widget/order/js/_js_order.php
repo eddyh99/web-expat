@@ -8,22 +8,8 @@
 
 <script>
 
-    $.ajax({                                      
-        url: `<?= base_url()?>widget/order/loadaddress/<?= $token?>`,              
-        type: "post",                
-        success: function (response) {
-            let result = JSON.parse(response)
-            $("#shownameaddress").text(result.title);
-            $("#showaddress").text(result.alamat);
-            $("#showphone").text(`(${result.phone})`);
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log(textStatus);
-        }
-    });
-    // $(document).ready(function (){
-    // });
-    
+
+
     $('input[type=radio][name=cartdelivery]').on("change", function() {  
         console.log(this.value);
         if($(this).val() == "pickup"){  
@@ -34,7 +20,7 @@
             $('#labeldelivery').removeClass('bg-expat');
         }
         else if($(this).val() == "delivery"){
-            $('#idpengiriman').val(<?= $address->id?>); 
+            $('#idpengiriman').val(<?= @$address->id?>); 
             $('#address').show();
             $('#pickupoutlet').hide();
             $('#labelpickup').removeClass('bg-expat');
@@ -98,51 +84,93 @@
     }
 
     
-    let $modaladdress = $('#editaddress');
+
+    // let $modaladdress = $('#editaddress');
     let $modalnote = $('#addnotemodal');
+
+
 
     $("#addnote").on("click", function(){
         $("#shownote").text($("#inptnote").val());
         $modalnote.modal('hide');
     });
 
-    $("#updateaddress").on("click", function(){
+    // $("#btnaddaddress").on("click", function(){
 
-        var formData = {
-            idaddress: $("#idaddress").val(),
-            nameaddress: $("#inptname").val(),
-            address: $("#inptaddress").val(),
-            phone: $("#inptphone").val(),
-            note: $("#inptnote").val(),
-            token: $("#usertoken").val(),
-        };
+    //     var formData = {
+    //         nameaddress: $("#addinptname").val(),
+    //         address: $("#addinptaddress").val(),
+    //         phone: $("#addinptphone").val(),
+    //         token: $("#usertoken").val(),
+    //     };
+
+    //     $.ajax({
+    //         url: `<?=base_url()?>widget/order/addaddress_process`,
+    //         type: "POST",
+    //         data: formData,
+    //         success: function (response) {
+    //             $('#addaddress').modal('hide');
+    //             $.ajax({                                      
+    //                 url: `<?= base_url()?>widget/order/loadaddress/<?= $token?>`,              
+    //                 type: "post",                
+    //                 success: function (response) {
+    //                     let result = JSON.parse(response)
+    //                     $("#shownameaddress").text(result.title);
+    //                     $("#showaddress").text(result.alamat);
+    //                     $("#showphone").text(`(${result.phone})`);
+    //                 },
+    //                 error: function(jqXHR, textStatus, errorThrown) {
+    //                     console.log(textStatus);
+    //                 }
+    //             });
+
+    //         },
+    //         error: function(jqXHR, textStatus, errorThrown) {
+    //             console.log(textStatus);
+    //         }
+    //     });
+
+    // });
+
+
+    // $("#updateaddress").on("click", function(){
+
+    //     var formData = {
+    //         idaddress: $("#idaddress").val(),
+    //         nameaddress: $("#inptname").val(),
+    //         address: $("#inptaddress").val(),
+    //         phone: $("#inptphone").val(),
+    //         note: $("#inptnote").val(),
+    //         token: $("#usertoken").val(),
+    //     };
     
-        $.ajax({
-            url: `<?=base_url()?>widget/order/editaddress_process`,
-            type: "POST",
-            data: formData,
-            success: function (response) {
-                $modaladdress.modal('hide');
-                $.ajax({                                      
-                    url: `<?= base_url()?>widget/order/loadaddress/<?= $token?>`,              
-                    type: "post",                
-                    success: function (response) {
-                        let result = JSON.parse(response)
-                        $("#shownameaddress").text(result.title);
-                        $("#showaddress").text(result.alamat);
-                        $("#showphone").text(`(${result.phone})`);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log(textStatus);
-                    }
-                });
+    //     $.ajax({
+    //         url: `<?=base_url()?>widget/order/editaddress_process`,
+    //         type: "POST",
+    //         data: formData,
+    //         success: function (response) {
+    //             $modaladdress.modal('hide');
+    //             $.ajax({                                      
+    //                 url: `<?= base_url()?>widget/order/loadaddress/<?= $token?>`,              
+    //                 type: "post",                
+    //                 success: function (response) {
+    //                     let result = JSON.parse(response)
+    //                     console.log(result);
+    //                     $("#shownameaddress").text(result.title);
+    //                     $("#showaddress").text(result.alamat);
+    //                     $("#showphone").text(`(${result.phone})`);
+    //                 },
+    //                 error: function(jqXHR, textStatus, errorThrown) {
+    //                     console.log(textStatus);
+    //                 }
+    //             });
 
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log(textStatus);
-            }
-        })
+    //         },
+    //         error: function(jqXHR, textStatus, errorThrown) {
+    //             console.log(textStatus);
+    //         }
+    //     })
 
-    })
+    // })
 
 </script>

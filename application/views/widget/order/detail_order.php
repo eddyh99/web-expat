@@ -186,7 +186,7 @@
                         <i class="fas fa-plus-circle fs-3" style="cursor: pointer;"></i>
                     </div>
                     <div class="w-90 d-flex justify-content-end ps-4">
-                        <button type="submit" class="btn btn-expat add-tocart px-5 w-100">ADD TO CHART</button>
+                        <button type="submit" class="btn btn-expat add-tocart px-5 w-100">ADD TO CART</button>
                     </div>
                 </div>
             </div>

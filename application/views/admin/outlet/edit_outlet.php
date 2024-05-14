@@ -34,6 +34,40 @@
                             <input type="text" class="form-control" value="<?= @$outlet->alamat?>" id="address" name="address" placeholder="Enter address..." required autocomplete="off">
                         </div>
                         <div class="mb-3">
+                            <label for="address" class="form-label">Cabang</label>
+                            <select class="addprovinsi-select2" id="provinsi" name="provinsi" required>
+                                <option value="Banda Aceh" <?= (@$outlet->provinsi == "Banda Aceh") ? 'selected' : "" ?>>Banda Aceh</option>
+                                <option value="Bali" <?= (@$outlet->provinsi == "Bali") ? 'selected' : "" ?>>Bali</option>
+                                <option value="Jakarta" <?= (@$outlet->provinsi == "Jakarta") ? 'selected' : "" ?>>Jakarta</option>
+                                <option value="Tanggerang" <?= (@$outlet->provinsi == "Tanggerang") ? 'selected' : "" ?>>Tanggerang</option>
+                                <option value="Yogyakarta" <?= (@$outlet->provinsi == "Yogyakarta") ? 'selected' : "" ?>>Yogyakarta</option>
+                                <option value="Surabaya" <?= (@$outlet->provinsi == "Surabaya") ? 'selected' : "" ?>>Surabaya</option>
+                                <option value="Makassar" <?= (@$outlet->provinsi == "Makassar") ? 'selected' : "" ?>>Makassar</option>
+                                <option value="Medan" <?= (@$outlet->provinsi == "Medan") ? 'selected' : "" ?>>Medan</option>
+                                <option value="Gorontalo" <?= (@$outlet->provinsi == "Gorontalo") ? 'selected' : "" ?>>Gorontalo</option>
+                                <option value="Jambi" <?= (@$outlet->provinsi == "Jambi") ? 'selected' : "" ?>>Jambi</option>
+                                <option value="Bandung" <?= (@$outlet->provinsi == "Bandung") ? 'selected' : "" ?>>Bandung</option>
+                                <option value="Bekasi" <?= (@$outlet->provinsi == "Bekasi") ? 'selected' : "" ?>>Bekasi</option>
+                                <option value="Bogor" <?= (@$outlet->provinsi == "Bogor") ? 'selected' : "" ?>>Bogor</option>
+                                <option value="Depok" <?= (@$outlet->provinsi == "Depok") ? 'selected' : "" ?>>Depok</option>
+                                <option value="Salatiga" <?= (@$outlet->provinsi == "Salatiga") ? 'selected' : "" ?>>Salatiga</option>
+                                <option value="Semarang" <?= (@$outlet->provinsi == "Semarang") ? 'selected' : "" ?>>Semarang</option>
+                                <option value="Surakarta" <?= (@$outlet->provinsi == "Surakarta") ? 'selected' : "" ?>>Surakarta</option>
+                                <option value="Kediri" <?= (@$outlet->provinsi == "Kediri") ? 'selected' : "" ?>>Kediri</option>
+                                <option value="Malang" <?= (@$outlet->provinsi == "Malang") ? 'selected' : "" ?>>Malang</option>
+                                <option value="Mojokerto" <?= (@$outlet->provinsi == "Mojokerto") ? 'selected' : "" ?>>Mojokerto</option>
+                                <option value="Pontianak" <?= (@$outlet->provinsi == "Pontianak") ? 'selected' : "" ?>>Pontianak</option>
+                                <option value="Banjarmasin" <?= (@$outlet->provinsi == "Banjarmasin") ? 'selected' : "" ?>>Banjarmasin</option>
+                                <option value="Balikpapan" <?= (@$outlet->provinsi == "Balikpapan") ? 'selected' : "" ?>>Balikpapan</option>
+                                <option value="Samarinda" <?= (@$outlet->provinsi == "Samarinda") ? 'selected' : "" ?>>Samarinda</option>
+                                <option value="IKN" <?= (@$outlet->provinsi == "IKN") ? 'selected' : "" ?>>IKN</option>
+                                <option value="Manado" <?= (@$outlet->provinsi == "Manado") ? 'selected' : "" ?>>Manado</option>
+                                <option value="Padang" <?= (@$outlet->provinsi == "Padang") ? 'selected' : "" ?>>Padang</option>
+                                <option value="Jayapura" <?= (@$outlet->provinsi == "Jayapura") ? 'selected' : "" ?>>Jayapura</option>
+                               
+                            </select>
+                        </div>
+                        <div class="mb-3">
                             <label for="opening" class="form-label">Opening</label>
                             <input type="text" class="form-control" value="<?= @$outlet->opening?>" id="opening" name="opening" placeholder="Ex: Monday to Sunday, 7 AM - 7 PM" required autocomplete="off">
                         </div>

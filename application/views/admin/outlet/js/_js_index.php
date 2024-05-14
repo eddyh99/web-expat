@@ -1,3 +1,8 @@
+<!-- SELECT2 -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <style>
     .th-outlet-address {
         width: 300px;
@@ -6,6 +11,8 @@
 </style>
 
 <script>
+
+
 
     var table_outlet = $('#table_list_outlet').DataTable({
 		"scrollX": true,
@@ -26,6 +33,7 @@
 			},
 			{ data: 'nama' },
 			{ data: 'alamat' },
+			{ data: 'provinsi' },
 			{ data: 'opening' },
 			{ data: 'kontak' },
 			{ 
@@ -78,6 +86,15 @@
             // tempImg.forEach(b64toblob);
           }
           reader.readAsDataURL($input[0].files[0]);
+        });
+
+		
+
+        $('.addprovinsi-select2').select2({
+            placeholder: "Select Province",
+            allowClear: true,
+            theme: "bootstrap", 
+            width: "100%"
         });
     });
 
