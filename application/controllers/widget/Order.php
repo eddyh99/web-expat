@@ -14,13 +14,12 @@ class Order extends CI_Controller
         $cookie = stripslashes($_COOKIE['variant']);
         $all_variant = json_decode($cookie, true);
 
-        // echo '<pre>'.print_r($all_variant,true).'</pre>';
+        // echo '<pre>'.print_r($_SESSION,true).'</pre>';
         // die;
 
-
-        if(empty($all_variant)){
-            echo '<pre>'.print_r("KOSONG KOOKIE",true).'</pre>';
-        }
+        // if(empty($all_variant)){
+        //     echo '<pre>'.print_r("KOSONG KOOKIE",true).'</pre>';
+        // }
 
         // echo '<pre>'.print_r($all_variant,true).'</pre>';
         // die;
@@ -67,8 +66,8 @@ class Order extends CI_Controller
             array_push($variant, $data);
         }
         
-        // echo '<pre>'.print_r($variant,true).'</pre>';
         // print_r(json_encode($variant));
+        // echo '<pre>'.print_r($variant,true).'</pre>';
         // die;
 
         $mdata = array(
@@ -103,6 +102,12 @@ class Order extends CI_Controller
         setcookie('variant', "", time() - 3600, "/");
         setcookie('variant', $data, 2147483647, "/");
 
+        $cookie = stripslashes($_COOKIE['variant']);
+        $all_variant = json_decode($cookie, true);
+
+        // echo '<pre>'.print_r($all_variant,true).'</pre>';
+        // die;
+        
         echo "SUKSES";
     }
 
@@ -359,9 +364,11 @@ class Order extends CI_Controller
 		$idcabang       = $this->security->xss_clean($input->post('id_cabang'));
 		$idvariant      = $this->security->xss_clean($input->post('id_variant'));
 		$idpengiriman   = $this->security->xss_clean($input->post('idpengiriman'));
-		$jumlah         = $this->security->xss_clean($input->post('jumlah'));;
-		$token          = $this->security->xss_clean($input->post('usertoken'));;
-		$note          = $this->security->xss_clean($input->post('inptnote'));
+		$jumlah         = $this->security->xss_clean($input->post('jumlah'));
+		$token          = $this->security->xss_clean($input->post('usertoken'));
+		$note           = $this->security->xss_clean($input->post('inptnote'));
+        $method		    = $this->security->xss_clean($input->post('methodpayment'));
+        $amount         = $this->security->xss_clean($input->post('amount'));
 
         $temp_item = array();
 
@@ -375,43 +382,171 @@ class Order extends CI_Controller
             }
         }
 
+        $mdata = array(
+            'id_pengiriman'     => (($idpengiriman != null) ? $idpengiriman : 'null'),
+            'id_cabang'         => $idcabang, 
+            'is_pickup'         => (($idpengiriman != null) ? 'No' : 'Yes'),
+            'note'              => ($note == null ? null : $note),
+            'carabayar'         => $method,
+            'items'             => $temp_item
+        );
 
-        if($idpengiriman != null){
-            $mdata = array(
-                'id_pengiriman'  => $idpengiriman,
-                'id_cabang'      => $idcabang, 
-                'is_pickup'     => 'No',
-                'note'          => ($note == null ? null : $note),
-                'items'           => $temp_item
-            );  
-        }else{
-            $mdata = array(
-                'id_pengiriman'  => 'null',
-                'id_cabang'      => $idcabang, 
-                'is_pickup'     => 'Yes',
-                'note'          => ($note == null ? null : $note),
-                'items'           => $temp_item
-            );  
-        }
+        // echo '<pre>'.print_r($mdata,true).'</pre>';
+        // die;
 
         $this->session->set_userdata('ordersummary', $mdata);
 
-        // echo '<pre>'.print_r($mdata,true).'</pre>';
-        // echo '<pre>'.print_r($token,true).'</pre>';
-        // die;
-        
+        if($method != 'expatbalance'){
+            $url = URLAPI . "/v1/mobile/order/add_transaksi";
+            $response = mobileAPI($url, json_encode($mdata), $token);
+            $result = $response->result;
 
+            if($response->status == 200){
+
+                $invoiceID	= $result->messages;
+                //echo "<pre>".print_r($_POST,true)."</pre>";
+                if ($method=="credit"){
+                    $bodyreq = array (
+                                'order' => array (
+                                    'amount' 		 => $amount+($amount*0.03),
+                                    'invoice_number' => $invoiceID,
+                                    'currency' 		 => 'IDR',
+                                    'callback_url' 	 => base_url()."widget/order/notif/".$token,
+                                    "callback_url_cancel"	=> base_url()."widget/order/cancel",
+                                    "auto_redirect"			=> true,
+                                    "disable_retry_payment" => true,
+                                ),			
+                                'payment' => array (
+                                    'payment_due_date' => 60,
+                                    "payment_method_types" => [
+                                        "CREDIT_CARD"
+                                    ]
+                                ),
+                    );
+                }elseif ($method=="virtual"){
+                    $bodyreq = array (
+                                'order' => array (
+                                    'amount' 		 => $amount,
+                                    'invoice_number' => $invoiceID,
+                                    'currency' 		 => 'IDR',
+                                    'callback_url' 	 => base_url()."widget/order/notif/".$token,
+                                    "callback_url_cancel"	=> base_url()."widget/order/cancel",
+                                    "auto_redirect"			=> true,
+                                    "disable_retry_payment" => true,
+                                ),			
+                                'payment' => array (
+                                    'payment_due_date' => 60,
+                                    "payment_method_types" => [
+                                        "VIRTUAL_ACCOUNT_BCA",
+                                        "VIRTUAL_ACCOUNT_BANK_MANDIRI",
+                                        "VIRTUAL_ACCOUNT_BANK_SYARIAH_MANDIRI",
+                                        "VIRTUAL_ACCOUNT_DOKU",
+                                        "VIRTUAL_ACCOUNT_BRI",
+                                        "VIRTUAL_ACCOUNT_BNI",
+                                        "VIRTUAL_ACCOUNT_BANK_PERMATA",
+                                        "VIRTUAL_ACCOUNT_BANK_CIMB",
+                                        "VIRTUAL_ACCOUNT_BANK_DANAMON"
+                                    ]
+                                ),
+                    );
+                }elseif($method=="wallet"){
+                    $bodyreq = array (
+                                'order' => array (
+                                    'amount' 		 => $amount,
+                                    'invoice_number' => $invoiceID,
+                                    'currency' 		 => 'IDR',
+                                    'callback_url' 	 => base_url()."widget/order/notif/".$token,
+                                    "callback_url_cancel"	=> base_url()."widget/order/cancel",
+                                    "auto_redirect"			=> true,
+                                    "disable_retry_payment" => true,
+                                ),			
+                                'payment' => array (
+                                    'payment_due_date' => 60,
+                                    "payment_method_types" => [
+                                        "EMONEY_SHOPEEPAY",
+                                          "EMONEY_OVO",
+                                          "EMONEY_DANA",
+                                    ]
+                                ),
+                    );
+                }else{
+                    $bodyreq = array (
+                                'order' => array (
+                                    'amount' 		 => $amount,
+                                    'invoice_number' => $invoiceID,
+                                    'currency' 		 => 'IDR',
+                                    'callback_url' 	 => base_url()."widget/order/notif/".$token,
+                                    "callback_url_cancel"	=> base_url()."widget/order/cancel",
+                                    "auto_redirect"			=> true,
+                                    "disable_retry_payment" => true,
+                                ),			
+                                'payment' => array (
+                                    'payment_due_date' => 60,
+                                    "payment_method_types" => [
+                                        "QRIS",
+                                    ]
+                                ),
+                    );
+                }
+        
+                $clientID		= "MCH-1352-1634273860130";
+                $dateTime 		= gmdate("Y-m-d H:i:s");
+                $isoDateTime 	= date(DATE_ISO8601, strtotime($dateTime));
+                $requestTime 	= substr($isoDateTime, 0, 19) . "Z";
+                $requestID		= time().uniqid();
+
+                $signature = $this->getsignature($clientID, $requestTime, $requestID, $bodyreq);
+
+                $url	= "https://api-sandbox.doku.com/checkout/v1/payment";
+                $ch = curl_init($url);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($bodyreq));
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                    'Content-Type: application/json',
+                    'Client-Id:' . $clientID,
+                    'Request-Id:' . $requestID,
+                    'Request-Timestamp:' . $requestTime,
+                    'Signature:' . "HMACSHA256=" . $signature,
+                ));
+        
+                // Set response json
+                $result = json_decode(curl_exec($ch));
+                $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        
+                curl_close($ch);
+                // setcookie('variant', "", time() - 3600, "/");
+
+                if ($result->message[0]=="SUCCESS"){
+                    redirect($result->response->payment->url);
+                }else{
+                    $this->session->set_flashdata("error","Your Order cannot be processed");
+                    redirect(base_url()."widget/order/ordersummary/".$token."?cabang=".$idcabang);
+                }
+            } else {
+                $this->session->set_flashdata('error', $result->messages->error);
+                return;
+            }
+        }
         
         $mdata = array(
             'title'         => NAMETITLE . ' - Enter PIN',
             'content'       => 'widget/order/enterpin',
             'extra'		    => 'widget/order/js/_js_pin',
-            'token'         => $token
+            'token'         => $token,
+            'id_cabang'     => $idcabang
         );
 
         $this->load->view('layout/wrapper', $mdata);
         
     }
+
+    public function cancel()
+	{
+		$this->session->set_flashdata("error","Your topup cannot be processed");
+		redirect(base_url()."widget/topup/membertopup/".$token);
+	}
 
 	public function getsignature($clientId, $requestDate, $requestId, $requestBody){
 		$targetPath = "/checkout/v1/payment"; 
@@ -441,45 +576,7 @@ class Order extends CI_Controller
 		$enterpin       = $this->security->xss_clean($input->post('enterpin'));
 		$token          = $this->security->xss_clean($input->post('usertoken'));
 		$method		    = $this->security->xss_clean($input->post('methodpayment'));
-		$amount         = "//amount total";
-		$email          = "//customer email";
-		// // $idmember       = $this->security->xss_clean($input->post('id_member'));
-		// $idcabang       = $this->security->xss_clean($input->post('id_cabang'));
-		// $idvariant      = $this->security->xss_clean($input->post('id_variant'));
-		// $idpengiriman   = $this->security->xss_clean($input->post('idpengiriman'));
-		// $jumlah         = $this->security->xss_clean($input->post('jumlah'));;
-		// $note          = $this->security->xss_clean($input->post('inptnote'));
-
-        // $temp_item = array();
-
-        // foreach($idvariant as $keyid => $valid){
-        //     $temp['id_varian']   = $valid; 
-        //     foreach($jumlah as $keyjmlh => $valjmlh){
-        //         $temp['jumlah']   = $valjmlh;
-        //         if(($keyid == $keyjmlh) && ($keyjmlh == $keyid)){
-        //             array_push($temp_item, $temp);
-        //         } 
-        //     }
-        // }
-
-
-        // if($idpengiriman != null){
-        //     $mdata = array(
-        //         'id_pengiriman'  => $idpengiriman,
-        //         'id_cabang'      => $idcabang, 
-        //         'is_pickup'     => 'No',
-        //         'note'          => ($note == null ? null : $note),
-        //         'items'           => $temp_item
-        //     );  
-        // }else{
-        //     $mdata = array(
-        //         'id_pengiriman'  => 'null',
-        //         'id_cabang'      => $idcabang, 
-        //         'is_pickup'     => 'Yes',
-        //         'note'          => ($note == null ? null : $note),
-        //         'items'           => $temp_item
-        //     );  
-        // }
+        $idcabang       = $this->security->xss_clean($input->post('id_cabang'));
         
 
         if(!empty($enterpin)){
@@ -488,160 +585,28 @@ class Order extends CI_Controller
                 "pin"   => sha1($enterpin)
             );
 
-            $url = URLAPI . "/v1/mobile/member/check_pin";
-            $response = mobileAPI($url,  json_encode($pin), $token);
+            $urlpin = URLAPI . "/v1/mobile/member/check_pin";
+            $response = mobileAPI($urlpin,  json_encode($pin), $token);
             $result = $response->result;
+
+            // echo '<pre>'.print_r($response,true).'</pre>';
 
             if($result->status == 200){
                 if(!empty($_SESSION['ordersummary'])){
                     $url = URLAPI . "/v1/mobile/order/add_transaksi";
                     $response = mobileAPI($url, json_encode($_SESSION['ordersummary']), $token);
                     $result = $response->result;
-            
+
+                    echo '<pre>'.print_r($result,true).'</pre>';
+                    die;
                     if($response->status == 200){
-
-
-		
-                		$invoiceID	= $response->messages;
-                		//echo "<pre>".print_r($_POST,true)."</pre>";
-                		if ($method=="credit"){
-                			$bodyreq = array (
-                						'order' => array (
-                							'amount' 		 => $amount+($amount*0.03),
-                							'invoice_number' => $invoiceID,
-                							'currency' 		 => 'IDR',
-                							'callback_url' 	 => base_url()."widget/order/success".$token,
-                							"callback_url_cancel"	=> base_url()."widget/order/cancel",
-                							"auto_redirect"			=> true,
-                							"disable_retry_payment" => true,
-                						),
-                						"customer" => array(
-                							  "email"	=> $email,
-                						),				
-                						'payment' => array (
-                							'payment_due_date' => 60,
-                							"payment_method_types" => [
-                								"CREDIT_CARD"
-                							]
-                						),
-                			);
-                		}elseif ($method=="virtual"){
-                			$bodyreq = array (
-                						'order' => array (
-                							'amount' 		 => $amount,
-                							'invoice_number' => $invoiceID,
-                							'currency' 		 => 'IDR',
-                							'callback_url' 	 => base_url()."widget/order/success".$token,
-                							"callback_url_cancel"	=> base_url()."widget/order/cancel",
-                							"auto_redirect"			=> true,
-                							"disable_retry_payment" => true,
-                						),
-                						"customer" => array(
-                							  "email"	=> $email,
-                						),				
-                						'payment' => array (
-                							'payment_due_date' => 60,
-                							"payment_method_types" => [
-                								"VIRTUAL_ACCOUNT_BCA",
-                								"VIRTUAL_ACCOUNT_BANK_MANDIRI",
-                								"VIRTUAL_ACCOUNT_BANK_SYARIAH_MANDIRI",
-                								"VIRTUAL_ACCOUNT_DOKU",
-                								"VIRTUAL_ACCOUNT_BRI",
-                								"VIRTUAL_ACCOUNT_BNI",
-                								"VIRTUAL_ACCOUNT_BANK_PERMATA",
-                								"VIRTUAL_ACCOUNT_BANK_CIMB",
-                								"VIRTUAL_ACCOUNT_BANK_DANAMON"
-                							]
-                						),
-                			);
-                		}elseif($method=="wallet"){
-                			$bodyreq = array (
-                						'order' => array (
-                							'amount' 		 => $amount,
-                							'invoice_number' => $invoiceID,
-                							'currency' 		 => 'IDR',
-                							'callback_url' 	 => base_url()."widget/order/success".$token,
-                							"callback_url_cancel"	=> base_url()."widget/order/cancel",
-                							"auto_redirect"			=> true,
-                							"disable_retry_payment" => true,
-                						),
-                						"customer" => array(
-                							  "email"	=> $email,
-                						),				
-                						'payment' => array (
-                							'payment_due_date' => 60,
-                							"payment_method_types" => [
-                								"EMONEY_SHOPEEPAY",
-                							  	"EMONEY_OVO",
-                							  	"EMONEY_DANA",
-                							]
-                						),
-                			);
-                		}else{
-                			$bodyreq = array (
-                						'order' => array (
-                							'amount' 		 => $amount,
-                							'invoice_number' => $invoiceID,
-                							'currency' 		 => 'IDR',
-                							'callback_url' 	 => base_url()."widget/order/success".$token,
-                							"callback_url_cancel"	=> base_url()."widget/order/cancel",
-                							"auto_redirect"			=> true,
-                							"disable_retry_payment" => true,
-                						),
-                						"customer" => array(
-                							  "email"	=> $email,
-                						),				
-                						'payment' => array (
-                							'payment_due_date' => 60,
-                							"payment_method_types" => [
-                								"QRIS",
-                							]
-                						),
-                			);
-                		}
-                
-                		$clientID		= "MCH-1352-1634273860130";
-                		$dateTime 		= gmdate("Y-m-d H:i:s");
-                		$isoDateTime 	= date(DATE_ISO8601, strtotime($dateTime));
-                		$requestTime 	= substr($isoDateTime, 0, 19) . "Z";
-                		$requestID		= time().uniqid();
-
-                		$signature = $this->getsignature($clientID, $requestTime, $requestID, $bodyreq);
-                		$url	= "https://api-sandbox.doku.com/checkout/v1/payment";
-                		$ch = curl_init($url);
-                		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($bodyreq));
-                		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
-                		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                
-                		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                			'Content-Type: application/json',
-                			'Client-Id:' . $clientID,
-                			'Request-Id:' . $requestID,
-                			'Request-Timestamp:' . $requestTime,
-                			'Signature:' . "HMACSHA256=" . $signature,
-                		));
-                
-                		// Set response json
-                		$result = json_decode(curl_exec($ch));
-                		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                
-                		curl_close($ch);
-                        setcookie('variant', "", time() - 3600, "/");
-                		//echo "<pre>".print_r($result,true)."</pre>";
-                		//die;
-                		if ($result->message[0]=="SUCCESS"){
-                			redirect($result->response->payment->url);
-                		}else{
-                			$this->session->set_flashdata("error","Your topup cannot be processed");
-                			redirect(base_url()."widget/topup/membertopup/".$token);
-                		}
-                    }else{
-                        redirect('widget/order/ordersummary/'.$token.'?cabang='.$idcabang);
-                        return;
+                        redirect('widget/order/notif');
                     }
+
                 }
             }else{
                 $this->session->set_flashdata('error', $result->messages->error);
+                redirect("widget/order/ordersummary/".$token."?cabang=".$idcabang);
                 return;
             }
         }else{
@@ -654,14 +619,16 @@ class Order extends CI_Controller
     public function removecookie()
     {
         setcookie('variant', "", time() - 3600, "/");
+        $this->session->sess_destroy();
     }
 
-    public function notif($token)
+    public function notif($token = NULL)
     {
         setcookie('variant', "", time() - 3600, "/");
-        $url = URLAPI . "/v1/mobile/order/list_transaksi";
-		$response = mobileAPI($url, $mdata = NULL, $token);
-        $result = $response->result->messages;
+        $this->session->sess_destroy();
+        // $url = URLAPI . "/v1/mobile/order/list_transaksi";
+		// $response = mobileAPI($url, $mdata = NULL, $token);
+        // $result = $response->result->messages;
 
         // echo '<pre>'.print_r($result,true).'</pre>';
         // die;

@@ -8,7 +8,17 @@
 
 <script>
 
+    var priceQuantity = [];
 
+    <?php foreach($variant as $vr){?>
+        priceQuantity.push(
+            {
+                "id"    : <?= $vr['id']?>,
+                "price" : <?= $vr['harga']?>,
+                "jumlah" : <?= $vr['jumlah']?>,
+            }
+        );
+    <?php }?>
 
     $('input[type=radio][name=cartdelivery]').on("change", function() {  
         console.log(this.value);
@@ -28,7 +38,6 @@
         }
     });
 
-
     function pluscart(id){
         $('#jumlah'+id).val( function(i, val) {
             ++val;
@@ -42,10 +51,14 @@
                     console.log(textStatus);
                 }
             });
-            console.log(val);
+            priceQuantity.forEach((el, i) => {
+                if(el.id == id){
+                    el.jumlah = val;
+                }
+            });
+            kalkulasiprice();
             return val;
         });
-        // document.getElementById("jumlah"+id).value++;
     }
 
     function minuscart(id){
@@ -54,7 +67,7 @@
             --val;
             if(val < 1){
                 console.log("HILANGKAN PRODUK");
-                val = 1;
+                val = 0;
                 $.ajax({
                     url: `<?=base_url()?>widget/order/remove_item/${id}/${val}`,
                     type: "POST",
@@ -65,6 +78,12 @@
                         console.log(textStatus);
                     }
                 });
+                priceQuantity.forEach((el, i) => {
+                    if(el.id == id){
+                        el.jumlah = val;
+                    }
+                });
+                kalkulasiprice();
                 return val;
             }else{
                 $.ajax({
@@ -77,100 +96,52 @@
                         console.log(textStatus);
                     }
                 });
-                console.log(val);
+                priceQuantity.forEach((el, i) => {
+                    if(el.id == id){
+                        el.jumlah = val;
+                    }
+                });
+                kalkulasiprice();
+                return val;
             }
-            return val;
         });
     }
 
-    
+    function kalkulasiprice(){
+        let subtotal = 0;
+        let total = 0;
+        priceQuantity.forEach((el, i) => {
+            subtotal = el.price * el.jumlah;
+            total += subtotal;
+        });
+        $("#amount").val(total);
+        $(".price-span").text(`${total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`);
+        $(".total-price-span").text(`${total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`);
+    }
+    kalkulasiprice();
 
-    // let $modaladdress = $('#editaddress');
+
     let $modalnote = $('#addnotemodal');
-
-
-
     $("#addnote").on("click", function(){
         $("#shownote").text($("#inptnote").val());
         $modalnote.modal('hide');
     });
 
-    // $("#btnaddaddress").on("click", function(){
-
-    //     var formData = {
-    //         nameaddress: $("#addinptname").val(),
-    //         address: $("#addinptaddress").val(),
-    //         phone: $("#addinptphone").val(),
-    //         token: $("#usertoken").val(),
-    //     };
-
-    //     $.ajax({
-    //         url: `<?=base_url()?>widget/order/addaddress_process`,
-    //         type: "POST",
-    //         data: formData,
-    //         success: function (response) {
-    //             $('#addaddress').modal('hide');
-    //             $.ajax({                                      
-    //                 url: `<?= base_url()?>widget/order/loadaddress/<?= $token?>`,              
-    //                 type: "post",                
-    //                 success: function (response) {
-    //                     let result = JSON.parse(response)
-    //                     $("#shownameaddress").text(result.title);
-    //                     $("#showaddress").text(result.alamat);
-    //                     $("#showphone").text(`(${result.phone})`);
-    //                 },
-    //                 error: function(jqXHR, textStatus, errorThrown) {
-    //                     console.log(textStatus);
-    //                 }
-    //             });
-
-    //         },
-    //         error: function(jqXHR, textStatus, errorThrown) {
-    //             console.log(textStatus);
-    //         }
-    //     });
-
-    // });
-
-
-    // $("#updateaddress").on("click", function(){
-
-    //     var formData = {
-    //         idaddress: $("#idaddress").val(),
-    //         nameaddress: $("#inptname").val(),
-    //         address: $("#inptaddress").val(),
-    //         phone: $("#inptphone").val(),
-    //         note: $("#inptnote").val(),
-    //         token: $("#usertoken").val(),
-    //     };
-    
-    //     $.ajax({
-    //         url: `<?=base_url()?>widget/order/editaddress_process`,
-    //         type: "POST",
-    //         data: formData,
-    //         success: function (response) {
-    //             $modaladdress.modal('hide');
-    //             $.ajax({                                      
-    //                 url: `<?= base_url()?>widget/order/loadaddress/<?= $token?>`,              
-    //                 type: "post",                
-    //                 success: function (response) {
-    //                     let result = JSON.parse(response)
-    //                     console.log(result);
-    //                     $("#shownameaddress").text(result.title);
-    //                     $("#showaddress").text(result.alamat);
-    //                     $("#showphone").text(`(${result.phone})`);
-    //                 },
-    //                 error: function(jqXHR, textStatus, errorThrown) {
-    //                     console.log(textStatus);
-    //                 }
-    //             });
-
-    //         },
-    //         error: function(jqXHR, textStatus, errorThrown) {
-    //             console.log(textStatus);
-    //         }
-    //     })
-
-    // })
+    $(document).ready(function(){
+        if($(".paymentradio").is(":checked")){
+            let rdy_method = $("input[name='paymentselectmodal']:checked").val();
+            let rdy_label = $("input[name='paymentselectmodal']:checked").data("title");
+            $("#methodpayment").val(rdy_method);
+            $(".labelpayment").text(rdy_label);
+        }
+        
+        $('.paymentradio').on('change', function(){
+            let chg_method = $("input[name='paymentselectmodal']:checked").val();
+            let chg_label = $("input[name='paymentselectmodal']:checked").data("title");
+            console.log(chg_label);
+            $("#methodpayment").val(chg_method);
+            $(".labelpayment").text(chg_label);
+        });
+    });
 
 </script>

@@ -1,6 +1,12 @@
 
 <div class="app-content px-2 row  mb-5 pb-5">
     <div class="app-member mx-auto col-12 col-lg-8  border-1 border-white">
+        <?php if (@isset($_SESSION["error"])) { ?>
+            <div class="col-12 alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="notif-login f-poppins"><?= $_SESSION["error"] ?></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php } ?>
         <form id="orderchart" action="<?= base_url()?>widget/order/enterpin" method="POST">
             <input type="hidden" name="id_cabang" value="<?= $_GET['cabang']?>">
             <input type="hidden" id="usertoken" name="usertoken" value="<?= $token?>">
@@ -151,23 +157,16 @@
                 <h2>Payment Summary</h2>
                 <div class="price d-flex justify-content-between align-items-center">
                     <span>Price</span>
-                    <span> Rp 
-                        <?php 
-                            $price = 0;
-                            $quantity = 0;
-                            $total = 0;
-                            foreach($variant as $vr){
-                                $price += $vr['harga'];
-                                $quantity += $vr['jumlah']; 
-                            }
-                            $total = $price * $quantity;
-                            echo number_format($total, 2);
-                        ?>
+                    <span>
+                        <!-- <i class="fas fa-sync text-warning" onClick="window.location.reload()"></i> -->
+                        Rp 
+                        <span class="price-span">   
+                        </span>
                     </span>
                 </div>
                 <div class="fee d-flex justify-content-between align-items-center">
                     <span>Fee Delivery</span>
-                    <span>Rp. 18.000</span>
+                    <span>Rp. 0</span>
                 </div>
             </div>
 
@@ -177,9 +176,14 @@
                 <h3 class="f-lora color-expat fw-bold">Total Payment</h3>
                 <span>Rp 
                     <?php 
-                        $total -= 18000;
-                        echo number_format($total, 2);?>
+                        // $total -= 0;
+                        // echo number_format($total, 2);
+                    ?>
+                    <span  class="total-price-span">
+
+                    </span>
                 </span>
+                <input type="hidden" name="amount" id="amount">
             </div>
 
 
@@ -188,6 +192,62 @@
                     <span>Your Balance</span>
                    Rp <?php echo number_format($user->saldo, 2) ?>
                 </a>
+            </div>
+
+            <div>
+                <div class="d-flex justify-content-between mt-2">
+                    <!-- <label for="" class="label-input-voucher">
+                        <img height="30" src="<?= base_url()?>assets/img/widget/icon-voucher.png" alt="icon">
+                        <input type="text" placeholder="Have a promotion code ?" class="form-input-voucher">
+                    </label> -->
+                    <!-- <a class="btn btn-primary rounded-1" style="font-size: 14px;" href="">Apply</a> -->
+                    <a class="btn btn-white d-flex justify-content-between align-items-center w-100" style="font-size: 13px;" href="" data-bs-toggle="modal" data-bs-target="#paymentmodal">
+                        <span class="d-flex align-items-center">
+                            <i class="fas fa-money-check-alt me-2 fs-5"></i>
+                            Payment
+                        </span>
+                        <span class="labelpayment">
+                            
+                        </span>
+                        <input type="hidden" name="methodpayment" id="methodpayment">
+                    </a>
+                    <div class="modal fade" id="paymentmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4>Select Payment Method</h4>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-white p-2">
+                                    <label for="expatbalance" class="label-amount">
+                                        <input type="radio" id="expatbalance" data-title="Expat Balance" value="expatbalance" name="paymentselectmodal" class="paymentradio card-input-amount-select" checked="checked" >
+                                        <span class="span-amount">Expat Balance <img class="img-fluid bg-black" width="40" src="<?= base_url()?>assets/img/logo.png" alt="logo"></span>
+                                    </label>
+                                    <br>
+                                    <label for="credit" class="label-amount">
+                                        <input type="radio" id="credit" data-title="Credit Card" value="credit" name="paymentselectmodal" class="paymentradio card-input-amount-select">
+                                        <span class="span-amount">Credit Card <img class="img-fluid" width="100" src="<?= base_url()?>assets/img/payment/card.png" alt="card"></span>
+                                    </label>
+                                    <br>
+                                    <label for="va" class="label-amount">
+                                        <input type="radio" id="va" data-title="Virtual Account" value="virtual" name="paymentselectmodal" class="paymentradio card-input-amount-select">
+                                        <span class="span-amount">Virtual Account <img class="img-fluid" width="160" src="<?= base_url()?>assets/img/payment/va.png" alt="va"></span>
+                                    </label>
+                                    <br>
+                                    <label for="wallet" class="label-amount">
+                                        <input type="radio" id="wallet" data-title="E-Wallet" value="wallet" name="paymentselectmodal" class="paymentradio card-input-amount-select" >
+                                        <span class="span-amount">E-Wallet<img class="img-fluid" width="200" src="<?= base_url()?>assets/img/payment/e-wallet.png" alt="e-wallet"></span>
+                                    </label>
+                                    <br>
+                                    <label for="qris" class="label-amount">
+                                        <input type="radio" id="qris" data-title="QRIS" value="qris" name="paymentselectmodal" class="paymentradio card-input-amount-select">
+                                        <span class="span-amount">QRIS <img class="img-fluid" width="50" src="<?= base_url()?>assets/img/payment/qris.png" alt="qris"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div id="button-order" class="d-flex w-100 mt-3">

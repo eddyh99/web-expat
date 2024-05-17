@@ -9,10 +9,10 @@
                 <div>
                     <h1 class="f-lora text-center  pt-4 color-expat fw-bold">THANK YOU!</h1>
                     <h5 class="text-center">TOP UP SUCCESS</h5>
-                    <p class="text-center" style="margin-top: 100px;">you get  <span class="fw-bolder color-expat">10 points</span> rewards</p>
-                    <div class="mt-5 pt-5">
+                    <p class="text-center" style="margin-top: 100px;">you get  <span class="fw-bolder color-expat">.... points</span> rewards</p>
+                    <!-- <div class="mt-5 pt-5">
                         <a href="" class="btn btn-expat px-5 py-2">CONTINUE</a>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
