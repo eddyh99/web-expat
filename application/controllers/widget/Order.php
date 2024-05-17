@@ -596,9 +596,6 @@ class Order extends CI_Controller
                     $url = URLAPI . "/v1/mobile/order/add_transaksi";
                     $response = mobileAPI($url, json_encode($_SESSION['ordersummary']), $token);
                     $result = $response->result;
-
-                    echo '<pre>'.print_r($result,true).'</pre>';
-                    die;
                     if($response->status == 200){
                         redirect('widget/order/notif');
                     }
