@@ -191,6 +191,7 @@
                 <a class="btn btn-expat px-3 py-1">
                     <span>Your Balance</span>
                    Rp <?php echo number_format($user->saldo, 2) ?>
+                   <input type="hidden" name="saldo" value="<?= $user->saldo?>">
                 </a>
             </div>
 

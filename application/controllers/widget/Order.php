@@ -1,6 +1,31 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+/*----------------------------------------------------------
+    Modul Name  : Order
+    Desc        : Modul ini di gunakan untuk menampilkan webview dari flutter saat melakukan
+                  menambahkan produk to cart, order transaksi, enterpin, serta proses doku
+                  
+    Sub fungsi  : 
+    - ordersummary          : Tampilan order summary produk user
+    - kalkulasi_item  	    : Prosess menambahkan atau mengurangi produk di halaman ordersummary
+    - remove_item           : Menghapus cookie produk yang kurang dar 1
+    - detail  			    : Tampilan detail produk berupa, option, size, additional dan add to cart
+    - setcookie_add_tocart  : Set cookie user add to cart detail produk
+    - get_harga_produk      : Tampilan harga produk di halaman detail produk
+    - loadaddress           : Get data address user from API
+    - addaddress            : Tampilan tambah alamat user
+    - addaddress_process    : Proses menambahkan alamat user
+    - editaddress           : Tampilan mengubah alamat user
+    - editaddress_process   : Proses mengupdate alamat user
+    - enterpin              : Tampilan enterpin dan proses DOKU
+    - cancel                : Redirecy cancel DOKU
+    - getsignature          : Proses get signature
+    - detail_process        : Proses add transkasi setelah enterpin expatbalance metod
+    - removecookie          : Hapus cookie dan session
+    - notif                 : Tampilan halaman berhasil order
+------------------------------------------------------------*/ 
+
 class Order extends CI_Controller
 {
 
@@ -11,40 +36,28 @@ class Order extends CI_Controller
 
 	public function ordersummary($token)
 	{	
+        // Get Cookie
         $cookie = stripslashes($_COOKIE['variant']);
         $all_variant = json_decode($cookie, true);
 
-        // echo '<pre>'.print_r($_SESSION,true).'</pre>';
-        // die;
-
-        // if(empty($all_variant)){
-        //     echo '<pre>'.print_r("KOSONG KOOKIE",true).'</pre>';
-        // }
-
-        // echo '<pre>'.print_r($all_variant,true).'</pre>';
-        // die;
-        // Killua BEARER TOKEN
-        // bbe287cf3a3bf23306bb175c8461ce86a16f6a75
-
-        // echo '<pre>'.print_r(getToken(),true).'</pre>';
-        // die;
-        // $token = 'bbe287cf3a3bf23306bb175c8461ce86a16f6a75';
-        // bbe287cf3a3bf23306bb175c8461ce86a16f6a75""
-
-
+        // Get Alamat user
         $urlAddress 		= URLAPI . "/v1/mobile/order/last_address";
 		$responseAddress 	= mobileAPI($urlAddress, $mdata = NULL, $token);
         $resultAddress      = $responseAddress->result->messages;
 
+        // Get User detail
         $urlUser 		= URLAPI . "/v1/mobile/member/get_userdetail";
 		$responseUser 	= mobileAPI($urlUser, $mdata = NULL, $token);
         $resultUser      = $responseUser->result->messages;
-
-
+        
+        
+        // Get Cabang
         $urlCabang 		= URLAPI . "/v1/mobile/outlet/getcabang_byid?id=".$_GET['cabang'];
 		$responseCabang 	= expatAPI($urlCabang);
         $resultCabang      = $responseCabang->result->messages;
 
+        // Cek Detail Variant dan produk
+        // Assign ke new array
         $variant = array();
         foreach($all_variant as $av){
             $detail_variant = expatAPI(URLAPI . "/v1/mobile/produk/get_detailbyid?id=".$av['id_variant'])->result->messages;
@@ -66,9 +79,6 @@ class Order extends CI_Controller
             array_push($variant, $data);
         }
         
-        // print_r(json_encode($variant));
-        // echo '<pre>'.print_r($variant,true).'</pre>';
-        // die;
 
         $mdata = array(
             'title'         => NAMETITLE . ' - Order',
@@ -86,9 +96,12 @@ class Order extends CI_Controller
 
     public function kalkulasi_item($id, $jumlah = null)
     {
+        // Get Cookie
         $cookie = stripslashes($_COOKIE['variant']);
         $all_variant = json_decode($cookie, true);
 
+        // Kalkulasi Item 
+        // Replace jumlah produk yang di pilih
         $new_variant = array();
         foreach($all_variant as $av){
             if($av['id_variant'] == $id){
@@ -98,25 +111,22 @@ class Order extends CI_Controller
             }
         }
         
+        // Set Cookie
         $data = json_encode($new_variant);
         setcookie('variant', "", time() - 3600, "/");
         setcookie('variant', $data, 2147483647, "/");
 
-        $cookie = stripslashes($_COOKIE['variant']);
-        $all_variant = json_decode($cookie, true);
-
-        // echo '<pre>'.print_r($all_variant,true).'</pre>';
-        // die;
-        
         echo "SUKSES";
     }
 
 
     public function remove_item($id, $jumlah = null)
     {
+        // Get Cookie
         $cookie = stripslashes($_COOKIE['variant']);
         $all_variant = json_decode($cookie, true);
 
+        // Menyesuikan array baru dengan kalkulasi
         $new_variant = array();
         foreach($all_variant as $av){
             if($av['id_variant'] != $id){
@@ -124,6 +134,7 @@ class Order extends CI_Controller
             }
         }
 
+        // Set Cookie
         $data = json_encode($new_variant);
         setcookie('variant', "", time() - 3600, "/");
         setcookie('variant', $data, 2147483647, "/");
@@ -134,19 +145,15 @@ class Order extends CI_Controller
     public function detail()
     {
 
+        // Get Cookie
         $cookie = stripslashes(@$_COOKIE['variant']);
         $all_variant = json_decode($cookie, true);
-
-        // echo '<pre>'.print_r($all_variant,true).'</pre>';
-        // die;
-
         
+        // Get Produk by id
         $urlproduk = URLAPI . "/v1/produk/getproduk_byid?id=".$_GET['product'];
 		$resultproduk = expatAPI($urlproduk)->result->messages;
         
-        // echo '<pre>'.print_r($resultproduk,true).'</pre>';
-        // die;
-
+        // Get Variant produk
         $variantproduk = expatAPI(URLAPI . "/v1/produk/get_varianbyid?id=".$_GET['product'])->result->messages;
 
         $mdata = array(
@@ -171,34 +178,53 @@ class Order extends CI_Controller
         
         
         if(isset($_COOKIE['variant'])){
-            
+            // Check ketika cookie tidak kosong
             $cookie = stripslashes($_COOKIE['variant']);
             $variant_available = json_decode($cookie, true);
             
+            // Mencari produk dan variant yang sama &
+            // Replace cookie yang sudah ada dengan jumlah yang baru
+            foreach($variant_available as $key => $val){
+                if($val['id_variant'] == $id){
+                    $total += $val['jumlah'];
+                    $mdata = array(
+                        "id_variant"    => $val['id_variant'],
+                        "jumlah"        => $total
+                    );
+                    unset($variant_available[$key]);
+                    array_push($variant_available, $mdata);
+                    
+                    $newarr = array_values($variant_available);
+                    $data = json_encode($newarr);
+                    setcookie('variant', "", time() - 3600, "/");
+                    setcookie('variant', $data, 2147483647, "/");
+                    redirect('widget/order/detail?cabang='.$idcabang.'&product='.$idproduk);
+                }
+            }
+
             
-            // array_push($variant_avail, $variant_show);
-            
+            // Tambahkan produk dan variant baru
             $mdata = array(
                 "id_variant"    => $id,
                 "jumlah"        => $total
-            );
-            
-            array_push($variant_available, $mdata);
+            );            
 
+            array_push($variant_available, $mdata);
             $data = json_encode($variant_available);
             setcookie('variant', "", time() - 3600, "/");
             setcookie('variant', $data, 2147483647, "/");
             redirect('widget/order/detail?cabang='.$idcabang.'&product='.$idproduk);
+            
+            
         }else{
+            // Check cookie ketika kosong
+            // Tambahkan produk dan variant baru
             $variant_empty = array();
-
             $mdata = array(
                 "id_variant"    => $id,
                 "jumlah"        => $total
             );
-
             array_push($variant_empty, $mdata);
-
             $data = json_encode($variant_empty);
             setcookie('variant', "", time() - 3600, "/");
             setcookie('variant', $data, 2147483647, "/");
@@ -214,16 +240,19 @@ class Order extends CI_Controller
 		$id_satuan = $this->security->xss_clean($input->post('id_satuan'));
 		$id_additional = $this->security->xss_clean($input->post('id_additional'));
 
+        // Assign variabel ke dalam array
         $mdata = array(
             'id_optional'   => $id_optional,
             'id_satuan'     => $id_satuan,
             'id_additional' => $id_additional
         );
 
+        // Get variant by id produk
         $url = URLAPI . "/v1/produk/get_varianbyid?id=".$_GET['product'];
 		$result = expatAPI($url)->result->messages;
         
 
+        // Cek apakah produk dan variant sesuai dengan dipilih user
         $harga;
         foreach($result as $dt){        
             if($_GET['cabang'] == $dt->id_cabang){
@@ -245,6 +274,7 @@ class Order extends CI_Controller
 
     public function loadaddress($token)
     {
+        // Get Address
         $url = URLAPI . "/v1/mobile/order/last_address";
 		$result = mobileAPI($url, $mdata=NULL, $token)->result->messages;
         echo json_encode($result);  
@@ -254,17 +284,14 @@ class Order extends CI_Controller
     
     public function addaddress($token)
     {  
+        // Get Last Address
         $urlAddress 		= URLAPI . "/v1/mobile/order/last_address";
 		$responseAddress 	= mobileAPI($urlAddress, $mdata = NULL, $token);
         $resultAddress      = $responseAddress->result->messages;
 
-        // echo '<pre>'.print_r($this->uri->segment('4'),true).'</pre>';
-
-
         $mdata = array(
             'title'         => NAMETITLE . ' - Add Address',
             'content'       => 'widget/address/add_address',
-            // 'extra'		    => 'widget/address/js/_js_addaddress',
             'address'       => $resultAddress,
             'token'         => $token
         );
@@ -275,7 +302,6 @@ class Order extends CI_Controller
     public function addaddress_process($token)
     {
         $input          = $this->input;
-		// $token          = $this->security->xss_clean($input->post('token'));
         $idaddress      = $this->security->xss_clean($input->post('idaddress'));
 		$nameaddress    = $this->security->xss_clean($input->post('nameaddress'));
 		$address        = $this->security->xss_clean($input->post('address'));
@@ -290,10 +316,12 @@ class Order extends CI_Controller
             'is_primary'    => 'yes'
         );
 
+        // Post data add address
         $url = URLAPI . "/v1/mobile/order/add_address";
 		$response = mobileAPI($url, json_encode($mdata), $token);
         $result = $response->result;
 
+        // Resposnse Data add address
         if($response->status == 200){
 			redirect('widget/order/ordersummary/'.$token.'?cabang='.$idcabang);
 			return;
@@ -306,12 +334,10 @@ class Order extends CI_Controller
 
     public function editaddress($token)
     {  
+        // Get Last Address
         $urlAddress 		= URLAPI . "/v1/mobile/order/last_address";
 		$responseAddress 	= mobileAPI($urlAddress, $mdata = NULL, $token);
         $resultAddress      = $responseAddress->result->messages;
-
-        // echo '<pre>'.print_r($this->uri->segment('4'),true).'</pre>';
-
 
         $mdata = array(
             'title'         => NAMETITLE . ' - Edit Address',
@@ -327,7 +353,6 @@ class Order extends CI_Controller
     public function editaddress_process($token)
     {
         $input          = $this->input;
-		// $token          = $this->security->xss_clean($input->post('token'));
 		$idaddress      = $this->security->xss_clean($input->post('idaddress'));
 		$nameaddress    = $this->security->xss_clean($input->post('nameaddress'));
 		$address        = $this->security->xss_clean($input->post('address'));
@@ -342,11 +367,12 @@ class Order extends CI_Controller
             'is_primary'    => 'yes'
         );
 
-
+        // Post Data edit address
         $url = URLAPI . "/v1/mobile/order/update_address?id=".$idaddress;
 		$response = mobileAPI($url, json_encode($mdata), $token);
         $result = $response->result;
 
+        // Resposnse Data edit address
         if($response->status == 200){
 			redirect('widget/order/ordersummary/'.$token.'?cabang='.$idcabang);
 			return;
@@ -359,8 +385,8 @@ class Order extends CI_Controller
 
     public function enterpin()
     {
+        // Get Data from user
         $input          = $this->input;
-		// $idmember       = $this->security->xss_clean($input->post('id_member'));
 		$idcabang       = $this->security->xss_clean($input->post('id_cabang'));
 		$idvariant      = $this->security->xss_clean($input->post('id_variant'));
 		$idpengiriman   = $this->security->xss_clean($input->post('idpengiriman'));
@@ -369,9 +395,11 @@ class Order extends CI_Controller
 		$note           = $this->security->xss_clean($input->post('inptnote'));
         $method		    = $this->security->xss_clean($input->post('methodpayment'));
         $amount         = $this->security->xss_clean($input->post('amount'));
+        $saldo          = $this->security->xss_clean($input->post('saldo'));
 
+
+        // Get variant user dan ubah bentuk array
         $temp_item = array();
-
         foreach($idvariant as $keyid => $valid){
             $temp['id_varian']   = $valid; 
             foreach($jumlah as $keyjmlh => $valjmlh){
@@ -382,8 +410,10 @@ class Order extends CI_Controller
             }
         }
 
+        
+        // Assign data user ke array
         $mdata = array(
-            'id_pengiriman'     => (($idpengiriman != null) ? $idpengiriman : 'null'),
+            'id_pengiriman'     => (($idpengiriman != null) ? $idpengiriman : null),
             'id_cabang'         => $idcabang, 
             'is_pickup'         => (($idpengiriman != null) ? 'No' : 'Yes'),
             'note'              => ($note == null ? null : $note),
@@ -391,21 +421,25 @@ class Order extends CI_Controller
             'items'             => $temp_item
         );
 
-        // echo '<pre>'.print_r($mdata,true).'</pre>';
-        // die;
 
+        // Set Session Ordersummary
         $this->session->set_userdata('ordersummary', $mdata);
 
+
         if($method != 'expatbalance'){
+            // Pengecekan jika tidak menggunakan expatbalance
+
+            // POST add transaksi
             $url = URLAPI . "/v1/mobile/order/add_transaksi";
             $response = mobileAPI($url, json_encode($mdata), $token);
             $result = $response->result;
 
+            // Response add transaksi 
             if($response->status == 200){
-
                 $invoiceID	= $result->messages;
-                //echo "<pre>".print_r($_POST,true)."</pre>";
                 if ($method=="credit"){
+
+                    // Jika menggunakan Credit Card
                     $bodyreq = array (
                                 'order' => array (
                                     'amount' 		 => $amount+($amount*0.03),
@@ -424,6 +458,8 @@ class Order extends CI_Controller
                                 ),
                     );
                 }elseif ($method=="virtual"){
+
+                    // Jika menggunakan Virtual Account
                     $bodyreq = array (
                                 'order' => array (
                                     'amount' 		 => $amount,
@@ -450,6 +486,8 @@ class Order extends CI_Controller
                                 ),
                     );
                 }elseif($method=="wallet"){
+
+                    // Jika menggunakan E-Wallet
                     $bodyreq = array (
                                 'order' => array (
                                     'amount' 		 => $amount,
@@ -470,6 +508,8 @@ class Order extends CI_Controller
                                 ),
                     );
                 }else{
+
+                    // Jika menggunakan QRIS
                     $bodyreq = array (
                                 'order' => array (
                                     'amount' 		 => $amount,
@@ -489,6 +529,7 @@ class Order extends CI_Controller
                     );
                 }
         
+                // PROSES DOKU
                 $clientID		= "MCH-1352-1634273860130";
                 $dateTime 		= gmdate("Y-m-d H:i:s");
                 $isoDateTime 	= date(DATE_ISO8601, strtotime($dateTime));
@@ -518,16 +559,26 @@ class Order extends CI_Controller
                 curl_close($ch);
                 // setcookie('variant', "", time() - 3600, "/");
 
+                // Response DOKU
                 if ($result->message[0]=="SUCCESS"){
                     redirect($result->response->payment->url);
                 }else{
-                    $this->session->set_flashdata("error","Your Order cannot be processed");
-                    redirect(base_url()."widget/order/ordersummary/".$token."?cabang=".$idcabang);
+                    $this->session->set_flashdata("error","Your order cannot be processed");
+                    redirect("widget/order/ordersummary/".$token."?cabang=".$idcabang);
                 }
             } else {
                 $this->session->set_flashdata('error', $result->messages->error);
+                redirect("widget/order/ordersummary/".$token."?cabang=".$idcabang);
                 return;
             }
+        }
+
+        // Jika menggunakan Expatbalance akan tetap berada di halaman enterpin
+        // Cek jika saldo kurang dari total pembayaran
+        if($saldo < $amount){
+            $this->session->set_flashdata('error', "Your balance is not enough, please topup first or change the method payment.");
+            redirect("widget/order/ordersummary/".$token."?cabang=".$idcabang);
+            return;
         }
         
         $mdata = array(
@@ -544,8 +595,9 @@ class Order extends CI_Controller
 
     public function cancel()
 	{
+        // Proses cancel DOKU
 		$this->session->set_flashdata("error","Your topup cannot be processed");
-		redirect(base_url()."widget/topup/membertopup/".$token);
+		redirect("widget/order/ordersummary/".$token);
 	}
 
 	public function getsignature($clientId, $requestDate, $requestId, $requestBody){
@@ -568,8 +620,6 @@ class Order extends CI_Controller
 
 	}
 	
-	
-
     public function detail_process()
     {
         $input          = $this->input;
@@ -580,29 +630,37 @@ class Order extends CI_Controller
         
 
         if(!empty($enterpin)){
+            // Cek pin tidak kosong
 
+            // Assign pin ke dalam array dan Encryption 
             $pin = array(
                 "pin"   => sha1($enterpin)
             );
 
+            // Post cek pin kembali
             $urlpin = URLAPI . "/v1/mobile/member/check_pin";
             $response = mobileAPI($urlpin,  json_encode($pin), $token);
             $result = $response->result;
 
-            // echo '<pre>'.print_r($response,true).'</pre>';
-
+            // Response Cek PIN
             if($result->status == 200){
+
                 if(!empty($_SESSION['ordersummary'])){
+                    // Cek jika session ordersummary tidak kosong
+
+                    // Post add transaksi
                     $url = URLAPI . "/v1/mobile/order/add_transaksi";
                     $response = mobileAPI($url, json_encode($_SESSION['ordersummary']), $token);
                     $result = $response->result;
+
+                    // Response add transkasi
                     if($response->status == 200){
                         redirect('widget/order/notif');
                     }
 
                 }
             }else{
-                $this->session->set_flashdata('error', $result->messages->error);
+                $this->session->set_flashdata('error', "Your Product Empty, please try to order");
                 redirect("widget/order/ordersummary/".$token."?cabang=".$idcabang);
                 return;
             }
@@ -615,14 +673,18 @@ class Order extends CI_Controller
 
     public function removecookie()
     {
+        // Remove Cookie dan session
         setcookie('variant', "", time() - 3600, "/");
         $this->session->sess_destroy();
     }
 
     public function notif($token = NULL)
     {
+        // Remove cookie dan session
         setcookie('variant', "", time() - 3600, "/");
         $this->session->sess_destroy();
+
+
         // $url = URLAPI . "/v1/mobile/order/list_transaksi";
 		// $response = mobileAPI($url, $mdata = NULL, $token);
         // $result = $response->result->messages;
