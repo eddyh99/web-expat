@@ -48,6 +48,12 @@
 
 
     $(document).ready(function(){
+        new Readmore('.article', {
+            speed: 75,
+            collapsedHeight: 95, 
+        });
+
+        
         if($(".optional").is(":checked")){
             let rdy_optional = $("input[name='optional']:checked").val();
             let rdy_satuan = $("input[name='satuan']:checked").val();
@@ -130,6 +136,10 @@
         // console.log('<?= @$totalorder?>');
     }
     postMessage();
+
+    $(function() {  
+        
+    });
 
 
 </script>

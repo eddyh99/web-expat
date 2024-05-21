@@ -39,7 +39,8 @@ class Order extends CI_Controller
         // Get Cookie
         $cookie = stripslashes($_COOKIE['variant']);
         $all_variant = json_decode($cookie, true);
-
+        // echo '<pre>'.print_r($all_variant,true).'</pre>';
+        
         // Get Alamat user
         $urlAddress 		= URLAPI . "/v1/mobile/order/last_address";
 		$responseAddress 	= mobileAPI($urlAddress, $mdata = NULL, $token);
@@ -78,7 +79,9 @@ class Order extends CI_Controller
 
             array_push($variant, $data);
         }
-        
+
+        // echo '<pre>'.print_r($variant,true).'</pre>';
+        // die;
 
         $mdata = array(
             'title'         => NAMETITLE . ' - Order',
@@ -155,7 +158,8 @@ class Order extends CI_Controller
         
         // Get Variant produk
         $variantproduk = expatAPI(URLAPI . "/v1/produk/get_varianbyid?id=".$_GET['product'])->result->messages;
-
+        // print_r(json_encode($variantproduk));
+        // die;
         $mdata = array(
             'title'         => NAMETITLE . ' - Order Detail',
             'content'       => 'widget/order/detail_order',

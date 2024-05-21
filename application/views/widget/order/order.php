@@ -30,7 +30,7 @@
 
 
             <div id="pickupoutlet" class="preview-cabang my-4" style="display: none;">
-                <h2>Pickup Outlet</h2>
+                <h5>Pickup Outlet</h5>
                 <h6 class="color-expat"><?= $cabang->nama?></h6>
                 <div class="d-flex align-items-center">
                     <img src="<?= $cabang->picture?>" alt="img">
@@ -43,8 +43,8 @@
             </div>
 
             <div id="address" class="pt-1 mt-5">
-                <h2>Delivery Address</h2>
-                <h4 class="color-expat" id="shownameaddress"><?= @$address->title?></h4>
+                <h5>Delivery Address</h5>
+                <h6 class="color-expat" id="shownameaddress"><?= @$address->title?></h6>
                 <span class="color-expat-secondary" id="showaddress"><?= @$address->alamat?></span><br>
                 <span class="color-expat-secondary" id="showphone"><?= @$address->phone?></span><br>
                 <span class="color-expat-secondary fst-italic" id="shownote"></span>
@@ -102,42 +102,27 @@
 
             <hr style="border-bottom: 2px solid #fff;">
             <?php foreach($variant as $vr){?>
-                <div id="itempreview<?= $vr['id']?>" class="item-preview-order d-flex align-items-center justify-content-between my-4">
-                    <div class="d-flex align-items-center">
+                <div id="itempreview<?= $vr['id']?>" class="item-preview-order d-flex flex-column align-items-start justify-content-between py-4 my-3">
+                    <div class="d-flex align-items-start">
                         <img src="<?= $vr['picture']?>" alt="img">
                         <div class="item-detail ms-3">
                             <h3><?= $vr['nama']?></h3>
-                            <span class="color-expat-secondary"><?= $vr['additional']?> | <?= $vr['optional']?></span><br>
+                            <span class="color-expat-secondary"><?= $vr['additional']?> | <?= $vr['optional']?> | <?= $vr['satuan']?></span><br>
                             <span class="color-expat-secondary"><?= number_format($vr['harga'], 2) ?></span>
                         </div>
+                        
                     </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <i onclick="minuscart('<?= $vr['id']?>')" class="fas fa-minus-circle minus-<?= $vr['id']?> fs-3" style="cursor: pointer;"></i>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <i onclick="minuscart('<?= $vr['id']?>')" class="fas fa-minus-circle minus-<?= $vr['id']?> fs-5" style="cursor: pointer;"></i>
                         <!-- <input type="hidden" name="injumlahcoffe" id="injumlahcoffe"> -->
-                        <span class="d-block" style="width: 50px;">
+                        <span class="d-block" style="width: 34px;">
                             <input type="hidden" name="id_variant[]" value="<?= $vr['id']?>">
                             <input type="number" name="jumlah[]" class="text-center w-100 border-0 bg-transparent text-white" id="jumlah<?= $vr['id']?>" value="<?= $vr['jumlah']?>">
                         </span>
-                        <i onclick="pluscart('<?= $vr['id']?>')"  class="fas fa-plus-circle plus-<?= $vr['id']?> fs-3" style="cursor: pointer;"></i>
+                        <i onclick="pluscart('<?= $vr['id']?>')"  class="fas fa-plus-circle plus-<?= $vr['id']?> fs-5" style="cursor: pointer;"></i>
                     </div>
                 </div>
             <?php }?>
-            <!-- <div class="item-preview-order d-flex align-items-center justify-content-between my-3">
-                <div class="d-flex align-items-center">
-                    <img src="<?= base_url()?>assets/img/widget/expresso.png" alt="img">
-                    <div class="item-detail ms-2">
-                        <h3>Capucinno</h3>
-                        <span class="color-expat-secondary">1 shot | nomad</span>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center">
-                    <i class="fas fa-minus-circle fs-3" style="cursor: pointer;"></i>
-                    <input type="hidden" name="injumlahcoffe" id="injumlahcoffe">
-                    <span class="mx-4" id="jumlahcoffe"></span>
-                    <i class="fas fa-plus-circle fs-3" style="cursor: pointer;"></i>
-                </div>
-            </div>
-           -->
             <hr style="border-bottom: 8px solid #fff;">
 
             <div>
@@ -154,7 +139,7 @@
             <hr style="border-bottom: 2px solid #fff;">
 
             <div id="summaryorder">
-                <h2>Payment Summary</h2>
+                <h5>Payment Summary</h5>
                 <div class="price d-flex justify-content-between align-items-center">
                     <span>Price</span>
                     <span>
@@ -173,7 +158,7 @@
             <hr style="border-bottom: 2px solid #fff;">
 
             <div id="totalsummary" class="d-flex justify-content-between align-items-center">
-                <h3 class="f-lora color-expat fw-bold">Total Payment</h3>
+                <h4 class="f-lora color-expat fw-bold">Total Payment</h4>
                 <span>Rp 
                     <?php 
                         // $total -= 0;

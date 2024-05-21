@@ -144,4 +144,10 @@
         });
     });
 
+    var name = $('.item-title').text();
+    if (name.length > 20) {
+        var shortname = name.substring(0, 20) + " ...";
+        $('a').replaceWith(shortname);
+    }
+
 </script>

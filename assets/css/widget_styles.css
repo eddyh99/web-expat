@@ -286,6 +286,9 @@ body {
     background-clip: content-box;
 }
 
+.app-content .app-member #orderchart .item-preview-order {
+    border-bottom: 1px dashed white;
+}
 
 .app-content .app-member #orderchart .item-preview-order img {
     width: 80px;
@@ -354,6 +357,22 @@ body {
     font-size: 12px;
     font-weight: 700;
 } 
+
+.item-preview-order .item-detail h3 {
+    font-size: 16px;
+}
+
+.item-preview-order .item-detail span {
+    font-size: 12px;
+}
+
+#summaryorder .price span,
+#summaryorder .fee span,
+#totalsummary span,
+#address span {
+    font-size: 12px;
+}
+
 
 @media (min-width: 425px) {
     .btn-expat.add-tocart {
