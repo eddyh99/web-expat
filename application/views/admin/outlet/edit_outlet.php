@@ -34,6 +34,16 @@
                             <input type="text" class="form-control" value="<?= @$outlet->alamat?>" id="address" name="address" placeholder="Enter address..." required autocomplete="off">
                         </div>
                         <div class="mb-3">
+                            <label for="lat" class="form-label">
+                                Latitude <small>(for more information about lat & long click <a href="https://support.google.com/maps/answer/18539?hl=en&co=GENIE.Platform%3DAndroid&oco=0" target="_blank">here</a>)</small>
+                            </label>
+                            <input type="text" class="form-control" id="lat" name="lat" value="<?= @$outlet->latitude?>" placeholder="Enter Latitude ..." required autocomplete="off">
+                        </div>
+                        <div class="mb-3">
+                            <label for="long" class="form-label">Longitude </label>
+                            <input type="text" class="form-control" id="long" name="long" value="<?= @$outlet->longitude?>" placeholder="Enter Longitude..." required autocomplete="off">
+                        </div>
+                        <div class="mb-3">
                             <label for="address" class="form-label">Cabang</label>
                             <select class="addprovinsi-select2" id="provinsi" name="provinsi" required>
                                 <option value="Banda Aceh" <?= (@$outlet->provinsi == "Banda Aceh") ? 'selected' : "" ?>>Banda Aceh</option>

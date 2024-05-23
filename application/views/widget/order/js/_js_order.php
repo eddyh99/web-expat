@@ -127,27 +127,22 @@
         $modalnote.modal('hide');
     });
 
-    $(document).ready(function(){
-        if($(".paymentradio").is(":checked")){
-            let rdy_method = $("input[name='paymentselectmodal']:checked").val();
-            let rdy_label = $("input[name='paymentselectmodal']:checked").data("title");
-            $("#methodpayment").val(rdy_method);
-            $(".labelpayment").text(rdy_label);
-        }
+    // $(document).ready(function(){
+    //     if($(".paymentradio").is(":checked")){
+    //         let rdy_method = $("input[name='paymentselectmodal']:checked").val();
+    //         let rdy_label = $("input[name='paymentselectmodal']:checked").data("title");
+    //         $("#methodpayment").val(rdy_method);
+    //         $(".labelpayment").text(rdy_label);
+    //     }
         
-        $('.paymentradio').on('change', function(){
-            let chg_method = $("input[name='paymentselectmodal']:checked").val();
-            let chg_label = $("input[name='paymentselectmodal']:checked").data("title");
-            console.log(chg_label);
-            $("#methodpayment").val(chg_method);
-            $(".labelpayment").text(chg_label);
-        });
-    });
+    //     $('.paymentradio').on('change', function(){
+    //         let chg_method = $("input[name='paymentselectmodal']:checked").val();
+    //         let chg_label = $("input[name='paymentselectmodal']:checked").data("title");
+    //         console.log(chg_label);
+    //         $("#methodpayment").val(chg_method);
+    //         $(".labelpayment").text(chg_label);
+    //     });
+    // });
 
-    var name = $('.item-title').text();
-    if (name.length > 20) {
-        var shortname = name.substring(0, 20) + " ...";
-        $('a').replaceWith(shortname);
-    }
 
 </script>

@@ -12,7 +12,8 @@
 
 <script>
 
-
+	const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+	const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
 
     var table_outlet = $('#table_list_outlet').DataTable({
 		"scrollX": true,

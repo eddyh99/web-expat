@@ -56,9 +56,11 @@ class Outlet extends CI_Controller
 		$this->form_validation->set_rules('opening', 'Opening', 'trim|required');
 		$this->form_validation->set_rules('contact', 'Contact', 'trim|required');
 		$this->form_validation->set_rules('provinsi', 'Province', 'trim|required');
+		$this->form_validation->set_rules('lat', 'Latitude', 'trim|required');
+		$this->form_validation->set_rules('long', 'Longitude', 'trim|required');
 
         if ($this->form_validation->run() == FALSE) {
-			$this->session->set_flashdata('error_validation', $this->message->error_msg(validation_errors()));
+			$this->session->set_flashdata('error', $this->message->error_msg(validation_errors()));
 			redirect("outlet/add_outlet");
 			return;
 		}
@@ -69,6 +71,8 @@ class Outlet extends CI_Controller
         $opening    = $this->security->xss_clean($this->input->post("opening"));
         $contact    = $this->security->xss_clean($this->input->post("contact"));
         $provinsi    = $this->security->xss_clean($this->input->post("provinsi"));
+        $lat        = $this->security->xss_clean($this->input->post("lat"));
+        $long       = $this->security->xss_clean($this->input->post("long"));
 
         $image      = $this->security->xss_clean($_FILES['imgoutlet']);
         if(!empty($image['name'])){
@@ -79,6 +83,8 @@ class Outlet extends CI_Controller
                 "opening"     => $opening,
                 "kontak"      => $contact,
                 "provinsi"    => $provinsi,
+                "lat"         => $lat,
+                "long"        => $long,
                 "image"       => $blob
             );
         }else{
@@ -88,6 +94,8 @@ class Outlet extends CI_Controller
                 "opening"     => $opening,
                 "kontak"      => $contact,
                 "provinsi"    => $provinsi,
+                "lat"         => $lat,
+                "long"        => $long,
             );
 
         }
@@ -137,12 +145,14 @@ class Outlet extends CI_Controller
 		$this->form_validation->set_rules('opening', 'opening', 'trim|required');
 		$this->form_validation->set_rules('contact', 'contact', 'trim|required');
 		$this->form_validation->set_rules('provinsi', 'Province', 'trim|required');
+        $this->form_validation->set_rules('lat', 'Latitude', 'trim|required');
+		$this->form_validation->set_rules('long', 'Longitude', 'trim|required');
 
         $input      = $this->input;
         $urisegment   = $this->security->xss_clean($input->post('urisegment'));
 
         if ($this->form_validation->run() == FALSE) {
-			$this->session->set_flashdata('error_validation', $this->message->error_msg(validation_errors()));
+			$this->session->set_flashdata('error', $this->message->error_msg(validation_errors()));
             redirect('outlet/edit_outlet/'.$urisegment);
 			return;
 		}
@@ -153,6 +163,8 @@ class Outlet extends CI_Controller
         $opening       = $this->security->xss_clean($input->post('opening'));
         $contact       = $this->security->xss_clean($input->post('contact'));
         $provinsi      = $this->security->xss_clean($this->input->post("provinsi"));
+        $lat        = $this->security->xss_clean($this->input->post("lat"));
+        $long       = $this->security->xss_clean($this->input->post("long"));
 
         
         $image      = $this->security->xss_clean(@$_FILES['imgoutlet']);
@@ -164,6 +176,8 @@ class Outlet extends CI_Controller
                 "opening"     => $opening,
                 "kontak"      => $contact,
                 "provinsi"    => $provinsi,
+                "lat"         => $lat,
+                "long"        => $long,
                 "image"       => $blob
             );
         }else{
@@ -174,11 +188,13 @@ class Outlet extends CI_Controller
                 "opening"     => $opening,
                 "kontak"      => $contact,
                 "provinsi"    => $provinsi,
+                "lat"         => $lat,
+                "long"        => $long,
             );
 
         }
 
-
+        
         $url = URLAPI . "/v1/outlet/updateCabang?id=".$id;
 		$response = expatAPI($url, json_encode($mdata));
         $result = $response->result;

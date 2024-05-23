@@ -44,7 +44,7 @@ class Order extends CI_Controller
         // Get Alamat user
         $urlAddress 		= URLAPI . "/v1/mobile/order/last_address";
 		$responseAddress 	= mobileAPI($urlAddress, $mdata = NULL, $token);
-        $resultAddress      = $responseAddress->result->messages;
+        $resultAddress      = $responseAddress->result->messages->address;
 
         // Get User detail
         $urlUser 		= URLAPI . "/v1/mobile/member/get_userdetail";
@@ -280,7 +280,7 @@ class Order extends CI_Controller
     {
         // Get Address
         $url = URLAPI . "/v1/mobile/order/last_address";
-		$result = mobileAPI($url, $mdata=NULL, $token)->result->messages;
+		$result = mobileAPI($url, $mdata=NULL, $token)->result->messages->address;
         echo json_encode($result);  
         die;    
     }
@@ -341,7 +341,7 @@ class Order extends CI_Controller
         // Get Last Address
         $urlAddress 		= URLAPI . "/v1/mobile/order/last_address";
 		$responseAddress 	= mobileAPI($urlAddress, $mdata = NULL, $token);
-        $resultAddress      = $responseAddress->result->messages;
+        $resultAddress      = $responseAddress->result->messages->address;
 
         $mdata = array(
             'title'         => NAMETITLE . ' - Edit Address',
@@ -397,7 +397,7 @@ class Order extends CI_Controller
 		$jumlah         = $this->security->xss_clean($input->post('jumlah'));
 		$token          = $this->security->xss_clean($input->post('usertoken'));
 		$note           = $this->security->xss_clean($input->post('inptnote'));
-        $method		    = $this->security->xss_clean($input->post('methodpayment'));
+        $method		    = "expatbalance";
         $amount         = $this->security->xss_clean($input->post('amount'));
         $saldo          = $this->security->xss_clean($input->post('saldo'));
 

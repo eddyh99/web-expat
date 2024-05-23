@@ -164,7 +164,6 @@
                         }
                     }
 
-                    // echo '<pre>'.print_r($finaladditional,true).'</pre>';
 
                     foreach($finaladditional as $key => $val){
                         if($key == 0){

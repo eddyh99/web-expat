@@ -273,4 +273,33 @@ class Member extends CI_Controller
             return;
         }
     }
+
+    public function membership()
+    {
+        $data = array(
+            'title'             => NAMETITLE . ' - Membership',
+            'content'           => 'admin/member/membership',
+            'extra'             => 'admin/member/js/_js_membership',
+            'master_active'     => 'active',
+            'master_in'         => 'in',
+            'dropdown_membership'   => 'text-expat-green'
+        );
+
+        $this->load->view('layout/wrapper', $data);
+    }
+
+    public function add_membership()
+    {
+        $data = array(
+            'title'             => NAMETITLE . ' - Add Membership',
+            'content'           => 'admin/member/add_membership',
+            'extra'             => 'admin/member/js/_js_membership',
+            'master_active'     => 'active',
+            'master_in'         => 'in',
+            'dropdown_membership'   => 'text-expat-green'
+        );
+
+        $this->load->view('layout/wrapper', $data);
+    }
+
 }

@@ -26,7 +26,7 @@
                         <input type="hidden" id="token" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter produk name..." required autocomplete="off">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter produk name..." required autocomplete="off" maxlength="55">
                         </div>
                         <div class="mb-3">
                             <label for="description" class="form-label">Description</label>

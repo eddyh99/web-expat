@@ -70,12 +70,6 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <!-- <a href="<?= base_url()?>produk" class="sidebar-link <?= @$dropdown_produk?>">
-                                <div class="round-16 ms-3 d-flex align-items-center justify-content-center">
-                                    <i class="ti ti-box"></i>
-                                </div>
-                                <span class="hide-menu">Produk</span>
-                            </a> -->
                             <a class="sidebar-link ms-3 has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <span class="d-flex">
                                     <i class="ti ti-box"></i>
@@ -133,14 +127,60 @@
                                 <span class="hide-menu">Promotion</span>
                             </a>
                         </li>
+                        <li class="sidebar-item">
+                            <a href="<?= base_url()?>member/membership" class="sidebar-link <?= @$dropdown_membership?>">
+                                <div class="round-16 ms-3 d-flex align-items-center justify-content-center">
+                                <i class="ti ti-credit-card"></i>
+                                </div>
+                                <span class="hide-menu">Membership</span>
+                            </a>
+                        </li>
                     </ul>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link <?= @$settings_active?>" href="<?= base_url()?>settings" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-chart-candle"></i>
+                        </span>
+                        <span class="hide-menu">
+                            Settings
+                        </span>
+                    </a>
                 </li>
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                    <span class="hide-menu">Transaction</span>
+                    <span class="hide-menu">Transactions</span>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link has-arrow <?= @$history_active?>" href="javascript:void(0)" aria-expanded="false">
+                        <span class="d-flex">
+                            <i class="ti ti-history"></i>
+                        </span>
+                        <span class="hide-menu">History</span>
+                    </a>
+                    <ul aria-expanded="false" class="collapse first-level <?= @$history_in?>">
+                        <li class="sidebar-item">
+                            <a href="<?= base_url()?>history" class="sidebar-link <?= @$dropdown_htopup?>">
+                                <div class="round-16 ms-3 d-flex align-items-center justify-content-center">
+                                    <i class="ti ti-cash"></i>
+                                </div>
+                                <span class="hide-menu">Topup</span>
+                            </a>
+                        
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="<?= base_url()?>history/order" class="sidebar-link <?= @$dropdown_horder?>">
+                                <div class="round-16 ms-3 d-flex align-items-center justify-content-center">
+                                    <i class="ti ti-shopping-cart"></i>
+                                </div>
+                                <span class="hide-menu">Order</span>
+                            </a>
+                        
+                        </li>
+                    </ul>
                 </li>
 
-                <li class="sidebar-item">
+                <!-- <li class="sidebar-item">
                     <a class="sidebar-link  <?= @$historytopup_active?>" href="<?= base_url()?>topup/history" aria-expanded="false">
                         <span>
                             <i class="ti ti-history"></i>
@@ -149,7 +189,7 @@
                             Topup History
                         </span>
                     </a>
-                </li>
+                </li> -->
                 <li class="sidebar-item mb-5 pb-5">
                     <a class="sidebar-link" href="<?= base_url()?>auth/logout" aria-expanded="false">
                         <span>

@@ -180,13 +180,8 @@
                 </a>
             </div>
 
-            <div>
+            <!-- <div>
                 <div class="d-flex justify-content-between mt-2">
-                    <!-- <label for="" class="label-input-voucher">
-                        <img height="30" src="<?= base_url()?>assets/img/widget/icon-voucher.png" alt="icon">
-                        <input type="text" placeholder="Have a promotion code ?" class="form-input-voucher">
-                    </label> -->
-                    <!-- <a class="btn btn-primary rounded-1" style="font-size: 14px;" href="">Apply</a> -->
                     <a class="btn btn-white d-flex justify-content-between align-items-center w-100" style="font-size: 13px;" href="" data-bs-toggle="modal" data-bs-target="#paymentmodal">
                         <span class="d-flex align-items-center">
                             <i class="fas fa-money-check-alt me-2 fs-5"></i>
@@ -234,12 +229,13 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
+            
 
             <div id="button-order" class="d-flex w-100 mt-3">
                 <button type="submit" class="btn btn-expat w-100 py-3 <?= (empty($all_variant)) ? "disabled": ""?>">ORDER</button>
             </div>
-
+            
         </form>
     </div>
 </div>

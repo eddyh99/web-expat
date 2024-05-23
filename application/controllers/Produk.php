@@ -54,13 +54,13 @@ class Produk extends CI_Controller
 
     public function addproduk_process()
     {
-		$this->form_validation->set_rules('name', 'Name Outlet', 'trim|required');
+		$this->form_validation->set_rules('name', 'Name Outlet', 'trim|max_length[55]|required');
 		$this->form_validation->set_rules('description', 'Description', 'trim|required');
         $this->form_validation->set_rules('kategori', 'Kategori', 'trim|required');
 		$this->form_validation->set_rules('favorite', 'Favorite', 'trim|required');
 
         if ($this->form_validation->run() == FALSE) {
-			$this->session->set_flashdata('error_validation', $this->message->error_msg(validation_errors()));
+			$this->session->set_flashdata('error', $this->message->error_msg(validation_errors()));
 			redirect("produk/add_produk");
 			return;
 		}
@@ -831,7 +831,7 @@ class Produk extends CI_Controller
 		$this->form_validation->set_rules('harga', 'Harga', 'trim|required');
 
         if ($this->form_validation->run() == FALSE) {
-			$this->session->set_flashdata('error_validation', $this->message->error_msg(validation_errors()));
+			$this->session->set_flashdata('error', $this->message->error_msg(validation_errors()));
 			redirect("produk/add_variant");
 			return;
 		}
@@ -851,13 +851,15 @@ class Produk extends CI_Controller
             "cabang"        => $cabang,
             "harga"         => str_replace(",", "", $harga),
         );
-        
+
+        echo '<pre>'.print_r($mdata,true).'</pre>';
         
         
         $url = URLAPI . "/v1/produk/addvarian?id=".$produk;
 		$response = expatAPI($url, json_encode($mdata));
         $result = $response->result;
-        
+        echo '<pre>'.print_r($response,true).'</pre>';
+        die;
         if($response->status == 200) {
             $this->session->set_flashdata('success', $result->messages);
 			redirect('produk/variant');

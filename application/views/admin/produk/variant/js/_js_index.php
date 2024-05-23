@@ -143,38 +143,6 @@
         $(this).trigger("change");
     });
 
-    // $('#example').DataTable()
-
-    // var table = $('#table_list_variant').DataTable({
-	// 	"scrollX": true,
-	// 	"ajax": {
-	// 		"url": "<?=base_url()?>produk/list_variant_produk",
-	// 		"type": "POST",
-    //         "data": {
-    //             id_produk : function(){console.log($("#produk_filter").val()); return $("#produk_filter").val()}
-    //         },
-	// 		"dataSrc":function (data){
-	// 			return data;							
-	// 		}
-	// 	},
-	// 	"columns": [
-	// 		{ data: 'cabang' },
-	// 		{ data: 'optional' },
-	// 		{ data: 'additional' },
-	// 		{ data: 'satuan' },
-	// 		{ data: 'harga', render: $.fn.dataTable.render.number(',', '.', 2) },
-	// 		{ 
-    //             data: null, "mRender": function(data, type, full, meta) {
-    //                 var btnEdit ='<a href="<?=base_url()?>produk/edit_variant/'+encodeURI(btoa(full.id))+'" class="btn btn-success mx-1 my-1"><i class="ti ti-pencil-minus fs-4"></i></a>'
-	// 				var btnDelete = '<a href="<?=base_url()?>produk/delete_variant/'+encodeURI(btoa(full.id))+'" class="del-data btn btn-danger my-1"><i class="ti ti-trash"></i></a>';
-					
-	// 				return `<div class="d-flex">${btnEdit} ${btnDelete} </div>`;     
-                
-                        
-    //             } 
-    //         },
-	// 	],
-	// });
 
 
     var collapsedGroups = {};
@@ -188,6 +156,7 @@
                 id_produk : function(){return $("#produk_filter").val()}
             },
 			"dataSrc":function (data){
+                console.log(data);
 				return data;							
 			}
 		},
