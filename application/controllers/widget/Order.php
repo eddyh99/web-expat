@@ -44,8 +44,10 @@ class Order extends CI_Controller
         // Get Alamat user
         $urlAddress 		= URLAPI . "/v1/mobile/order/last_address";
 		$responseAddress 	= mobileAPI($urlAddress, $mdata = NULL, $token);
-        $resultAddress      = $responseAddress->result->messages->address;
+        $resultAddress      = $responseAddress->result->messages;
 
+        // echo '<pre>'.print_r($resultAddress,true).'</pre>';
+        // die;
         // Get User detail
         $urlUser 		= URLAPI . "/v1/mobile/member/get_userdetail";
 		$responseUser 	= mobileAPI($urlUser, $mdata = NULL, $token);
@@ -425,6 +427,8 @@ class Order extends CI_Controller
             'items'             => $temp_item
         );
 
+        echo '<pre>'.print_r($mdata,true).'</pre>';
+        die;
 
         // Set Session Ordersummary
         $this->session->set_userdata('ordersummary', $mdata);

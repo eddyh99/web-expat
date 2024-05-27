@@ -1,1 +1,0 @@
-__ci_last_regenerate|i:1715961513;ordersummary|a:6:{s:13:"id_pengiriman";s:1:"2";s:9:"id_cabang";s:1:"1";s:9:"is_pickup";s:2:"No";s:4:"note";N;s:9:"carabayar";s:12:"expatbalance";s:5:"items";a:1:{i:0;a:2:{s:9:"id_varian";s:2:"91";s:6:"jumlah";s:1:"1";}}}error|s:76:"Your balance is not enough, please topup first or change the method payment.";__ci_vars|a:1:{s:5:"error";s:3:"old";}

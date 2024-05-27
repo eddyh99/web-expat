@@ -3,10 +3,10 @@
     <!--  Row Daftar User -->
     <div class="row my-4">
         <div class="col-lg-12 d-flex align-items-strech">
-            <a href="<?= base_url()?>employe/add_employe" class="btn btn-expat d-flex align-items-center">
+            <a href="<?= base_url()?>employe/add_assignstaff" class="btn btn-expat d-flex align-items-center">
                 <i class="ti ti-plus fs-5 me-2"></i>
                 <span>
-                    Add Employe
+                    Add Assign Staff
                 </span>
             </a>
         </div>
@@ -17,18 +17,15 @@
             <div class="card border-expat w-100">
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
-                        <h5 class="card-title fw-semibold mb-4">List Employe</h5>
+                        <h5 class="card-title fw-semibold mb-4">List Assign Staff</h5>
                     </div>
-                    <table id="table_list_employe" class="table table-striped" style="width:100%">
+                    <table id="table_list_assignstaff" class="table table-striped" style="width:100%">
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Email</th>
                                 <th>Name</th>
-                                <th class="th-role">Tanggal Lahir</th>
-                                <th>Gender</th>
-                                <th>Driver</th>
-                                <th>Plafon</th>
+                                <th>Outlet</th>
+                                <th>Address</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -37,12 +34,9 @@
                         <tfoot>
                             <tr>
                                 <th>No</th>
-                                <th>Email</th>
                                 <th>Name</th>
-                                <th>Tanggal Lahir</th>
-                                <th>Gender</th>
-                                <th>Driver</th>
-                                <th>Plafon</th>
+                                <th>Outlet</th>
+                                <th>Address</th>
                                 <th>Action</th>
                             </tr>
                         </tfoot>

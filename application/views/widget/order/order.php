@@ -12,7 +12,7 @@
             <input type="hidden" id="usertoken" name="usertoken" value="<?= $token?>">
             
             <div class="chart-delivery row mx-auto mt-5 p-2">
-                <input type="hidden" id="idpengiriman" name="idpengiriman" value="<?= @$address->id?>">
+                <input type="hidden" id="idpengiriman" name="idpengiriman" value="<?= @$address->address->id?>">
            
                 <label id="labelpickup" class="col-6 d-flex justify-content-center align-items-center" for="pickup">
                     <div class="">
@@ -44,9 +44,9 @@
 
             <div id="address" class="pt-1 mt-5">
                 <h5>Delivery Address</h5>
-                <h6 class="color-expat" id="shownameaddress"><?= @$address->title?></h6>
-                <span class="color-expat-secondary" id="showaddress"><?= @$address->alamat?></span><br>
-                <span class="color-expat-secondary" id="showphone"><?= @$address->phone?></span><br>
+                <h6 class="color-expat" id="shownameaddress"><?= @$address->address->title?></h6>
+                <span class="color-expat-secondary" id="showaddress"><?= @$address->address->alamat?></span><br>
+                <span class="color-expat-secondary" id="showphone"><?= @$address->address->phone?></span><br>
                 <span class="color-expat-secondary fst-italic" id="shownote"></span>
                 <div id="edit-in-address" class="d-flex justify-content-start align-items-center mt-2">
                     <?php if(empty($address)){?>
@@ -143,7 +143,6 @@
                 <div class="price d-flex justify-content-between align-items-center">
                     <span>Price</span>
                     <span>
-                        <!-- <i class="fas fa-sync text-warning" onClick="window.location.reload()"></i> -->
                         Rp 
                         <span class="price-span">   
                         </span>
@@ -151,7 +150,7 @@
                 </div>
                 <div class="fee d-flex justify-content-between align-items-center">
                     <span>Fee Delivery</span>
-                    <span>Rp. 0</span>
+                    <span>Rp. <?php echo number_format($address->delivery_fee, 2) ?></span>
                 </div>
             </div>
 

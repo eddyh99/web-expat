@@ -110,13 +110,17 @@
     function kalkulasiprice(){
         let subtotal = 0;
         let total = 0;
+        let totalsummary = 0;
+        let deliveryfee = <?= $address->delivery_fee?>;
+        console.log(deliveryfee);
         priceQuantity.forEach((el, i) => {
             subtotal = el.price * el.jumlah;
             total += subtotal;
         });
-        $("#amount").val(total);
+        totalsummary = total + deliveryfee;
         $(".price-span").text(`${total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`);
-        $(".total-price-span").text(`${total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`);
+        $("#amount").val(totalsummary);
+        $(".total-price-span").text(`${totalsummary.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`);
     }
     kalkulasiprice();
 

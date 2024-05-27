@@ -62,6 +62,14 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
+                            <a href="<?= base_url()?>employe/assign_staff" class="sidebar-link <?= @$dropdown_assignstaff?>">
+                                <div class="round-16 ms-3 d-flex align-items-center justify-content-center">
+                                    <i class="ti ti-user-plus"></i>
+                                </div>
+                                <span class="hide-menu">Assign Staff</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
                             <a href="<?= base_url()?>outlet" class="sidebar-link <?= @$dropdown_outlet?>">
                                 <div class="round-16 ms-3 d-flex align-items-center justify-content-center">
                                     <i class="ti ti-building-store"></i>
