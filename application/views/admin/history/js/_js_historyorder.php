@@ -92,6 +92,12 @@
             theme: "bootstrap", 
             width: "100%"
         });
+
+        
+    });
+
+    $("#filter").on("click",function(){
+        table.ajax.reload();
     });
 
 

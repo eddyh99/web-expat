@@ -10,6 +10,18 @@
         <form id="detailorder" action="<?= base_url()?>widget/order/editaddress_process/<?= $token?>" method="POST">
             <input type="hidden" id="idaddress" name="idaddress" value="<?= @$address->id?>">
             <input type="hidden" id="idcabang" name="idcabang" value="<?= $_GET['idcabang']?>">
+            <div class="my-4 d-flex flex-column align-items-start justify-content-start">
+                <label for="pac-input">Select Location</label>
+                <input type="text" id="pac-input" name="pac-input" class="form-control " placeholder="Search Place"/>
+                <input type="hidden" id="lat" name="lat">
+                <input type="hidden" id="long" name="long">
+                <div id="map"></div>
+            </div>
+            <div class="my-3">
+                <label for="nameaddress" id="preview-pac-input">
+                    
+                </label>
+            </div>
             <div class="my-4">
                 <label for="nameaddress">Name Location</label>
                 <input type="text" id="nameaddress" name="nameaddress" class="form-control" value="<?= @$address->title?>">

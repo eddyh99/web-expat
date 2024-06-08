@@ -154,21 +154,6 @@
                 console.log(place.geometry.location.lat());
                 console.log(place.geometry.location.lng());
 
-                $("#lat").val(place.geometry.location.lat());
-                $("#long").val(place.geometry.location.lng());
-
-                $("#prev-address").remove();
-                $("#preview-pac-input").append(`
-                    <span id="prev-address">
-                        <i class="fas fa-map-marker-alt me-2"></i>
-                    </span>
-                `);
-                place.address_components.forEach((address, i) => {
-                    $("#prev-address").append(`
-                        ${address.short_name},
-                    `);
-                });
-
                 const icon = {
                     url: place.icon,
                     size: new google.maps.Size(71, 71),
