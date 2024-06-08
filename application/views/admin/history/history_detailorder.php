@@ -61,19 +61,19 @@
                                                             </select>
                                                         </div>
                                                         <div class="my-4">
-                                                            <button id="savedriver" class="btn btn-expat">Save Driver</button>
+                                                            <button id="savedriver" class="btn btn-expat">Select Driver</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <h6 class="mt-2 fst-italic">Jhon Cena (Driver)</h6>
+                                    <h6 class="mt-2 fst-italic"><span id="drivername"></span></h6>
                                 </div>
                                 
                             </div>
                             <div class="d-flex flex-column justify-content-end align-items-end">
-                                <h5 class="ticket-idtransaksi ">INV-123123123</h5>
+                                <h5 class="ticket-idtransaksi "><?=$invoice?></h5>
                                 <h6>2024-05-20 10:10:10</h6>
                                 <span class="bg-danger-subtle text-danger badge"><?= $detail[0]->is_proses?></span>
                             </div>
@@ -147,13 +147,15 @@
                                         <h6>Total</h6>
                                         <h6>Rp 300.000</h6>
                                     </div>
-
-                                    <a href="" class="btn btn-expat d-flex align-items-center justify-content-center">
+                                    <form action="<?=base_url()?>history/process_order" method="post">
+                                        <input type="hidden" id="id_driver" name="id_driver">
+                                        <input type="hidden" name="invoice" value="<?=$invoice?>">
+                                    <button class="btn btn-expat d-flex align-items-center justify-content-center">
                                         <span>
-                                            UPDATE PROCCESS
+                                            PROCCESS TRANSACTION
                                         </span>
-                                    </a>
-
+                                    </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

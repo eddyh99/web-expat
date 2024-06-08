@@ -427,9 +427,9 @@ class Order extends CI_Controller
             'items'             => $temp_item
         );
 
-        echo '<pre>'.print_r($mdata,true).'</pre>';
+/*        echo '<pre>'.print_r($mdata,true).'</pre>';
         die;
-
+*/
         // Set Session Ordersummary
         $this->session->set_userdata('ordersummary', $mdata);
 

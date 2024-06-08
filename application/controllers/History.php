@@ -130,10 +130,25 @@ class History extends CI_Controller
             'history_in'         => 'in',
             'dropdown_horder'    => 'text-expat-green', 
             'detail'            => $result, 
-            'staff'             => $resultStaff
+            'staff'             => $resultStaff,
+            'invoice'           => $invoice
         );
         
         $this->load->view('layout/wrapper', $data);
 
+    }
+    
+    public function process_order(){
+        $invoice        = $this->security->xss_clean($this->input->post('invoice'));
+        $iddriver       = $this->security->xss_clean($this->input->post('id_driver'));
+        
+        $mdata=array(
+                "invoice"     => $invoice,
+                "id_driver"  => !empty($iddriver) ? $iddriver : null
+            );
+        $url = URLAPI . "/v1/history/process_order";
+		$result = expatAPI($url,json_encode($mdata));
+		print_r($result);
+        
     }
 }

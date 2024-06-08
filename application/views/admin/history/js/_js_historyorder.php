@@ -84,15 +84,23 @@
 			}],
     });
 
-    $(document).ready(function(){		
 
-        $('.driver-select2').select2({
-            placeholder: "Select Driver",
-            allowClear: true,
-            theme: "bootstrap", 
-            width: "100%"
-        });
+    $('.driver-select2').select2({
+        placeholder: "Select Driver",
+        allowClear: true,
+        theme: "bootstrap", 
+        width: "100%"
     });
+    
+    $("#savedriver").on("click",function(){
+        var isi=$( "#driver option:selected" ).text();
+        $("#drivername").html(isi);
+        var iddriver=$("#driver").val();
+        $("#id_driver").val(iddriver)
+        $('#paymentmodal').modal("hide");
+    })
 
-
+    $("#filter").on("click",function(){
+        table.ajax.reload();
+    })
 </script>
