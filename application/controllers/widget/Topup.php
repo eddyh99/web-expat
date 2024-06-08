@@ -60,14 +60,14 @@ class Topup extends CI_Controller
 		$method		= $this->security->xss_clean($input->post('methodpayment'));
 		
 		$invoiceID	= date("Ymd").uniqid();
-		//echo "<pre>".print_r($_POST,true)."</pre>";
+		// echo "<pre>".print_r($_POST,true)."</pre>";
 		if ($method=="credit"){
 			$bodyreq = array (
 						'order' => array (
 							'amount' 		 => $amount+($amount*0.03),
 							'invoice_number' => $invoiceID,
 							'currency' 		 => 'IDR',
-							'callback_url' 	 => base_url()."widget/topup/success",
+							'callback_url' 	 => base_url()."widget/topup/success/".$token."/".$invoiceID,
 							"callback_url_cancel"	=> base_url()."widget/topup/cancel",
 							"auto_redirect"			=> true,
 							"disable_retry_payment" => true,
@@ -88,7 +88,7 @@ class Topup extends CI_Controller
 							'amount' 		 => $amount,
 							'invoice_number' => $invoiceID,
 							'currency' 		 => 'IDR',
-							'callback_url' 	 => base_url()."widget/topup/success",
+							'callback_url' 	 => base_url()."widget/topup/success/".$token."/".$invoiceID,
 							"callback_url_cancel"	=> base_url()."widget/topup/cancel",
 							"auto_redirect"			=> true,
 							"disable_retry_payment" => true,
@@ -117,7 +117,7 @@ class Topup extends CI_Controller
 							'amount' 		 => $amount,
 							'invoice_number' => $invoiceID,
 							'currency' 		 => 'IDR',
-							'callback_url' 	 => base_url()."widget/topup/success",
+							'callback_url' 	 => base_url()."widget/topup/success/".$token."/".$invoiceID,
 							"callback_url_cancel"	=> base_url()."widget/topup/cancel",
 							"auto_redirect"			=> true,
 							"disable_retry_payment" => true,
@@ -140,7 +140,7 @@ class Topup extends CI_Controller
 							'amount' 		 => $amount,
 							'invoice_number' => $invoiceID,
 							'currency' 		 => 'IDR',
-							'callback_url' 	 => base_url()."widget/topup/success",
+							'callback_url' 	 => base_url()."widget/topup/success/".$token."/".$invoiceID,
 							"callback_url_cancel"	=> base_url()."widget/topup/cancel",
 							"auto_redirect"			=> true,
 							"disable_retry_payment" => true,
@@ -244,11 +244,17 @@ class Topup extends CI_Controller
         $this->load->view('layout/wrapper', $mdata);
 	}
 	
-	public function success()
+	public function success($token = NULL, $invoice = NULL)
 	{
+
+		$urlPoin 		= URLAPI . "/payment/checkpoin?invoice=".$invoice."&tipe=topup";
+		$responsePoin 	= mobileAPI($urlPoin, $mdata = NULL, $token);
+        $resultPoin      = $responsePoin->result->messages;
+
 		$mdata = array(
             'title'     => NAMETITLE . ' - Topup Success',
             'content'   => 'widget/topup/topup_success',
+			'invoice'	=> $resultPoin
         );
         $this->load->view('layout/wrapper', $mdata);
 	}

@@ -58,13 +58,6 @@ class Employe extends CI_Controller
 
         echo json_encode($resultActive);  
               
-        // if($status == 'active'){
-        //     echo json_encode($resultActive);        
-        // }else if($status == 'new'){
-        //     echo json_encode($resultNew);        
-        // }else if($status == 'disabled'){
-        //     echo json_encode($resultDisabled);        
-        // }
 
     }
 
@@ -257,6 +250,118 @@ class Employe extends CI_Controller
         }else{
             $this->session->set_flashdata('error', $result->messages->error);
             redirect('member');
+            return;
+        }
+    }
+
+    public function assign_staff()
+    {
+  
+
+        $data = array(
+            'title'             => NAMETITLE . ' - Assign Staff',
+            'content'           => 'admin/employe/assignstaff/index',
+            'extra'             => 'admin/employe/assignstaff/js/_js_index',
+            'master_active'     => 'active',
+            'master_in'         => 'in',
+            'dropdown_assignstaff'  => 'text-expat-green', 
+
+        );
+
+        $this->load->view('layout/wrapper', $data);
+    }
+
+    public function list_assignstaff()
+    {
+
+		$url = URLAPI . "/v1/user/getall_staff";
+		$response = expatAPI($url)->result->messages;   
+
+        echo json_encode($response);  
+    }
+
+    public function add_assignstaff()
+    {
+        $urlStaff = URLAPI . "/v1/member/get_allmember?role=pegawai";
+		$resultStaff = expatAPI($urlStaff)->result->messages;  
+        
+        
+        $urlCabang = URLAPI . "/v1/outlet/get_allcabang";
+		$resultCabang = expatAPI($urlCabang)->result->messages;  
+
+
+        $data = array(
+            'title'             => NAMETITLE . ' - Add Assign Staff',
+            'content'           => 'admin/employe/assignstaff/add_assignstaff',
+            'extra'             => 'admin/employe/assignstaff/js/_js_index',
+            'master_active'     => 'active',
+            'master_in'         => 'in',
+            'dropdown_assignstaff'  => 'text-expat-green',
+            'staff'             => $resultStaff,
+            'cabang'             => $resultCabang,
+        );
+
+        $this->load->view('layout/wrapper', $data);
+    }
+
+    public function addproccess_assignstaff()
+    {
+        $this->form_validation->set_rules('staff', 'Staff', 'trim|required');
+		$this->form_validation->set_rules('outlet', 'Outlet', 'trim|required');
+
+        if ($this->form_validation->run() == FALSE) {
+			$this->session->set_flashdata('error', $this->message->error_msg(validation_errors()));
+			redirect("employe/add_assignstaff");
+			return;
+		}
+
+        $input      = $this->input;
+        $idstaff      = $this->security->xss_clean($input->post('staff'));
+        $idoutlet     = $this->security->xss_clean($input->post('outlet'));
+
+        $mdata = array(
+            "id_staff"      => $idstaff,
+            "cabangid"      => $idoutlet
+        );
+
+        $url = URLAPI . "/v1/user/addStaff";
+		$response = expatAPI($url, json_encode($mdata));
+        $result = $response->result;
+
+        // echo '<pre>'.print_r($response,true).'</pre>';
+        // die;    
+
+        if($response->status == 200){
+            $this->session->set_flashdata('success', $result->messages);
+			redirect('employe/assign_staff');
+			return;
+        }else{
+            $this->session->set_flashdata('error', $result->messages->error);
+            redirect('employe/add_assignstaff');
+            return;
+        }
+
+    }
+
+    public function delete_assignstaff($idstaff, $idcabang)
+    {
+        $id_staff = base64_decode($this->security->xss_clean($idstaff));
+        $id_cabang = base64_decode($this->security->xss_clean($idcabang));
+
+        $url = URLAPI . "/v1/user/deleteStaff?id_staff=".$id_staff."&cabangid=".$id_cabang;
+		$response = expatAPI($url);
+        $result = $response->result;
+
+        // echo '<pre>'.print_r($response,true).'</pre>';
+        // die;    
+
+        if($response->status == 200){
+            $this->session->set_flashdata('success', $result->messages);
+			redirect('employe/assign_staff');
+			return;
+        }else{
+            $this->session->set_flashdata('error', $result->messages->error);
+            redirect('employe/assign_staff');
             return;
         }
     }

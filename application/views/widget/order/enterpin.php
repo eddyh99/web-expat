@@ -9,6 +9,7 @@
         <form id="enterpinform" action="<?= base_url()?>widget/order/detail_process" method="POST">
 
             <input type="hidden" id="usertoken" name="usertoken" value="<?= $token?>">
+            <input type="hidden" id="id_cabang" name="id_cabang" value="<?= $token?>">
             <div class="mb-4">
                 <h1 class="f-lora color-expat">Enter Pin </h1>
             </div>

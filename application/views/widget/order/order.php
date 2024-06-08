@@ -1,12 +1,18 @@
 
 <div class="app-content px-2 row  mb-5 pb-5">
     <div class="app-member mx-auto col-12 col-lg-8  border-1 border-white">
+        <?php if (@isset($_SESSION["error"])) { ?>
+            <div class="col-12 alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="notif-login f-poppins"><?= $_SESSION["error"] ?></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php } ?>
         <form id="orderchart" action="<?= base_url()?>widget/order/enterpin" method="POST">
             <input type="hidden" name="id_cabang" value="<?= $_GET['cabang']?>">
             <input type="hidden" id="usertoken" name="usertoken" value="<?= $token?>">
             
             <div class="chart-delivery row mx-auto mt-5 p-2">
-                <input type="hidden" id="idpengiriman" name="idpengiriman" value="<?= @$address->id?>">
+                <input type="hidden" id="idpengiriman" name="idpengiriman" value="<?= @$address->address->id?>">
            
                 <label id="labelpickup" class="col-6 d-flex justify-content-center align-items-center" for="pickup">
                     <div class="">
@@ -24,7 +30,7 @@
 
 
             <div id="pickupoutlet" class="preview-cabang my-4" style="display: none;">
-                <h2>Pickup Outlet</h2>
+                <h5>Pickup Outlet</h5>
                 <h6 class="color-expat"><?= $cabang->nama?></h6>
                 <div class="d-flex align-items-center">
                     <img src="<?= $cabang->picture?>" alt="img">
@@ -37,10 +43,10 @@
             </div>
 
             <div id="address" class="pt-1 mt-5">
-                <h2>Delivery Address</h2>
-                <h4 class="color-expat" id="shownameaddress"><?= @$address->title?></h4>
-                <span class="color-expat-secondary" id="showaddress"><?= @$address->alamat?></span><br>
-                <span class="color-expat-secondary" id="showphone"><?= @$address->phone?></span><br>
+                <h5>Delivery Address</h5>
+                <h6 class="color-expat" id="shownameaddress"><?= @$address->address->title?></h6>
+                <span class="color-expat-secondary" id="showaddress"><?= @$address->address->alamat?></span><br>
+                <span class="color-expat-secondary" id="showphone"><?= @$address->address->phone?></span><br>
                 <span class="color-expat-secondary fst-italic" id="shownote"></span>
                 <div id="edit-in-address" class="d-flex justify-content-start align-items-center mt-2">
                     <?php if(empty($address)){?>
@@ -96,42 +102,27 @@
 
             <hr style="border-bottom: 2px solid #fff;">
             <?php foreach($variant as $vr){?>
-                <div id="itempreview<?= $vr['id']?>" class="item-preview-order d-flex align-items-center justify-content-between my-4">
-                    <div class="d-flex align-items-center">
+                <div id="itempreview<?= $vr['id']?>" class="item-preview-order d-flex flex-column align-items-start justify-content-between py-4 my-3">
+                    <div class="d-flex align-items-start">
                         <img src="<?= $vr['picture']?>" alt="img">
                         <div class="item-detail ms-3">
                             <h3><?= $vr['nama']?></h3>
-                            <span class="color-expat-secondary"><?= $vr['additional']?> | <?= $vr['optional']?></span><br>
+                            <span class="color-expat-secondary"><?= $vr['additional']?> | <?= $vr['optional']?> | <?= $vr['satuan']?></span><br>
                             <span class="color-expat-secondary"><?= number_format($vr['harga'], 2) ?></span>
                         </div>
+                        
                     </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <i onclick="minuscart('<?= $vr['id']?>')" class="fas fa-minus-circle minus-<?= $vr['id']?> fs-3" style="cursor: pointer;"></i>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <i onclick="minuscart('<?= $vr['id']?>')" class="fas fa-minus-circle minus-<?= $vr['id']?> fs-5" style="cursor: pointer;"></i>
                         <!-- <input type="hidden" name="injumlahcoffe" id="injumlahcoffe"> -->
-                        <span class="d-block" style="width: 50px;">
+                        <span class="d-block" style="width: 34px;">
                             <input type="hidden" name="id_variant[]" value="<?= $vr['id']?>">
                             <input type="number" name="jumlah[]" class="text-center w-100 border-0 bg-transparent text-white" id="jumlah<?= $vr['id']?>" value="<?= $vr['jumlah']?>">
                         </span>
-                        <i onclick="pluscart('<?= $vr['id']?>')"  class="fas fa-plus-circle plus-<?= $vr['id']?> fs-3" style="cursor: pointer;"></i>
+                        <i onclick="pluscart('<?= $vr['id']?>')"  class="fas fa-plus-circle plus-<?= $vr['id']?> fs-5" style="cursor: pointer;"></i>
                     </div>
                 </div>
             <?php }?>
-            <!-- <div class="item-preview-order d-flex align-items-center justify-content-between my-3">
-                <div class="d-flex align-items-center">
-                    <img src="<?= base_url()?>assets/img/widget/expresso.png" alt="img">
-                    <div class="item-detail ms-2">
-                        <h3>Capucinno</h3>
-                        <span class="color-expat-secondary">1 shot | nomad</span>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center">
-                    <i class="fas fa-minus-circle fs-3" style="cursor: pointer;"></i>
-                    <input type="hidden" name="injumlahcoffe" id="injumlahcoffe">
-                    <span class="mx-4" id="jumlahcoffe"></span>
-                    <i class="fas fa-plus-circle fs-3" style="cursor: pointer;"></i>
-                </div>
-            </div>
-           -->
             <hr style="border-bottom: 8px solid #fff;">
 
             <div>
@@ -148,38 +139,35 @@
             <hr style="border-bottom: 2px solid #fff;">
 
             <div id="summaryorder">
-                <h2>Payment Summary</h2>
+                <h5>Payment Summary</h5>
                 <div class="price d-flex justify-content-between align-items-center">
                     <span>Price</span>
-                    <span> Rp 
-                        <?php 
-                            $price = 0;
-                            $quantity = 0;
-                            $total = 0;
-                            foreach($variant as $vr){
-                                $price += $vr['harga'];
-                                $quantity += $vr['jumlah']; 
-                            }
-                            $total = $price * $quantity;
-                            echo number_format($total, 2);
-                        ?>
+                    <span>
+                        Rp 
+                        <span class="price-span">   
+                        </span>
                     </span>
                 </div>
                 <div class="fee d-flex justify-content-between align-items-center">
                     <span>Fee Delivery</span>
-                    <span>Rp. 18.000</span>
+                    <span>Rp. <?php echo number_format($address->delivery_fee, 2) ?></span>
                 </div>
             </div>
 
             <hr style="border-bottom: 2px solid #fff;">
 
             <div id="totalsummary" class="d-flex justify-content-between align-items-center">
-                <h3 class="f-lora color-expat fw-bold">Total Payment</h3>
+                <h4 class="f-lora color-expat fw-bold">Total Payment</h4>
                 <span>Rp 
                     <?php 
-                        $total -= 18000;
-                        echo number_format($total, 2);?>
+                        // $total -= 0;
+                        // echo number_format($total, 2);
+                    ?>
+                    <span  class="total-price-span">
+
+                    </span>
                 </span>
+                <input type="hidden" name="amount" id="amount">
             </div>
 
 
@@ -187,13 +175,66 @@
                 <a class="btn btn-expat px-3 py-1">
                     <span>Your Balance</span>
                    Rp <?php echo number_format($user->saldo, 2) ?>
+                   <input type="hidden" name="saldo" value="<?= $user->saldo?>">
                 </a>
             </div>
+
+            <!-- <div>
+                <div class="d-flex justify-content-between mt-2">
+                    <a class="btn btn-white d-flex justify-content-between align-items-center w-100" style="font-size: 13px;" href="" data-bs-toggle="modal" data-bs-target="#paymentmodal">
+                        <span class="d-flex align-items-center">
+                            <i class="fas fa-money-check-alt me-2 fs-5"></i>
+                            Payment
+                        </span>
+                        <span class="labelpayment">
+                            
+                        </span>
+                        <input type="hidden" name="methodpayment" id="methodpayment">
+                    </a>
+                    <div class="modal fade" id="paymentmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4>Select Payment Method</h4>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-white p-2">
+                                    <label for="expatbalance" class="label-amount">
+                                        <input type="radio" id="expatbalance" data-title="Expat Balance" value="expatbalance" name="paymentselectmodal" class="paymentradio card-input-amount-select" checked="checked" >
+                                        <span class="span-amount">Expat Balance <img class="img-fluid bg-black" width="40" src="<?= base_url()?>assets/img/logo.png" alt="logo"></span>
+                                    </label>
+                                    <br>
+                                    <label for="credit" class="label-amount">
+                                        <input type="radio" id="credit" data-title="Credit Card" value="credit" name="paymentselectmodal" class="paymentradio card-input-amount-select">
+                                        <span class="span-amount">Credit Card <img class="img-fluid" width="100" src="<?= base_url()?>assets/img/payment/card.png" alt="card"></span>
+                                    </label>
+                                    <br>
+                                    <label for="va" class="label-amount">
+                                        <input type="radio" id="va" data-title="Virtual Account" value="virtual" name="paymentselectmodal" class="paymentradio card-input-amount-select">
+                                        <span class="span-amount">Virtual Account <img class="img-fluid" width="160" src="<?= base_url()?>assets/img/payment/va.png" alt="va"></span>
+                                    </label>
+                                    <br>
+                                    <label for="wallet" class="label-amount">
+                                        <input type="radio" id="wallet" data-title="E-Wallet" value="wallet" name="paymentselectmodal" class="paymentradio card-input-amount-select" >
+                                        <span class="span-amount">E-Wallet<img class="img-fluid" width="200" src="<?= base_url()?>assets/img/payment/e-wallet.png" alt="e-wallet"></span>
+                                    </label>
+                                    <br>
+                                    <label for="qris" class="label-amount">
+                                        <input type="radio" id="qris" data-title="QRIS" value="qris" name="paymentselectmodal" class="paymentradio card-input-amount-select">
+                                        <span class="span-amount">QRIS <img class="img-fluid" width="50" src="<?= base_url()?>assets/img/payment/qris.png" alt="qris"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            
 
             <div id="button-order" class="d-flex w-100 mt-3">
                 <button type="submit" class="btn btn-expat w-100 py-3 <?= (empty($all_variant)) ? "disabled": ""?>">ORDER</button>
             </div>
-
+            
         </form>
     </div>
 </div>

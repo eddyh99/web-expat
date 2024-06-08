@@ -18,13 +18,6 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
                         <h5 class="card-title fw-semibold mb-4">List Employe</h5>
-                        <!-- <div class="w-30">
-                            <label for="role" class="form-label">Pegawai Status</label>
-                            <select name="member_status" id="member_status" class="form-select member-status mb-3">
-                                <option value="active">Active</option>
-                                <option value="new">New Member</option>
-                            </select>
-                        </div> -->
                     </div>
                     <table id="table_list_employe" class="table table-striped" style="width:100%">
                         <thead>

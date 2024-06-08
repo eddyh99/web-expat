@@ -10,7 +10,7 @@
             <input type="hidden" name="total_variant" id="total_variant">
             <div class="mt-3">
                 <h1><?= $product->nama?></h1>
-                <span class="desc"><?= $product->deskripsi?></span>
+                <article class="article desc"><?= $product->deskripsi?></article>
                 <h3 class="greenprice">Rp <span class="showprice">-</span></h3>
             </div>
             <!-- <button type="button" class="btn btn-primary" id="liveToastBtn">Show live toast</button> -->
@@ -36,20 +36,23 @@
                     $temp_optional = array();
                     $finaloptional = array();
                     foreach($variant as $vr){
-                        if($vr->id_cabang == $_GET['cabang']){
-                            if(in_array($vr->optional, $check_optional)){
-                                echo "";
-                            }else{
-                                array_push($check_optional, $vr->optional);
-                                $temp_optional = array(
-                                    "idoptional"  => $vr->id_optional,
-                                    "optional"    => $vr->optional
-                                );
-                                array_push($finaloptional, $temp_optional);
+                        if(isset($vr->id_optional)){
+                            if($vr->id_cabang == $_GET['cabang']){
+                                if(in_array($vr->optional, $check_optional)){
+                                    echo "";
+                                }else{
+                                    array_push($check_optional, $vr->optional);
+                                    $temp_optional = array(
+                                        "idoptional"  => $vr->id_optional,
+                                        "optional"    => $vr->optional
+                                    );
+                                    array_push($finaloptional, $temp_optional);
+                                }
                             }
                         }
                     }
 
+                if(isset($finaloptional)){
                     foreach($finaloptional as $key => $val){
                         if($key == 0){
                 ?>
@@ -73,6 +76,7 @@
                 <?php 
                         }
                     }
+                }
                 ?>
 
             </div>
@@ -85,7 +89,7 @@
                 <?php } else if($product->kategori == "food"){?>
                     <h3 class="f-lora">Portion Of Food</h3>
                 <?php } else {?>
-                    <h3 class="f-lora">Retail</h3>
+                    <h3 class="f-lora">Satuan</h3>
                 <?php } ?>
 
 
@@ -94,19 +98,23 @@
                     $temp_satuan = array();
                     $finalsatuan = array();
                     foreach($variant as $vr){
-                        if($vr->id_cabang == $_GET['cabang']){
-                            if(in_array($vr->satuan, $check_satuan)){
-                                echo "";
-                            }else{
-                                array_push($check_satuan, $vr->satuan);
-                                $temp_satuan = array(
-                                    "idsatuan"  => $vr->id_satuan,
-                                    "satuan"    => $vr->satuan
-                                );
-                                array_push($finalsatuan, $temp_satuan);
+                        if(isset($vr->id_satuan)){
+                            if($vr->id_cabang == $_GET['cabang']){
+                                if(in_array($vr->satuan, $check_satuan)){
+                                    echo "";
+                                }else{
+                                    array_push($check_satuan, $vr->satuan);
+                                    $temp_satuan = array(
+                                        "idsatuan"  => $vr->id_satuan,
+                                        "satuan"    => $vr->satuan
+                                    );
+                                    array_push($finalsatuan, $temp_satuan);
+                                }
                             }
                         }
                     }
+
+                    // echo '<pre>'.print_r($finalsatuan,true).'</pre>';
 
                    foreach($finalsatuan as $key => $val){
                        if($key == 0){
@@ -133,26 +141,30 @@
             </div>
             <hr style="border-bottom: 2px solid #fff;">
             <div class="mt-3 mb-4">
+                
                 <h3 class="f-lora">Additional</h3>
-
                 <?php 
                     $check_additional = array();
                     $temp_additional = array();
                     $finaladditional = array();
                     foreach($variant as $vr){
-                        if($vr->id_cabang == $_GET['cabang']){
-                            if(in_array($vr->additional, $check_additional)){
-                                echo "";
-                            }else{
-                                array_push($check_additional, $vr->additional);
-                                $temp_additional = array(
-                                    "idadditional"  => $vr->id_additional,
-                                    "additional"    => $vr->additional
-                                );
-                                array_push($finaladditional, $temp_additional);
+                        if(isset($vr->id_additional)){
+                            if($vr->id_cabang == $_GET['cabang']){
+                                if(in_array($vr->additional, $check_additional)){
+                                    echo "";
+                                }else{
+                                    array_push($check_additional, $vr->additional);
+                                    $temp_additional = array(
+                                        "idadditional"  => $vr->id_additional,
+                                        "additional"    => $vr->additional
+                                    );
+                                    array_push($finaladditional, $temp_additional);
+                                }
                             }
                         }
                     }
+
+
                     foreach($finaladditional as $key => $val){
                         if($key == 0){
                 ?>

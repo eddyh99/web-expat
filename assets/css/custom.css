@@ -175,7 +175,32 @@
 border-radius: 10px;
 }
 
+.detail-historyorder .jenis-pengiriman {
+    letter-spacing: 4px;
+}
 
+.detail-historyorder .ticket-idtransaksi {
+    color: #338f61;
+    font-weight: 800;
+}
+
+.detail-historyorder .information-historyorder .left {
+    border-right: 2px solid #477960;
+}
+
+.detail-historyorder .information-historyorder .left .img-produk{
+    width: 120px;
+}
+
+.detail-historyorder .information-historyorder .right .title-delivery-details {
+   color: #a1a1a1;
+}
+
+.detail-historyorder .information-historyorder .right .deliveryto-border {
+   height: 2rem;
+   margin-left: 0.4rem;
+   border-left: 2px dashed #72A28A;
+}
 
 
 
