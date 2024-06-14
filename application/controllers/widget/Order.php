@@ -34,6 +34,47 @@ class Order extends CI_Controller
 		parent::__construct();
 	}
 
+    private function getFastestRoute($origin, $destination) {
+        $apiKey = 'AIzaSyAHJmWb8cmOV3QMTtc561XdQuc3ems19Jw';
+        $url = 'https://maps.googleapis.com/maps/api/directions/json';
+        $params = [
+            'origin' => $origin,
+            'destination' => $destination,
+            'key' => $apiKey,
+            'mode' => 'driving',  // Change to desired mode of transport
+            'departure_time' => 'now',  // Use 'now' to get real-time traffic information
+            'units' => 'metric'  // Specify metric units for distance in kilometers
+        ];
+        
+        $url .= '?' . http_build_query($params);
+        
+        // Initialize a CURL session.
+        $ch = curl_init();
+        
+        // Return Page contents.
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        
+        // Set the URL
+        curl_setopt($ch, CURLOPT_URL, $url);
+        
+        // Execute the session and store the contents in $response
+        $response = curl_exec($ch);
+        
+        // Closing the session
+        curl_close($ch);
+        
+        // Decode the JSON response
+        $directions = json_decode($response, true);
+        
+        if ($directions['status'] == 'OK') {
+            $route = $directions['routes'][0];
+            return $route;
+        } else {
+            return null;
+        }
+    }
+    
+    //@todo display error to summary
 	public function ordersummary($token)
 	{	
         // Get Cookie
@@ -58,7 +99,30 @@ class Order extends CI_Controller
         $urlCabang 		= URLAPI . "/v1/mobile/outlet/getcabang_byid?id=".$_GET['cabang'];
 		$responseCabang 	= expatAPI($urlCabang);
         $resultCabang      = $responseCabang->result->messages;
-
+        // echo '<pre>'.print_r($resultCabang,true).'</pre>';
+        // die;
+        
+        $origin = $resultAddress->address->latitude.','.$resultAddress->address->longitude;  // Latitude and longitude for origin
+        $destination = $resultCabang->latitude.','.$resultCabang->longitude;  // Latitude and longitude for destination
+        // echo $origin;
+        // echo "<hr>";
+        // echo $destination;
+        // die;
+        $route = $this->getFastestRoute($origin, $destination);
+        
+        if ($route) {
+            $legs = $route['legs'][0];
+            $distance = $legs['distance'];
+            $jarak = str_replace(' km', '', $distance['text']);  // Remove " km" from the distance text
+            if ($jarak>$resultCabang->max){
+                $error = "Delivery Address is too far, max is ".$distance['text'];
+            }
+        } else {
+            $error = "No route found";
+        }
+        
+        //display error
+                
         // Cek Detail Variant dan produk
         // Assign ke new array
         $variant = array();
@@ -392,6 +456,7 @@ class Order extends CI_Controller
 
     }
 
+    //@todo redirect ke order summary
     public function enterpin()
     {
         // Get Data from user
@@ -405,6 +470,39 @@ class Order extends CI_Controller
         $method		    = "expatbalance";
         $amount         = $this->security->xss_clean($input->post('amount'));
         $saldo          = $this->security->xss_clean($input->post('saldo'));
+
+        // Get Alamat user
+        $urlAddress 		= URLAPI . "/v1/mobile/order/last_address";
+		$responseAddress 	= mobileAPI($urlAddress, $mdata = NULL, $token);
+        $resultAddress      = $responseAddress->result->messages;
+        
+        // Get Cabang
+        $urlCabang 		= URLAPI . "/v1/mobile/outlet/getcabang_byid?id=".$_GET['cabang'];
+		$responseCabang 	= expatAPI($urlCabang);
+        $resultCabang      = $responseCabang->result->messages;
+        // echo '<pre>'.print_r($resultCabang,true).'</pre>';
+        // die;
+        
+        $origin = $resultAddress->address->latitude.','.$resultAddress->address->longitude;  // Latitude and longitude for origin
+        $destination = $resultCabang->latitude.','.$resultCabang->longitude;  // Latitude and longitude for destination
+        // echo $origin;
+        // echo "<hr>";
+        // echo $destination;
+        // die;
+        $route = $this->getFastestRoute($origin, $destination);
+        
+        if ($route) {
+            $legs = $route['legs'][0];
+            $distance = $legs['distance'];
+            $jarak = str_replace(' km', '', $distance['text']);  // Remove " km" from the distance text
+            if ($jarak>$resultCabang->max){
+                $error = "Delivery Address is too far, max is ".$distance['text'];
+                //redirect order summary
+            }
+        } else {
+            $error = "No route found";
+            //redirect order summary
+        }
 
 
         // Get variant user dan ubah bentuk array
