@@ -49,8 +49,8 @@
                 <span class="color-expat-secondary" id="showphone"><?= @$address->address->phone?></span><br>
                 <span class="color-expat-secondary fst-italic" id="shownote"></span>
                 <div id="edit-in-address" class="d-flex justify-content-start align-items-center mt-2">
-                    <?php if(empty($address)){?>
-                        <a class="btn btn-white d-flex align-items-center" href="<?= base_url()?>widget/order/addaddress/<?= $token?>" >
+                    <?php if(empty($address->address)){?>
+                        <a class="btn btn-white d-flex align-items-center" href="<?= base_url()?>widget/order/addaddress/<?= $token?>?idcabang=<?= $_GET['cabang']?>" >
                             <svg class="me-2" width="18" height="18" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M6.70399 1.62683H4.52291C2.72916 1.62683 1.60449 2.89675 1.60449 4.69458V9.54441C1.60449 11.3422 2.72391 12.6122 4.52291 12.6122H9.67024C11.4698 12.6122 12.5892 11.3422 12.5892 9.54441V7.19475" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M5.14986 6.37049L9.50911 2.01125C10.0522 1.46875 10.9324 1.46875 11.4755 2.01125L12.1854 2.72116C12.7285 3.26425 12.7285 4.14508 12.1854 4.68758L7.80519 9.06783C7.56778 9.30525 7.24578 9.43883 6.90978 9.43883H4.72461L4.77944 7.23383C4.78761 6.9095 4.92003 6.60033 5.14986 6.37049Z" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>

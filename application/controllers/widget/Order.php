@@ -295,9 +295,12 @@ class Order extends CI_Controller
 		$responseAddress 	= mobileAPI($urlAddress, $mdata = NULL, $token);
         $resultAddress      = $responseAddress->result->messages;
 
+        // echo '<pre>'.print_r($resultAddress,true).'</pre>';
+        // die;
         $mdata = array(
             'title'         => NAMETITLE . ' - Add Address',
             'content'       => 'widget/address/add_address',
+            'extra'         => 'widget/address/js/_js_addaddress',
             'address'       => $resultAddress,
             'token'         => $token
         );
@@ -364,7 +367,7 @@ class Order extends CI_Controller
 		$address        = $this->security->xss_clean($input->post('address'));
 		$phone          = $this->security->xss_clean($input->post('phone'));
 		$idcabang       = $this->security->xss_clean($input->post('idcabang'));
-
+		$pacinput       = $this->security->xss_clean($input->post('pac-input'));
 
         $mdata = array(
             'title'         => $nameaddress,
@@ -427,9 +430,11 @@ class Order extends CI_Controller
             'items'             => $temp_item
         );
 
-/*        echo '<pre>'.print_r($mdata,true).'</pre>';
+        /*
+        echo '<pre>'.print_r($mdata,true).'</pre>';
         die;
-*/
+        */
+        
         // Set Session Ordersummary
         $this->session->set_userdata('ordersummary', $mdata);
 

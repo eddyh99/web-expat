@@ -21,8 +21,9 @@
                                 <label for="role" class="form-label">Outlet</label>
                                 <select name="idcabang" id="idcabang" class="form-select member-status">
                                     <option value="">All</option>
-                                    <option value="pending">PETITENGET</option>
-                                    <option value="success">BEACHWALK</option>
+                                    <?php foreach($cabang as $dt){?>
+                                        <option value="<?= $dt->id?>"><?= $dt->nama?></option>
+                                    <?php }?>
                                 </select>
                             </div>
                             <div class="col-12 col-md-2 my-2 my-md-0">
@@ -40,7 +41,7 @@
                                 <th>Member</th>
                                 <th>Date</th>
                                 <th>Invoice</th>
-                                <th>Cabang</th>
+                                <th>Outlet</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -52,7 +53,7 @@
                                 <th>Member</th>
                                 <th>Date</th>
                                 <th>Invoice</th>
-                                <th>Cabang</th>
+                                <th>Outlet</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>

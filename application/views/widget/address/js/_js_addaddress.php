@@ -1,5 +1,5 @@
 
-<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+<script src="https://polyfill.io/v3/polyfill.js?features=default"></script>
 <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHJmWb8cmOV3QMTtc561XdQuc3ems19Jw&callback=initAutocomplete&libraries=places&v=weekly"
       defer
@@ -109,8 +109,6 @@
     // This example requires the Places library. Include the libraries=places
     // parameter when you first load the API. For example:
     // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-
-    
     function initAutocomplete() {
         const map = new google.maps.Map(document.getElementById("map"), {
             center: { lat: -33.8688, lng: 151.2195 },
@@ -156,21 +154,6 @@
                 console.log(place.geometry.location.lat());
                 console.log(place.geometry.location.lng());
 
-                $("#lat").val(place.geometry.location.lat());
-                $("#long").val(place.geometry.location.lng());
-
-                $("#prev-address").remove();
-                $("#preview-pac-input").append(`
-                    <span id="prev-address">
-                        <i class="fas fa-map-marker-alt me-2"></i>
-                    </span>
-                `);
-                place.address_components.forEach((address, i) => {
-                    $("#prev-address").append(`
-                        ${address.short_name},
-                    `);
-                });
-
                 const icon = {
                     url: place.icon,
                     size: new google.maps.Size(71, 71),
@@ -203,60 +186,26 @@
 
     window.initAutocomplete = initAutocomplete;
 
-    // function deg2rad(deg) {
-    //     return deg * (Math.PI/180)
-    // }
-
-    
-    // function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
-    //     var R = 6371; // Radius of the earth in km
-    //     var dLat = deg2rad(lat2-lat1);  // deg2rad below
-    //     var dLon = deg2rad(lon2-lon1); 
-    //     var a = 
-    //         Math.sin(dLat/2) * Math.sin(dLat/2) +
-    //         Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
-    //         Math.sin(dLon/2) * Math.sin(dLon/2)
-    //         ; 
-    //     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-    //     var d = R * c; // Distance in km
-    //     return d;
-    // }
-
-    // console.log(getDistanceFromLatLonInKm(-8.5049596,115.179781,-8.5413679,115.1912804));
-
-
-
-    function initMap() {
-        var map = new google.maps.Map(document.getElementById('map'), {
-            center: { lat: 37.7749, lng: -122.4194 }, // San Francisco as center
-            zoom: 6
-        });
-
-        var directionsService = new google.maps.DirectionsService();
-        var directionsRenderer = new google.maps.DirectionsRenderer();
-
-        directionsRenderer.setMap(map);
-
-        var start = { lat: 37.7749, lng: -122.4194 }; // San Francisco
-        var end = { lat: 34.0522, lng: -118.2437 }; // Los Angeles
-
-        var request = {
-            origin: start,
-            destination: end,
-            travelMode: 'DRIVING'
-        };
-
-        directionsService.route(request, function(result, status) {
-            console.log(result);
-            console.log(directionsRenderer);
-            if (status == 'OK') {
-                directionsRenderer.setDirections(result);
-            } else {
-                alert('Directions request failed due to ' + status);
-            }
-        });
+    function deg2rad(deg) {
+        return deg * (Math.PI/180)
     }
 
-    window.onload = initMap;
+    
+    function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+        var R = 6371; // Radius of the earth in km
+        var dLat = deg2rad(lat2-lat1);  // deg2rad below
+        var dLon = deg2rad(lon2-lon1); 
+        var a = 
+            Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+            Math.sin(dLon/2) * Math.sin(dLon/2)
+            ; 
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+        var d = R * c; // Distance in km
+        return d;
+    }
+
+    console.log(getDistanceFromLatLonInKm(-8.5049596,115.179781,-8.5413679,115.1912804));
+
 </script>
 
