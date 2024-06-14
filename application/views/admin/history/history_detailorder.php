@@ -19,63 +19,61 @@
                     <div>
                         <div class="d-flex justify-content-between align-items-start">
                             <div class="d-flex flex-column justify-content-start align-items-start">
-                                <h3 class="jenis-pengiriman d-flex align-items-center"> <span class="me-3">DELIVERY</span> <i class="ti ti-truck-delivery"></i></h3>
-                                <!-- <a href="" class="btn btn-expat d-flex align-items-center">
-                                    <i class="ti ti-plus fs-5 me-2"></i>
-                                    <span>
-                                        Assign Driver
-                                    </span>
-                                </a> -->
-                                <div>
-                                    <div class="d-flex justify-content-between mt-2">
-                                        <a class="btn btn-expat d-flex justify-content-between align-items-center w-100" style="font-size: 13px;" href="" data-bs-toggle="modal" data-bs-target="#paymentmodal">
-                                            <span class="d-flex align-items-center">
-                                                <i class="ti ti-plus me-1 fs-5"></i>
-                                                Assign Driver
-                                            </span>
-                                            <span class="labelpayment">
-                                                
-                                            </span>
-                                            <input type="hidden" name="methodpayment" id="methodpayment">
-                                        </a>
-                                    
-                                        <div class="modal fade" id="paymentmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4>Select Driver</h4>
-                                                        <button type="button" class="btn-close btn-close-black" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body text-white p-2">
-                                                        <div class="mb-4">
-                                                            <select class=" form-select" id="driver" name="driver" >
-                                                                <?php 
-                                                                foreach($staff as $st){
-                                                                    if($st->cabang == $detail[0]->cabang){
-                                                                ?>
-                                                                    <option value="<?= $st->staffid?>"><?= $st->nama?></option>
-                                                                <?php 
-                                                                    }
-                                                                }
-                                                                ?>
-                                                            </select>
+                                <?php if($detail[0]->id_pengiriman == null){?>
+                                    <h3 class="jenis-pengiriman d-flex align-items-center"> <span class="me-3">PICKUP</span> <i class="ti ti-coffee"></i></h3>
+                                <?php } else{?>
+                                    <h3 class="jenis-pengiriman d-flex align-items-center"> <span class="me-3">DELIVERY</span> <i class="ti ti-truck-delivery"></i></h3>
+                                    <div>
+                                        <div class="d-flex justify-content-between mt-2">
+                                            <a class="btn btn-expat d-flex justify-content-between align-items-center w-100" style="font-size: 13px;" href="" data-bs-toggle="modal" data-bs-target="#paymentmodal">
+                                                <span class="d-flex align-items-center">
+                                                    <i class="ti ti-plus me-1 fs-5"></i>
+                                                    Assign Driver
+                                                </span>
+                                                <span class="labelpayment">
+                                                    
+                                                </span>
+                                                <input type="hidden" name="methodpayment" id="methodpayment">
+                                            </a>
+                                        
+                                            <div class="modal fade" id="paymentmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4>Select Driver</h4>
+                                                            <button type="button" class="btn-close btn-close-black" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
-                                                        <div class="my-4">
-                                                            <button id="savedriver" class="btn btn-expat">Save Driver</button>
+                                                        <div class="modal-body text-white p-2">
+                                                            <div class="mb-4">
+                                                                <select class=" form-select" id="driver" name="driver" >
+                                                                    <?php 
+                                                                    foreach($staff as $st){
+                                                                        if($st->cabang == $detail[0]->cabang){
+                                                                    ?>
+                                                                        <option value="<?= $st->staffid?>"><?= $st->nama?></option>
+                                                                    <?php 
+                                                                        }
+                                                                    }
+                                                                    ?>
+                                                                </select>
+                                                            </div>
+                                                            <div class="my-4">
+                                                                <button id="savedriver" class="btn btn-expat">Select Driver</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        <h6 class="mt-2 fst-italic"><span id="drivername"><?= $detail[0]->nama?></span></h6>
                                     </div>
-                                    <h6 class="mt-2 fst-italic">Jhon Cena (Driver)</h6>
-                                </div>
+                                <?php } ?>
                                 
                             </div>
                             <div class="d-flex flex-column justify-content-end align-items-end">
-                                <h5 class="ticket-idtransaksi ">INV-123123123</h5>
-                                <h6>2024-05-20 10:10:10</h6>
-                                <span class="bg-danger-subtle text-danger badge"><?= $detail[0]->is_proses?></span>
+                                <h5 class="ticket-idtransaksi "><?=$invoice?></h5>
+                                <h6><?=$detail[0]->tanggal?></h6>
+                                <span class="<?= (($detail[0]->is_proses == 'pending') ? 'bg-danger-subtle text-danger' : (($detail[0]->is_proses == 'delivery') ? 'bg-warning-subtle text-warning' : 'bg-success-subtle text-success')) ?> badge"><?= $detail[0]->is_proses?></span>
                             </div>
                         </div>
                         <br>
@@ -83,7 +81,11 @@
 
                         <div class="d-flex information-historyorder row">
                             <div class="col-6 pe-3 left">
-                                <?php foreach($detail as $dt){?>
+                                <?php
+                                    $price = 0;
+                                    foreach($detail as $dt){
+                                    $price += $dt->harga;
+                                ?>
                                     <div class="col-12">
                                         <div class="card border-start border-success">
                                             <div class="card-body">
@@ -105,7 +107,12 @@
                             </div>
                             <div class="col-6 ps-3 right">
                                 <div class="col-12">
-                                    <h5 class="title-delivery-details">Delivery Details</h5>
+                                    <?php if($detail[0]->id_pengiriman == null){?>
+                                        <h5 class="title-delivery-details">Pickup Details</h5>
+                                    <?php } else {?>
+                                        <h5 class="title-delivery-details">Delivery Details</h5>
+                                    <?php } ?>
+
                                     <div>
                                         <?php if($detail[0]->picture != null){?>
                                             <img class="rounded-circle" width="60" src="<?= $detail[0]->picture ?>" alt="img">
@@ -114,46 +121,63 @@
                                         <?php } ?>
                                         <h6 class="pt-2"><?= $detail[0]->customer?></h6>
                                     </div>
-                                    <div>
-                                        <span>From</span>
-                                        <h6><?= $detail[0]->cabang?></h6>
-                                        <h6><?= $detail[0]->almtcabang?></h6>
-                                    </div>
-                                    <div class="deliveryto-border"></div>
-                                    <div>
-                                        <span>To</span>
-                                        <h6><?= $detail[0]->title?></h6>
-                                        <h6><?= $detail[0]->alamat?></h6>
-                                        <h6 class="fst-italic"><?= $detail[0]->phone?></h6>
-                                        <h6 class="fst-italic">( <?= $detail[0]->note?> )</h6>
-                                        
-                                    </div>
+
+                                    <?php if($detail[0]->id_pengiriman == null){?>
+                                        <div>
+                                            <span>Pickup Outlet</span>
+                                            <h6><?= $detail[0]->cabang?></h6>
+                                            <h6><?= $detail[0]->almtcabang?></h6>
+                                        </div>
+                                    <?php } else {?>
+                                        <div>
+                                            <span>From</span>
+                                            <h6><?= $detail[0]->cabang?></h6>
+                                            <h6><?= $detail[0]->almtcabang?></h6>
+                                        </div>
+                                        <div class="deliveryto-border"></div>
+                                        <div>
+                                            <span>To</span>
+                                            <h6><?= $detail[0]->title?></h6>
+                                            <h6><?= $detail[0]->alamat?></h6>
+                                            <h6 class="fst-italic"><?= $detail[0]->phone?></h6>
+                                            <h6 class="fst-italic"><?= ($detail[0]->note != null) ? '('.$detail[0]->note.')' : ''?> </h6>
+                                        </div>
+                                    <?php } ?>
                                 </div>
                                 <div class="col-12 mt-5">
                                     <h5 class="title-delivery-details">Payment Details</h5>
                                     <div class="d-flex justify-content-between">
                                         <h6>Price</h6>
-                                        <h6>Rp 300.000</h6>
+                                        <h6>Rp <?= number_format($price,2,".",",")?></h6>
                                     </div>
                                     <div class="d-flex justify-content-between">
                                         <h6>Handling & Delivery Fee</h6>
-                                        <h6>Rp 0</h6>
+                                        <h6>Rp 
+                                            <?php 
+                                                echo number_format($detail[0]->delivery_fee, 2, ".", ",");
+                                                $total = $price + $detail[0]->delivery_fee;
+                                            ?> 
+                                        </h6>
                                     </div>
                                     <div class="d-flex justify-content-between">
                                         <h6>Discount</h6>
-                                        <h6>Rp 0</h6>
+                                        <h6>Rp <?= number_format("0",2,".",",")?></h6>
                                     </div>
                                     <div class="d-flex justify-content-between">
                                         <h6>Total</h6>
-                                        <h6>Rp 300.000</h6>
+                                        <h6>Rp <?= number_format($total,2,".",",")?></h6>
                                     </div>
-
-                                    <a href="" class="btn btn-expat d-flex align-items-center justify-content-center">
-                                        <span>
-                                            UPDATE PROCCESS
-                                        </span>
-                                    </a>
-
+                                    <form action="<?=base_url()?>history/process_order" method="post">
+                                        <input type="hidden" id="id_driver" name="id_driver">
+                                        <input type="hidden" name="invoice" value="<?=$invoice?>">
+                                        <?php if($detail[0]->is_proses == 'pending'){?>
+                                        <button class="btn btn-expat d-flex align-items-center justify-content-center">
+                                            <span>
+                                                PROCCESS TRANSACTION
+                                            </span>
+                                        </button>
+                                        <?php }?>
+                                    </form>
                                 </div>
                             </div>
                         </div>

@@ -10,8 +10,10 @@
 
 <script>
     $('#tanggal').daterangepicker({
-        startDate: moment().startOf('month'),
-        endDate: moment().endOf('month'),
+        // startDate: moment().startOf('month'),
+        // endDate: moment().endOf('month'),
+        startDate: moment().add(-31, 'days'),
+        endDate: moment().add(0, 'days'),
         opens: 'right',
         locale: {
             format: 'DD MMM YYYY'
@@ -76,29 +78,33 @@
                         
                     }
 					return `
-                        <a class="btn ${(full.is_proses == 'complete') ? 'btn-success' : 'btn-danger'}" href="<?=base_url()?>history/detail_order/${encodeURI(btoa(full.id_transaksi))}">
-                            ${(full.is_proses == 'complete') ? '<i class="ti ti-info-circle"></i>' : '<i class="ti ti-clock"></i>'}
-                            ${(full.is_proses == 'complete') ? 'Details' : 'Pending'}
+                        <a class="btn ${(full.is_proses == 'complete') ? 'btn-success' : (full.is_proses == 'delivery') ? 'btn-warning' :  'btn-danger'}" href="<?=base_url()?>history/detail_order/${encodeURI(btoa(full.id_transaksi))}">
+                            ${(full.is_proses == 'complete') ? '<i class="ti ti-info-circle"></i>' : (full.is_proses == 'delivery') ? '<i class="ti ti-truck-delivery"></i>' : '<i class="ti ti-clock"></i>'}
+                            ${(full.is_proses == 'complete') ? 'Complete' : (full.is_proses == 'delivery') ? 'Delivery' :'Pending'}
                         </a> `;
 				}
 			}],
     });
 
-    $(document).ready(function(){		
 
-        $('.driver-select2').select2({
-            placeholder: "Select Driver",
-            allowClear: true,
-            theme: "bootstrap", 
-            width: "100%"
-        });
 
-        
+    $('.driver-select2').select2({
+        placeholder: "Select Driver",
+        allowClear: true,
+        theme: "bootstrap", 
+        width: "100%"
     });
+    
+    $("#savedriver").on("click",function(){
+        var isi=$( "#driver option:selected" ).text();
+        console.log(isi);
+        $("#drivername").html(`(${isi})`);
+        var iddriver=$("#driver").val();
+        $("#id_driver").val(iddriver)
+        $('#paymentmodal').modal("hide");
+    })
 
     $("#filter").on("click",function(){
         table.ajax.reload();
-    });
-
-
+    })
 </script>

@@ -369,8 +369,6 @@ class Order extends CI_Controller
 		$idcabang       = $this->security->xss_clean($input->post('idcabang'));
 		$pacinput       = $this->security->xss_clean($input->post('pac-input'));
 
-        echo '<pre>'.print_r($pacinput,true).'</pre>';
-        die;
         $mdata = array(
             'title'         => $nameaddress,
             'alamat'        => $address,
@@ -432,7 +430,11 @@ class Order extends CI_Controller
             'items'             => $temp_item
         );
 
-
+        /*
+        echo '<pre>'.print_r($mdata,true).'</pre>';
+        die;
+        */
+        
         // Set Session Ordersummary
         $this->session->set_userdata('ordersummary', $mdata);
 

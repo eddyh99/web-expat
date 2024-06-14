@@ -74,13 +74,19 @@ class History extends CI_Controller
 
     public function order()
     {
+        $url = URLAPI . "/v1/outlet/get_allcabang";
+		$result = expatAPI($url)->result->messages;
+
+        // echo '<pre>'.print_r($result,true).'</pre>';
+        // die;
         $data = array(
             'title'             => NAMETITLE . ' - History Order',
             'content'           => 'admin/history/history_order',
             'extra'             => 'admin/history/js/_js_historyorder',
             'history_active'     => 'active',
             'history_in'         => 'in',
-            'dropdown_horder'    => 'text-expat-green'
+            'dropdown_horder'    => 'text-expat-green',
+            'cabang'             => $result
         );
         $this->load->view('layout/wrapper', $data);
 
@@ -130,10 +136,26 @@ class History extends CI_Controller
             'history_in'         => 'in',
             'dropdown_horder'    => 'text-expat-green', 
             'detail'            => $result, 
-            'staff'             => $resultStaff
+            'staff'             => $resultStaff,
+            'invoice'           => $invoice
         );
         
         $this->load->view('layout/wrapper', $data);
 
+    }
+    
+    public function process_order(){
+        $invoice        = $this->security->xss_clean($this->input->post('invoice'));
+        $iddriver       = $this->security->xss_clean($this->input->post('id_driver'));
+        
+        $mdata=array(
+            "invoice"     => $invoice,
+            "id_driver"  => !empty($iddriver) ? $iddriver : null
+        );
+
+        $url = URLAPI . "/v1/history/process_order";
+		$result = expatAPI($url,json_encode($mdata));
+		print_r($result);
+        
     }
 }

@@ -17,19 +17,19 @@
                         </div>
                     <?php } ?>
                     <h5 class="card-title fw-semibold mb-4">Settings</h5>
-                    <form action="<?= base_url()?>promotion/addpromotion_process" method="POST">
+                    <form action="<?= base_url()?>settings/update_settings" method="POST">
                         <input type="hidden" id="token" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                         <div class="mb-3">
                             <label for="poin" class="form-label">Base Poin</label>
-                            <input type="text" class="form-control" id="poin" name="poin" placeholder="Enter poin..." required autocomplete="off">
+                            <input type="text" class="form-control" id="poin" name="poin" placeholder="Enter poin..." value="<?=($config[0]->content=="poin_calculate") ? $config[0]->value:0 ?>" required autocomplete="off">
                         </div>
                         <div class="mb-3">
                             <label for="dfee" class="form-label">Delivery Fee</label>
-                            <input type="text" class="form-control" id="dfee" name="dfee" placeholder="Enter Delivery Fee..." required autocomplete="off">
+                            <input type="text" class="form-control" id="dfee" name="dfee" placeholder="Enter Delivery Fee..." value="<?=($config[1]->content=="delivery_fee") ? $config[1]->value:0 ?>" required autocomplete="off">
                         </div>
                         <div class="mb-3">
                             <label for="maxarea" class="form-label">Max Area Delivery</label>
-                            <input type="text" class="form-control" id="maxarea" name="maxarea" placeholder="Enter Max Area Delivery..." required autocomplete="off">
+                            <input type="text" class="form-control" id="maxarea" name="maxarea" placeholder="Enter Max Area Delivery..." value="<?=($config[2]->content=="max_area") ? $config[2]->value:0 ?>" required autocomplete="off">
                         </div>
                         <button type="submit" class="btn btn-expat mt-3">Save Settings</button>
                   </form>
