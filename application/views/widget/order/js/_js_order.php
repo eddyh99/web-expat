@@ -28,6 +28,7 @@
             $('#pickupoutlet').show();
             $('#labelpickup').addClass('bg-expat');
             $('#labeldelivery').removeClass('bg-expat');
+            $("#ordernow").removeClass('disabled')
         }
         else if($(this).val() == "delivery"){
             $('#idpengiriman').val(<?= @$address->id?>); 

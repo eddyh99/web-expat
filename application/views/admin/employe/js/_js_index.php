@@ -19,11 +19,11 @@
 			},
 			{ data: 'email' },
 			{ data: 'nama' },
-			{ 
-                data: null, "mRender": function(data, type, full, meta) {
-                    return full.dob.split("-").reverse().join("-");
-                } 
-            },
+			// { 
+            //     data: null, "mRender": function(data, type, full, meta) {
+            //         return full.dob.split("-").reverse().join("-");
+            //     } 
+            // },
 			{ data: 'gender' },
 			{ data: 'is_driver' },
 			{ data: 'plafon' },

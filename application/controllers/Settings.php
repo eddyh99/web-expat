@@ -18,6 +18,7 @@ class Settings extends CI_Controller
         
         $url = URLAPI . "/v1/settings/get_setting";    
         $response = expatAPI($url)->result->messages;
+
         $data = array(
             'title'             => NAMETITLE . ' - Settings',
             'content'           => 'admin/settings/index',

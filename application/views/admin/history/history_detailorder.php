@@ -16,6 +16,18 @@
         <div class="col-lg-12 d-flex align-items-strech">
             <div class="card border-expat w-100">
                 <div class="card-body detail-historyorder">
+                    <?php if (@isset($_SESSION["error"])) { ?>
+                        <div class="col-12 alert alert-danger alert-dismissible fade show" role="alert">
+                            <span class="notif-login f-poppins"><?= $_SESSION["error"] ?></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php } ?>
+                    <?php if (@isset($_SESSION["success"])) { ?>
+                        <div class="col-12 alert alert-success alert-dismissible fade show" role="alert">
+                            <span class="notif-login f-poppins"><?= $_SESSION["success"] ?></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php } ?>
                     <div>
                         <div class="d-flex justify-content-between align-items-start">
                             <div class="d-flex flex-column justify-content-start align-items-start">
@@ -170,6 +182,7 @@
                                     <form action="<?=base_url()?>history/process_order" method="post">
                                         <input type="hidden" id="id_driver" name="id_driver">
                                         <input type="hidden" name="invoice" value="<?=$invoice?>">
+                                        <input type="hidden" name="jenis" value="<?= (($detail[0]->id_pengiriman == null) ? 'pickup' : 'delivery')?>">
                                         <?php if($detail[0]->is_proses == 'pending'){?>
                                         <button class="btn btn-expat d-flex align-items-center justify-content-center">
                                             <span>
@@ -189,41 +202,5 @@
     </div>
 </div>
 <!-- MAIN CONTENT END -->
-
-<!-- SWEET ALERT START -->
-<?php if(isset($_SESSION["success"])) { ?>
-    <script>
-        setTimeout(function() {
-            Swal.fire({
-                html: '<?= $_SESSION['success'] ?>',
-                position: 'top',
-                timer: 3000,
-                showCloseButton: true,
-                showConfirmButton: false,
-                icon: 'success',
-                timer: 2000,
-                timerProgressBar: true,
-            });
-        }, 100);
-    </script>
-<?php } ?>
-
-<?php if(isset($_SESSION["error"])) { ?>
-    <script>
-        setTimeout(function() {
-            Swal.fire({
-                html: '<?= $_SESSION['error'] ?>',
-                position: 'top',
-                timer: 3000,
-                showCloseButton: true,
-                showConfirmButton: false,
-                icon: 'error',
-                timer: 2000,
-                timerProgressBar: true,
-            });
-        }, 100);
-    </script>
-<?php } ?>
-<!-- SWEET ALERT END -->
 
 

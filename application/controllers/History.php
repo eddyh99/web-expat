@@ -147,15 +147,45 @@ class History extends CI_Controller
     public function process_order(){
         $invoice        = $this->security->xss_clean($this->input->post('invoice'));
         $iddriver       = $this->security->xss_clean($this->input->post('id_driver'));
+        $jenis          = $this->security->xss_clean($this->input->post('jenis'));
         
+
+        if($jenis == 'delivery'){
+            $this->form_validation->set_rules('invoice', 'Invoice', 'trim|required');
+            $this->form_validation->set_rules('id_driver', 'Driver', 'trim|required');
+
+        }else{
+            $this->form_validation->set_rules('invoice', 'Invoice', 'trim|required');
+        }
+
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('error', $this->message->error_msg(validation_errors()));
+            redirect("history/detail_order/".base64_encode($invoice));
+            return;
+        }
+
         $mdata=array(
             "invoice"     => $invoice,
             "id_driver"  => !empty($iddriver) ? $iddriver : null
         );
-
+        
         $url = URLAPI . "/v1/history/process_order";
 		$result = expatAPI($url,json_encode($mdata));
-		print_r($result);
+
+        if($result->status == 200) {
+            if($jenis == 'delivery'){
+                $this->session->set_flashdata('success', "Order Successfully Update");
+            }else{
+                $this->session->set_flashdata('success', "Order Successfully Pickup");
+            }
+            redirect("history/detail_order/".base64_encode($invoice));
+            return;
+        }else{
+            $this->session->set_flashdata('error', $result->result->messages->error);
+            redirect("history/detail_order/".base64_encode($invoice));
+            return;
+        }
         
     }
 }

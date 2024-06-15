@@ -7,6 +7,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         <?php } ?>
+        <?php if (@isset($_SESSION["warning_maxarea"])) { ?>
+            <div class="col-12 alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="notif-login f-poppins"><?= $_SESSION["warning_maxarea"] ?></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php } ?>
         <form id="orderchart" action="<?= base_url()?>widget/order/enterpin" method="POST">
             <input type="hidden" name="id_cabang" value="<?= $_GET['cabang']?>">
             <input type="hidden" id="usertoken" name="usertoken" value="<?= $token?>">
@@ -232,7 +238,7 @@
             
 
             <div id="button-order" class="d-flex w-100 mt-3">
-                <button type="submit" class="btn btn-expat w-100 py-3 <?= (empty($all_variant)) ? "disabled": ""?>">ORDER</button>
+                <button type="submit" id="ordernow" class="btn btn-expat w-100 py-3 <?= (empty($all_variant) || @isset($_SESSION["warning_maxarea"])) ? "disabled": ""?>">ORDER</button>
             </div>
             
         </form>

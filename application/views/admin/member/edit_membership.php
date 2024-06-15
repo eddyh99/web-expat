@@ -22,36 +22,21 @@
                         </div>
                     <?php } ?>
                     <h5 class="card-title fw-semibold mb-4">Add Membership</h5>
-                    <form action="<?= base_url()?>promotion/addpromotion_process" method="POST">
+                    <form action="<?= base_url()?>member/membership_proses" method="POST">
                         <input type="hidden" id="token" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                         <div class="mb-3">
-                            <label for="title" class="form-label">Title</label>
-                            <input type="text" class="form-control" id="title" name="title" placeholder="Enter title..." required autocomplete="off">
+                            <label for="type" class="form-label">Type</label>
+                            <input type="text" class="form-control" id="type" name="type" value="<?= $result[0]['tipe']?>" readonly placeholder="Enter type..." required autocomplete="off">
                         </div>
                         <div class="mb-3">
                             <label for="description" class="form-label">Description</label>
-                            <input type="text" class="form-control" id="description" name="description" placeholder="Enter description..." required autocomplete="off">
+                            <input type="text" class="form-control" id="description" name="description" value="<?= $result[0]['deskripsi']?>" placeholder="Enter description..." required autocomplete="off">
                         </div>
-
-                        <div class="mb-3">   
-                            <label for="images-logo" class="form-label">Image</label>   
-                            <div class="d-flex flex-column">
-                                <div class="col-12 col-sm-8 col-lg-6 input-outlet-image">
-                                    <input name="imgpromotion" type="file" id="images-logo" accept="image/jpg, image/jpeg, image/png" style="cursor: pointer;">
-                                </div>
-                                <div class="row mt-3">
-                                    <div class="col-12 d-flex flex-column flex-sm-row">
-                                        <img id="image-container" class="preview-image-container" />
-                                        <span class="p-4 fw-bolder">
-                                            <p class="text-findme text-start">*Maximum 2MB</p>
-                                            <p class="text-findme text-start">*png, jpg</p>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="mb-3">
+                            <label for="minpoin" class="form-label">Min. Poin</label>
+                            <input type="number" class="form-control" id="minpoin" name="minpoin" value="<?= $result[0]['minpoin']?>" placeholder="Enter Min Poin..." required autocomplete="off">
                         </div>
-
-                        <button type="submit" class="btn btn-expat mt-3">Save Membership</button>
+                        <button type="submit" class="btn btn-expat mt-3">Update Membership</button>
                   </form>
                 </div>
             </div>

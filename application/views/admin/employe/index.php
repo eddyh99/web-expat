@@ -25,7 +25,7 @@
                                 <th>No</th>
                                 <th>Email</th>
                                 <th>Name</th>
-                                <th class="th-role">Tanggal Lahir</th>
+                                <!-- <th class="th-role">Tanggal Lahir</th> -->
                                 <th>Gender</th>
                                 <th>Driver</th>
                                 <th>Plafon</th>
@@ -39,7 +39,7 @@
                                 <th>No</th>
                                 <th>Email</th>
                                 <th>Name</th>
-                                <th>Tanggal Lahir</th>
+                                <!-- <th>Tanggal Lahir</th> -->
                                 <th>Gender</th>
                                 <th>Driver</th>
                                 <th>Plafon</th>
