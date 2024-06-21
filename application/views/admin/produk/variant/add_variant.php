@@ -48,7 +48,6 @@
                                 <select name="additional[]" multiple="multiple" id="additional" class="form-control additional_select2">
                                 </select>
                             </div>
-
                         </div>
                   
                         <div class="rounded-2 p-4 mb-4" style="border: 2px dashed #72A28A;">
@@ -66,7 +65,6 @@
                                 <select name="optional[]" multiple="multiple" id="optional" class="form-control optional_select2">
                                 </select>
                             </div>
-                        
                         </div>
 
                         <div class="rounded-2 p-4 mb-4" style="border: 2px dashed #72A28A;">
@@ -83,10 +81,8 @@
                                 <label for="satuan" class="form-label">Select Satuan</label>
                                 <select name="satuan[]" multiple="multiple" id="satuan" class="form-control satuan_select2">
                                 </select>
-                            </div>
-                                        
+                            </div>          
                         </div>
-
 
                         <div class="mb-4 col-12">
                             <label for="satuan" class="form-label">Harga</label>
@@ -95,7 +91,7 @@
 
 
                         <div class="mb-4 col-12">
-                            <label for="cabang" class="form-label">Select Cabang</label>
+                            <label for="cabang" class="form-label">Select Outlet</label>
                             <select name="cabang[]" multiple="multiple" id="cabang" class="form-control cabang_select2">
                                 <?php foreach($cabang as $cb){?>
                                     <option value="<?= $cb->id?>"><?= $cb->nama?></option>

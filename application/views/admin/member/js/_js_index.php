@@ -1,3 +1,10 @@
+<style>
+	.th-name{
+		min-width: 150px;
+		max-width: 151px;
+	}
+</style>
+
 <script>
 
     var table_member = $('#table_list_member').DataTable({
@@ -22,9 +29,16 @@
 			},
 			{ data: 'email' },
 			{ data: 'nama' },
+			// { data: 'dob' },
 			{ 
                 data: null, "mRender": function(data, type, full, meta) {
-                    return full.dob.split("-").reverse().join("-");
+					var tgl_lahir;
+					if(full.dob == null){
+						tgl_lahir = full.dob;
+					}else{
+						tgl_lahir = full.dob.split("-").reverse().join("-");
+					}
+                    return tgl_lahir;
                 } 
             },
 			{ data: 'gender' },
@@ -33,7 +47,7 @@
                 data: null, "mRender": function(data, type, full, meta) {
                     var btnActive ='<a href="<?=base_url()?>member/manual_activation/'+encodeURI(btoa(full.id))+'" class="btn btn-primary  my-1"><i class="ti ti-key fs-4"></i></a>'
                     var btnEnabled ='<a href="<?=base_url()?>member/edit_user/'+encodeURI(btoa(full.username))+'" class="btn btn-primary  my-1"><i class="ti ti-arrow-back fs-4"></i></a>'
-                    var btnEdit ='<a href="<?=base_url()?>member/edit_member/'+encodeURI(btoa(full.id))+'" class="btn btn-success mx-1 my-1"><i class="ti ti-pencil-minus fs-4"></i></a>'
+                    var btnEdit ='<a href="<?=base_url()?>member/edit_member/'+encodeURI(btoa(full.id))+'" class="btn btn-success my-1"><i class="ti ti-pencil-minus fs-4"></i></a>'
 					var btnDelete = '<a href="<?=base_url()?>member/delete/'+encodeURI(btoa(full.id))+'" class="del-data btn btn-danger my-1"><i class="ti ti-trash"></i></a>';
 					return `
                         ${full.status == 'new' ? btnActive : ''} 

@@ -22,7 +22,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Username</th>
-                                <th>Name</th>
+                                <th class="th-name">Name</th>
                                 <th class="th-role">Role</th>
                                 <th>Action</th>
                             </tr>

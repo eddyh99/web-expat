@@ -33,7 +33,7 @@
                     <table id="table_list_variant" class="table table-striped" style="width:100%">
                         <thead>
                             <tr>
-                                <th>Cabang</th>
+                                <th>Outlet</th>
                                 <th data-orderable="false">Optional</th>
                                 <th data-orderable="false">Additional</th>
                                 <th data-orderable="false">Satuan</th>
@@ -45,7 +45,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th>Cabang</th>
+                                <th>Outlet</th>
                                 <th>Optional</th>
                                 <th>Additional</th>
                                 <th>Satuan</th>

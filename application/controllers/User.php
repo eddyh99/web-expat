@@ -50,9 +50,9 @@ class User extends CI_Controller
 
     public function adduser_process()
     {
-        $this->form_validation->set_rules('username', 'Username', 'trim|required');
+        $this->form_validation->set_rules('username', 'Username', 'trim|required|max_length[10]');
 		$this->form_validation->set_rules('passwd', 'Password', 'trim|required');
-		$this->form_validation->set_rules('name', 'Name', 'trim|required');
+		$this->form_validation->set_rules('name', 'Name', 'trim|required|max_length[100]');
 		$this->form_validation->set_rules('role', 'Role', 'trim|required');
 
 
@@ -114,9 +114,9 @@ class User extends CI_Controller
     
     public function edituser_process()
     {
-        $this->form_validation->set_rules('username', 'Username', 'trim|required');
+        $this->form_validation->set_rules('username', 'Username', 'trim|required|max_length[10]');
 		$this->form_validation->set_rules('passwd', 'Password', 'trim');
-		$this->form_validation->set_rules('name', 'Name', 'trim|required');
+		$this->form_validation->set_rules('name', 'Name', 'trim|required|max_length[100]');
 		$this->form_validation->set_rules('role', 'Role', 'trim|required');
 
         $input      = $this->input;

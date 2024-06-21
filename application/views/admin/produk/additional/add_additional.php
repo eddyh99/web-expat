@@ -34,7 +34,7 @@
                         </div>
                         <div class="mb-4">
                             <label for="additional" class="form-label">Additional Name</label>
-                            <input type="text" class="form-control" id="additional" name="additional" placeholder="Enter additional name..." required autocomplete="off">
+                            <input type="text" class="form-control" id="additional" name="additional" maxlength="100" placeholder="Enter additional name..." required autocomplete="off">
                         </div>
                         <button type="submit" class="btn btn-expat mt-3">Save Additional</button>
                     </form>

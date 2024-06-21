@@ -103,9 +103,9 @@ class Member extends CI_Controller
 
     public function addmember_process()
     {
-        $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
-		$this->form_validation->set_rules('passwd', 'Password', 'trim|required');
-		$this->form_validation->set_rules('name', 'Name', 'trim|required');
+        $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|max_length[100]');
+		$this->form_validation->set_rules('passwd', 'Password', 'trim|required|max_length[100]');
+		$this->form_validation->set_rules('name', 'Name', 'trim|required|max_length[100]');
 		$this->form_validation->set_rules('gender', 'Gender', 'trim|required');
 		$this->form_validation->set_rules('membership', 'Membership', 'trim|required');
 
@@ -174,7 +174,7 @@ class Member extends CI_Controller
     public function editmember_process()
     {
 		$this->form_validation->set_rules('passwd', 'Password', 'trim');
-		$this->form_validation->set_rules('name', 'Name', 'trim|required');
+		$this->form_validation->set_rules('name', 'Name', 'trim|required|max_length[100]');
 		$this->form_validation->set_rules('gender', 'Gender', 'trim|required');
 		$this->form_validation->set_rules('membership', 'Membership', 'trim|required');
 

@@ -32,11 +32,11 @@ class Promotion extends CI_Controller
         $status     = $this->security->xss_clean($this->input->post('status'));
 
         if($status == 'all'){
-            $url = URLAPI . "/v1/promotion/get_allpromo";    
+            $url = URLAPI . "/v1/mobile/promotion/get_allpromo";    
         }else if($status == 'instore'){
-            $url = URLAPI . "/v1/promotion/get_allinstore";      
+            $url = URLAPI . "/v1/mobile/promotion/get_allinstore";      
         }else if($status == 'online'){
-            $url = URLAPI . "/v1/promotion/get_allonline";           
+            $url = URLAPI . "/v1/mobile/promotion/get_allonline";           
         }
 
 		$response = expatAPI($url)->result->messages;

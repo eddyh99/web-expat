@@ -26,7 +26,7 @@
                         <input type="hidden" id="token" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter outlet name..." required autocomplete="off">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter outlet name..." required maxlength="100" autocomplete="off">
                         </div>
                         <div class="mb-3">
                             <label for="address" class="form-label">Outlet Address</label>
@@ -36,14 +36,14 @@
                             <label for="lat" class="form-label">
                                 Latitude <small>(for more information about lat & long click <a href="https://support.google.com/maps/answer/18539?hl=en&co=GENIE.Platform%3DAndroid&oco=0" target="_blank">here</a>)</small>
                             </label>
-                            <input type="text" class="form-control" id="lat" name="lat" placeholder="Enter Latitude ..." required autocomplete="off">
+                            <input type="text" class="form-control" id="lat" name="lat" placeholder="Enter Latitude ..." required maxlength="50" autocomplete="off">
                         </div>
                         <div class="mb-3">
                             <label for="long" class="form-label">Longitude </label>
-                            <input type="text" class="form-control" id="long" name="long" placeholder="Enter Longitude..." required autocomplete="off">
+                            <input type="text" class="form-control" id="long" name="long" placeholder="Enter Longitude..." required maxlength="50" autocomplete="off">
                         </div>
                         <div class="mb-3">
-                            <label for="address" class="form-label">Cabang</label>
+                            <label for="address" class="form-label">City</label>
                             <select class="addprovinsi-select2" id="provinsi" name="provinsi" >
                                 <option value="Banda Aceh">Banda Aceh</option>
                                 <option value="Bali">Bali</option>
@@ -77,11 +77,11 @@
                         </div>
                         <div class="mb-3">
                             <label for="opening" class="form-label">Opening</label>
-                            <input type="text" class="form-control" id="opening" name="opening" placeholder="Ex: Monday to Sunday, 7 AM - 7 PM" required autocomplete="off">
+                            <input type="text" class="form-control" id="opening" name="opening" maxlength="255" placeholder="Ex: Monday to Sunday, 7 AM - 7 PM" required autocomplete="off">
                         </div>
                         <div class="mb-4">
                             <label for="contact" class="form-label">Contact</label>
-                            <input type="text" class="form-control" id="contact" name="contact" placeholder="Enter contact outlet..." required autocomplete="off">
+                            <input type="text" class="form-control" id="contact" name="contact" maxlength="50" placeholder="Enter contact outlet..." required autocomplete="off">
                         </div>
                         <div class="mb-3">   
                             <label for="images-logo" class="form-label">Image</label>   

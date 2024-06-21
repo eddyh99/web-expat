@@ -26,15 +26,15 @@
                         <input type="hidden" id="token" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="text" class="form-control" id="email" name="email" placeholder="Enter email..." required autocomplete="off">
+                            <input type="text" class="form-control" id="email" name="email" placeholder="Enter email..." required maxlength="100" autocomplete="off">
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control " id="passwd" name="passwd" placeholder="Enter password..." required autocomplete="off">
+                            <input type="password" class="form-control " id="passwd" name="passwd" placeholder="Enter password..." required maxlength="100" autocomplete="off">
                         </div>
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter name..." required autocomplete="off">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter name..." required maxlength="100" autocomplete="off">
                         </div>
                         <div class="mb-3 col-3">
                             <label for="gender" class="form-label">Gender</label>

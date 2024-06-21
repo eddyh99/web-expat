@@ -1,3 +1,10 @@
+<style>
+	.th-name{
+		min-width: 150px;
+		max-width: 151px;
+	}
+</style>
+
 <script>
 
     var table_employe = $('#table_list_employe').DataTable({

@@ -11,7 +11,6 @@
 			"url": "<?=base_url()?>member/list_membership",
 			"type": "POST",
 			"dataSrc":function (data){
-				console.log(data);
 				return data;							
 			}
 		},

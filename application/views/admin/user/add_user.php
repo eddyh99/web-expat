@@ -26,19 +26,20 @@
                         <input type="hidden" id="token" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                         <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter username..." required autocomplete="off">
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter username..." required maxlength="10" autocomplete="off">
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control " id="passwd" name="passwd" placeholder="Enter password..." required autocomplete="off">
+                            <input type="password" class="form-control " id="passwd" name="passwd" placeholder="Enter password..." required maxlength="100"  autocomplete="off">
                         </div>
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter name..." required autocomplete="off">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter name..." required maxlength="100" autocomplete="off">
                         </div>
                         <div class="mb-3 col-3">
                             <label for="role" class="form-label">Role</label>
                             <select name="role" id="role" class="form-select">
+                                <option value="admin">Admin</option>
                                 <option value="kasir">Kasir</option>
                             </select>
                         </div>

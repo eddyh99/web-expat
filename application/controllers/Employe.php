@@ -76,9 +76,9 @@ class Employe extends CI_Controller
 
     public function addemploye_process()
     {
-        $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
-		$this->form_validation->set_rules('passwd', 'Password', 'trim|required');
-		$this->form_validation->set_rules('name', 'Name', 'trim|required');
+        $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|max_length[100]');
+		$this->form_validation->set_rules('passwd', 'Password', 'trim|required|max_length[100]');
+		$this->form_validation->set_rules('name', 'Name', 'trim|required|max_length[100]');
 		$this->form_validation->set_rules('gender', 'Gender', 'trim|required');
 		$this->form_validation->set_rules('is_driver', 'Is Driver', 'trim|required');
 
@@ -148,8 +148,8 @@ class Employe extends CI_Controller
 
     public function editemploye_process()
     {
-		$this->form_validation->set_rules('passwd', 'Password', 'trim');
-		$this->form_validation->set_rules('name', 'Name', 'trim|required');
+		$this->form_validation->set_rules('passwd', 'Password', 'trim|max_length[100]');
+		$this->form_validation->set_rules('name', 'Name', 'trim|required|max_length[100]');
 		$this->form_validation->set_rules('gender', 'Gender', 'trim|required');
 		$this->form_validation->set_rules('is_driver', 'Driver', 'trim|required');
 
