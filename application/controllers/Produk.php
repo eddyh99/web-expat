@@ -91,7 +91,7 @@ class Produk extends CI_Controller
             );
 
         }
-
+        
 
         $url = URLAPI . "/v1/produk/addProduk";
 		$response = expatAPI($url, json_encode($mdata));
@@ -179,7 +179,8 @@ class Produk extends CI_Controller
         $url = URLAPI . "/v1/produk/updateProduk?id=".$id;
 		$response = expatAPI($url, json_encode($mdata));
         $result = $response->result;
-
+        // print_r($result);
+        // die;
         if($response->status == 200){
             $this->session->set_flashdata('success', $result->messages);
 			redirect('produk');

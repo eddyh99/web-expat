@@ -2,7 +2,7 @@
 <div class="container-fluid">
     <div class="row my-4">
         <div class="col-lg-12 d-flex align-items-strech">
-            <a href="<?= base_url()?>promotion" class="btn btn-outline-expat d-flex align-items-center">
+            <a href="<?= base_url()?>member/membership" class="btn btn-outline-expat d-flex align-items-center">
                 <i class="ti ti-chevron-left fs-5 me-1"></i>
                 <span>
                     Back
@@ -21,38 +21,18 @@
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     <?php } ?>
-                    <h5 class="card-title fw-semibold mb-4">Add Promotion</h5>
-                    <form action="<?= base_url()?>promotion/addpromotion_process" method="POST" enctype='multipart/form-data'>
+                    <h5 class="card-title fw-semibold mb-4">Add Membership</h5>
+                    <form action="<?= base_url()?>promotion/addpromotion_process" method="POST">
                         <input type="hidden" id="token" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="title" name="title" placeholder="Enter title..." required autocomplete="off">
+                        </div>
                         <div class="mb-3">
                             <label for="description" class="form-label">Description</label>
                             <input type="text" class="form-control" id="description" name="description" placeholder="Enter description..." required autocomplete="off">
                         </div>
-                        <div class="mb-3 col-3">
-                            <label for="promotion_type" class="form-label">Promotion Type</label>
-                            <select name="promotion_type" id="promotion_type" class="form-select">
-                                <option value="instore">Store</option>
-                                <option value="online">Online</option>
-                            </select>
-                        </div>
-                        <div class="mb-3 col-3">
-                            <label for="start_date" class="form-label">Start Date</label>
-                            <div class="form-control d-flex">
-                                <input type="text" class="w-100 border-0 cursor-pointer" name="start_date" id="start_date" autocomplete="off">
-                                <label for="start_date" class="cursor-pointer">
-                                    <i class="ti ti-calendar-event fs-6"></i>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="mb-3 col-3">
-                            <label for="end_date" class="form-label">End Date</label>
-                            <div class="form-control d-flex">
-                                <input type="text" class="w-100 border-0 cursor-pointer" name="end_date" id="end_date" autocomplete="off" >
-                                <label for="end_date" class="cursor-pointer">
-                                    <i class="ti ti-calendar-event fs-6"></i>
-                                </label>
-                            </div>
-                        </div>
+
                         <div class="mb-3">   
                             <label for="images-logo" class="form-label">Image</label>   
                             <div class="d-flex flex-column">
@@ -71,7 +51,7 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-expat mt-3">Save Promotion</button>
+                        <button type="submit" class="btn btn-expat mt-3">Save Membership</button>
                   </form>
                 </div>
             </div>

@@ -99,7 +99,7 @@ class Outlet extends CI_Controller
             );
 
         }
-
+        
         $url = URLAPI . "/v1/outlet/addCabang";
 		$response = expatAPI($url, json_encode($mdata));
         $result = $response->result;

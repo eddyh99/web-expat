@@ -22,7 +22,7 @@
                         </div>
                     <?php } ?>
                     <h5 class="card-title fw-semibold mb-4">Add Promotion</h5>
-                    <form action="<?= base_url()?>promotion/editpromotion_process" method="POST">
+                    <form action="<?= base_url()?>promotion/editpromotion_process" method="POST" enctype='multipart/form-data'>
                         <input type="hidden" id="token" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                         <input type="hidden" name="urisegment" value="<?php echo $this->uri->segment('3')?>">
                         <div class="mb-3">

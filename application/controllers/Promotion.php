@@ -76,6 +76,7 @@ class Promotion extends CI_Controller
         $end_date           = $this->security->xss_clean($this->input->post("end_date"));
 
         $image      = $this->security->xss_clean(@$_FILES['imgpromotion']);
+
         if(!empty($image['name'])){
             $blob       = curl_file_create($image['tmp_name'],$image['type']);
             $mdata = array(
@@ -96,8 +97,6 @@ class Promotion extends CI_Controller
 
         }
 
-        // echo '<pre>'.print_r($mdata,true).'</pre>';
-        
         $url = URLAPI . "/v1/promotion/addPromo";
 		$response = expatAPI($url, json_encode($mdata));
         $result = $response->result;
@@ -122,7 +121,7 @@ class Promotion extends CI_Controller
         $id_promotion	= base64_decode($this->security->xss_clean($id));
 
         $url = URLAPI . "/v1/promotion/getpromo_byid?id=".$id_promotion;
-		$result = expatAPI($url)->result->messages[0];
+		$result = expatAPI($url)->result->messages;
 
         $data = array(
             'title'             => NAMETITLE . ' - Edit Member',
@@ -191,7 +190,9 @@ class Promotion extends CI_Controller
         $url = URLAPI . "/v1/promotion/updatePromo?id=".$id;
 		$response = expatAPI($url, json_encode($mdata));
         $result = $response->result;
-        
+        // echo '<pre>'.print_r($result,true).'</pre>';
+        // die;
+
         
         if($response->status == 200){
             $this->session->set_flashdata('success', $result->messages);
