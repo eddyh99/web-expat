@@ -1,3 +1,10 @@
+<style>
+	.th-name{
+		min-width: 150px;
+		max-width: 151px;
+	}
+</style>
+
 <script>
 
     var table_employe = $('#table_list_employe').DataTable({
@@ -19,11 +26,11 @@
 			},
 			{ data: 'email' },
 			{ data: 'nama' },
-			{ 
-                data: null, "mRender": function(data, type, full, meta) {
-                    return full.dob.split("-").reverse().join("-");
-                } 
-            },
+			// { 
+            //     data: null, "mRender": function(data, type, full, meta) {
+            //         return full.dob.split("-").reverse().join("-");
+            //     } 
+            // },
 			{ data: 'gender' },
 			{ data: 'is_driver' },
 			{ data: 'plafon' },

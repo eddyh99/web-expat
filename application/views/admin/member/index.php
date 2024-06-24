@@ -23,6 +23,7 @@
                             <select name="member_status" id="member_status" class="form-select member-status mb-3">
                                 <option value="active">Active</option>
                                 <option value="new">New Member</option>
+                                <option value="disabled">Disabled</option>
                             </select>
                         </div>
                     </div>
@@ -30,9 +31,9 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Email</th>
-                                <th>Name</th>
-                                <th class="th-role">Tanggal Lahir</th>
+                                <th class="th-name">Email</th>
+                                <th class="th-name">Name</th>
+                                <th>Tanggal Lahir</th>
                                 <th>Gender</th>
                                 <th>Membership</th>
                                 <th>Action</th>

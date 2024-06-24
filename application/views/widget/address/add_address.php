@@ -13,15 +13,15 @@
             <input type="hidden" id="idaddress" name="idaddress" value="<?= @$address->id?>">
             <input type="hidden" id="idcabang" name="idcabang" value="<?= $_GET['idcabang']?>">
             <div class="my-4 d-flex flex-column align-items-start justify-content-start">
-                <label for="nameaddress">Select Location</label>
-                <input type="text" id="pac-input" class="form-control " placeholder="Search Box"/>
+                <label for="pac-input">Select Location</label>
+                <input type="text" id="pac-input" name="pac-input" class="form-control " placeholder="Search Place"/>
+                <input type="hidden" id="lat" name="lat">
+                <input type="hidden" id="long" name="long">
                 <div id="map"></div>
             </div>
             <div class="my-3">
                 <label for="nameaddress" id="preview-pac-input">
-                    <span>
-                        <i class="fas fa-map-marker-alt me-2"></i>Gang Gunung Arjuna, Werdi Bhuwana
-                    </span>
+                    
                 </label>
             </div>
             <div class="my-4">

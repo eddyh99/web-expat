@@ -54,7 +54,7 @@ class Produk extends CI_Controller
 
     public function addproduk_process()
     {
-		$this->form_validation->set_rules('name', 'Name Outlet', 'trim|max_length[55]|required');
+		$this->form_validation->set_rules('name', 'Name Produk', 'trim|max_length[255]|required');
 		$this->form_validation->set_rules('description', 'Description', 'trim|required');
         $this->form_validation->set_rules('kategori', 'Kategori', 'trim|required');
 		$this->form_validation->set_rules('favorite', 'Favorite', 'trim|required');
@@ -133,7 +133,7 @@ class Produk extends CI_Controller
 
     public function editproduk_process()
     {
-		$this->form_validation->set_rules('name', 'Name Outlet', 'trim|required');
+		$this->form_validation->set_rules('name', 'Name Produk', 'trim|required|max_length[255]');
 		$this->form_validation->set_rules('description', 'Description', 'trim|required');
 		$this->form_validation->set_rules('kategori', 'Kategori', 'trim|required');
 		$this->form_validation->set_rules('favorite', 'Favorite', 'trim|required');
@@ -266,8 +266,8 @@ class Produk extends CI_Controller
 
     public function addadditional_process()
     {
-		$this->form_validation->set_rules('additional_group', 'Additional Group', 'trim|required');
-		$this->form_validation->set_rules('additional', 'Additional Name', 'trim|required');
+		$this->form_validation->set_rules('additional_group', 'Additional Group', 'trim|required|max_length[50]');
+		$this->form_validation->set_rules('additional', 'Additional Name', 'trim|required|max_length[100]');
 
         if ($this->form_validation->run() == FALSE) {
 			$this->session->set_flashdata('error_validation', $this->message->error_msg(validation_errors()));
@@ -330,8 +330,8 @@ class Produk extends CI_Controller
 
     public function editadditional_process()
     {
-        $this->form_validation->set_rules('additional_group', 'Additional Group', 'trim|required');
-		$this->form_validation->set_rules('additional', 'Additional Name', 'trim|required');
+        $this->form_validation->set_rules('additional_group', 'Additional Group', 'trim|required|max_length[50]');
+		$this->form_validation->set_rules('additional', 'Additional Name', 'trim|required|max_length[100]');
 
         $input      = $this->input;
         $urisegment   = $this->security->xss_clean($input->post('urisegment'));
@@ -387,14 +387,6 @@ class Produk extends CI_Controller
 
 
 
-
-
-
-
-
-
-
-
     
     public function optional()
     {
@@ -446,8 +438,8 @@ class Produk extends CI_Controller
 
     public function addoptional_process()
     {
-		$this->form_validation->set_rules('optional_group', 'Optional Group', 'trim|required');
-		$this->form_validation->set_rules('optional', 'Optional Name', 'trim|required');
+		$this->form_validation->set_rules('optional_group', 'Optional Group', 'trim|required|max_length[50]');
+		$this->form_validation->set_rules('optional', 'Optional Name', 'trim|required|max_length[100]');
 
         if ($this->form_validation->run() == FALSE) {
 			$this->session->set_flashdata('error_validation', $this->message->error_msg(validation_errors()));
@@ -508,8 +500,8 @@ class Produk extends CI_Controller
 
     public function editoptional_process()
     {
-        $this->form_validation->set_rules('optional_group', 'optional Group', 'trim|required');
-		$this->form_validation->set_rules('optional', 'optional Name', 'trim|required');
+        $this->form_validation->set_rules('optional_group', 'optional Group', 'trim|required|max_length[50]');
+		$this->form_validation->set_rules('optional', 'optional Name', 'trim|required|max_length[100]');
 
         $input      = $this->input;
         $urisegment   = $this->security->xss_clean($input->post('urisegment'));
@@ -619,8 +611,8 @@ class Produk extends CI_Controller
 
     public function addsatuan_process()
     {
-		$this->form_validation->set_rules('satuan_group', 'satuan Group', 'trim|required');
-		$this->form_validation->set_rules('satuan', 'satuan Name', 'trim|required');
+		$this->form_validation->set_rules('satuan_group', 'satuan Group', 'trim|required|max_length[50]');
+		$this->form_validation->set_rules('satuan', 'satuan Name', 'trim|required|max_length[100]');
 
         if ($this->form_validation->run() == FALSE) {
 			$this->session->set_flashdata('error_validation', $this->message->error_msg(validation_errors()));
@@ -682,8 +674,8 @@ class Produk extends CI_Controller
 
     public function editsatuan_process()
     {
-        $this->form_validation->set_rules('satuan_group', 'satuan Group', 'trim|required');
-		$this->form_validation->set_rules('satuan', 'satuan Name', 'trim|required');
+        $this->form_validation->set_rules('satuan_group', 'satuan Group', 'trim|required|max_length[50]');
+		$this->form_validation->set_rules('satuan', 'satuan Name', 'trim|required|max_length[100]');
 
         $input      = $this->input;
         $urisegment   = $this->security->xss_clean($input->post('urisegment'));
@@ -845,21 +837,20 @@ class Produk extends CI_Controller
         $harga         = $this->security->xss_clean($this->input->post("harga"));
         
         $mdata = array(
-            "additional"    => $additional,
-            "optional"      => $optional,
-            "satuan"        => $satuan,
+            "additional"    => (empty($additional) ? array() : $additional),
+            "optional"      => (empty($optional) ? array() : $optional),
+            "satuan"        => (empty($satuan) ? array() : $satuan),
             "cabang"        => $cabang,
             "harga"         => str_replace(",", "", $harga),
         );
 
-        echo '<pre>'.print_r($mdata,true).'</pre>';
-        
+        // echo '<pre>'.print_r($mdata,true).'</pre>';
         
         $url = URLAPI . "/v1/produk/addvarian?id=".$produk;
 		$response = expatAPI($url, json_encode($mdata));
         $result = $response->result;
-        echo '<pre>'.print_r($response,true).'</pre>';
-        die;
+        // echo '<pre>'.print_r($response,true).'</pre>';
+        // die;
         if($response->status == 200) {
             $this->session->set_flashdata('success', $result->messages);
 			redirect('produk/variant');

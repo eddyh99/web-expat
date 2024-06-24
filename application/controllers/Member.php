@@ -103,9 +103,9 @@ class Member extends CI_Controller
 
     public function addmember_process()
     {
-        $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
-		$this->form_validation->set_rules('passwd', 'Password', 'trim|required');
-		$this->form_validation->set_rules('name', 'Name', 'trim|required');
+        $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|max_length[100]');
+		$this->form_validation->set_rules('passwd', 'Password', 'trim|required|max_length[100]');
+		$this->form_validation->set_rules('name', 'Name', 'trim|required|max_length[100]');
 		$this->form_validation->set_rules('gender', 'Gender', 'trim|required');
 		$this->form_validation->set_rules('membership', 'Membership', 'trim|required');
 
@@ -174,7 +174,7 @@ class Member extends CI_Controller
     public function editmember_process()
     {
 		$this->form_validation->set_rules('passwd', 'Password', 'trim');
-		$this->form_validation->set_rules('name', 'Name', 'trim|required');
+		$this->form_validation->set_rules('name', 'Name', 'trim|required|max_length[100]');
 		$this->form_validation->set_rules('gender', 'Gender', 'trim|required');
 		$this->form_validation->set_rules('membership', 'Membership', 'trim|required');
 
@@ -276,6 +276,7 @@ class Member extends CI_Controller
 
     public function membership()
     {
+        
         $data = array(
             'title'             => NAMETITLE . ' - Membership',
             'content'           => 'admin/member/membership',
@@ -288,18 +289,176 @@ class Member extends CI_Controller
         $this->load->view('layout/wrapper', $data);
     }
 
-    public function add_membership()
+    public function list_membership()
     {
+        $url = URLAPI . "/v1/settings/get_setting";    
+        $response = expatAPI($url)->result->messages;
+
+        $bronze = array();
+        $silver = array();
+        $gold = array();
+        $platinum = array();
+
+        foreach($response as $dt){
+            if($dt->content == 'Bronze' || $dt->content == 'poin_bronze') {
+                if($dt->content == 'Bronze'){
+                    $temp_bronze['tipe'] = 'Bronze';
+                    $temp_bronze['deskripsi'] = $dt->value;
+                }else{
+                    $temp_bronze['minpoin'] = $dt->value;
+                }
+            } 
+            if($dt->content == 'Silver' || $dt->content == 'poin_silver') {
+                if($dt->content == 'Silver'){
+                    $temp_silver['tipe'] = 'Silver';
+                    $temp_silver['deskripsi'] = $dt->value;
+                }else{
+                    $temp_silver['minpoin'] = $dt->value;
+                }
+            } 
+            if($dt->content == 'Gold' || $dt->content == 'poin_gold') {
+                if($dt->content == 'Gold'){
+                    $temp_gold['tipe'] = 'Gold';
+                    $temp_gold['deskripsi'] = $dt->value;
+                }else{
+                    $temp_gold['minpoin'] = $dt->value;
+                }
+            }
+            if($dt->content == 'Platinum' || $dt->content == 'poin_platinum') {
+                if($dt->content == 'Platinum'){
+                    $temp_platinum['tipe'] = 'Platinum';
+                    $temp_platinum['deskripsi'] = $dt->value;
+                }else{
+                    $temp_platinum['minpoin'] = $dt->value;
+                }
+            } 
+        }
+        array_push($bronze, $temp_bronze);
+        array_push($silver, $temp_silver);
+        array_push($gold, $temp_gold);
+        array_push($platinum, $temp_platinum);
+
+        $result = array_merge($bronze, $silver, $gold, $platinum);
+
+        echo json_encode($result);
+    }
+
+    public function edit_membership($tipe)
+    {
+        $type	= base64_decode($this->security->xss_clean($tipe));
+
+        $url = URLAPI . "/v1/settings/get_setting";    
+        $response = expatAPI($url)->result->messages;
+
+        $bronze = array();
+        $silver = array();
+        $gold = array();
+        $platinum = array();
+
+        foreach($response as $dt){
+            if($dt->content == 'Bronze' || $dt->content == 'poin_bronze') {
+                if($dt->content == 'Bronze'){
+                    $temp_bronze['tipe'] = 'Bronze';
+                    $temp_bronze['deskripsi'] = $dt->value;
+                }else{
+                    $temp_bronze['minpoin'] = $dt->value;
+                }
+            } else if($dt->content == 'Silver' || $dt->content == 'poin_silver') {
+                if($dt->content == 'Silver'){
+                    $temp_silver['tipe'] = 'Silver';
+                    $temp_silver['deskripsi'] = $dt->value;
+                }else{
+                    $temp_silver['minpoin'] = $dt->value;
+                }
+            } else if($dt->content == 'Gold' || $dt->content == 'poin_gold') {
+                if($dt->content == 'Gold'){
+                    $temp_gold['tipe'] = 'Gold';
+                    $temp_gold['deskripsi'] = $dt->value;
+                }else{
+                    $temp_gold['minpoin'] = $dt->value;
+                }
+            } else if($dt->content == 'Platinum' || $dt->content == 'poin_platinum') {
+                if($dt->content == 'Platinum'){
+                    $temp_platinum['tipe'] = 'Platinum';
+                    $temp_platinum['deskripsi'] = $dt->value;
+                }else{
+                    $temp_platinum['minpoin'] = $dt->value;
+                }
+            } 
+        }
+        array_push($bronze, $temp_bronze);
+        array_push($silver, $temp_silver);
+        array_push($gold, $temp_gold);
+        array_push($platinum, $temp_platinum);
+
+        $result = array_merge($bronze, $silver, $gold, $platinum);
+
+        $final = array();
+        foreach($result as $dt){
+            if($dt['tipe'] == $type){
+                $temp['tipe']   = $dt['tipe'];
+                $temp['deskripsi']  = $dt['deskripsi'];
+                $temp['minpoin']    = $dt['minpoin'];
+                array_push($final, $temp);
+            }
+        }
+
+        // echo '<pre>'.print_r($final,true).'</pre>';
+        // die;
+
         $data = array(
-            'title'             => NAMETITLE . ' - Add Membership',
-            'content'           => 'admin/member/add_membership',
+            'title'             => NAMETITLE . ' - Edit Membership',
+            'content'           => 'admin/member/edit_membership',
             'extra'             => 'admin/member/js/_js_membership',
             'master_active'     => 'active',
             'master_in'         => 'in',
-            'dropdown_membership'   => 'text-expat-green'
+            'dropdown_membership'   => 'text-expat-green',
+            'result'            => $final,
         );
 
         $this->load->view('layout/wrapper', $data);
+    }
+
+    public function membership_proses()
+    {
+        $this->form_validation->set_rules('type', 'Type', 'trim|required');
+        $this->form_validation->set_rules('description', 'Description', 'trim|required');
+        $this->form_validation->set_rules('minpoin', 'Min Poin', 'trim|required');
+        
+        $input      = $this->input;
+        $type       = $this->security->xss_clean($this->input->post("type"));
+        $description       = $this->security->xss_clean($this->input->post("description"));
+        $minpoin       = $this->security->xss_clean($this->input->post("minpoin"));
+
+
+        if ($this->form_validation->run() == FALSE) {
+			$this->session->set_flashdata('error', $this->message->error_msg(validation_errors()));
+			redirect("member/edit_membership/".base64_encode($type));
+			return;
+		}
+
+        $mdata = array(
+            "type"      => $type,
+            "description" => $description,
+            "minpoin"       => $minpoin
+        );
+
+        $url = URLAPI . "/v1/settings/updatemembership";
+		$response = expatAPI($url, json_encode($mdata));
+        $result = $response->result;
+
+        if($response->status == 200) {
+            $this->session->set_flashdata('success', $result->messages);
+			redirect('member/membership');
+			return;
+        }else{
+            $this->session->set_flashdata('error', $result->messages->error);
+			redirect("member/edit_membership/".base64_encode($type));
+			return;
+        }
+        // echo '<pre>'.print_r($response,true).'</pre>';
+        // die;
+
     }
 
 }

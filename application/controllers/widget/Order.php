@@ -94,7 +94,8 @@ class Order extends CI_Controller
 		$responseUser 	= mobileAPI($urlUser, $mdata = NULL, $token);
         $resultUser      = $responseUser->result->messages;
         
-        
+        // echo '<pre>'.print_r($resultUser,true).'</pre>';
+        // die;
         // Get Cabang
         $urlCabang 		= URLAPI . "/v1/mobile/outlet/getcabang_byid?id=".$_GET['cabang'];
 		$responseCabang 	= expatAPI($urlCabang);
@@ -102,23 +103,22 @@ class Order extends CI_Controller
         // echo '<pre>'.print_r($resultCabang,true).'</pre>';
         // die;
         
-        $origin = $resultAddress->address->latitude.','.$resultAddress->address->longitude;  // Latitude and longitude for origin
-        $destination = $resultCabang->latitude.','.$resultCabang->longitude;  // Latitude and longitude for destination
-        // echo $origin;
-        // echo "<hr>";
-        // echo $destination;
-        // die;
+        $origin = @$resultAddress->address->latitude.','.@$resultAddress->address->longitude;  // Latitude and longitude for origin
+        $destination = @$resultCabang->latitude.','.$resultCabang->longitude;  // Latitude and longitude for destination
+
         $route = $this->getFastestRoute($origin, $destination);
         
         if ($route) {
             $legs = $route['legs'][0];
             $distance = $legs['distance'];
             $jarak = str_replace(' km', '', $distance['text']);  // Remove " km" from the distance text
-            if ($jarak>$resultCabang->max){
-                $error = "Delivery Address is too far, max is ".$distance['text'];
+            if ($jarak > $resultCabang->max){
+                $error = "Delivery Address is too far, max is ".$resultCabang->max ."km";
+                $this->session->set_flashdata('warning_maxarea', $error);
             }
         } else {
             $error = "No route found";
+            $this->session->set_flashdata('warning_maxarea', $error);
         }
         
         //display error
@@ -380,14 +380,31 @@ class Order extends CI_Controller
 		$address        = $this->security->xss_clean($input->post('address'));
 		$phone          = $this->security->xss_clean($input->post('phone'));
         $idcabang       = $this->security->xss_clean($input->post('idcabang'));
+        $lat            = $this->security->xss_clean($input->post('lat'));
+        $long           = $this->security->xss_clean($input->post('long'));
+
+        $this->form_validation->set_rules('nameaddress', 'Name Address', 'trim|required');
+        $this->form_validation->set_rules('address', 'Address', 'trim|required');
+        $this->form_validation->set_rules('phone', 'Phone Number', 'trim|required');
+        $this->form_validation->set_rules('lat', 'Select Location', 'trim|required');
+        $this->form_validation->set_rules('long', 'Select Location', 'trim|required');
+
+        if ($this->form_validation->run() == FALSE) {
+			$this->session->set_flashdata('error', $this->message->error_msg(validation_errors()));
+            redirect('widget/order/addaddress/'.$token.'?idcabang='.$idcabang);
+			return;
+		}
 
 
         $mdata = array(
             'title'         => $nameaddress,
             'alamat'        => $address,
             'phone'         => $phone,
+            'latitude'      => $lat,
+            'longitude'     => $long,
             'is_primary'    => 'yes'
         );
+
 
         // Post data add address
         $url = URLAPI . "/v1/mobile/order/add_address";
@@ -426,17 +443,32 @@ class Order extends CI_Controller
     public function editaddress_process($token)
     {
         $input          = $this->input;
-		$idaddress      = $this->security->xss_clean($input->post('idaddress'));
+        $idaddress      = $this->security->xss_clean($input->post('idaddress'));
 		$nameaddress    = $this->security->xss_clean($input->post('nameaddress'));
 		$address        = $this->security->xss_clean($input->post('address'));
 		$phone          = $this->security->xss_clean($input->post('phone'));
-		$idcabang       = $this->security->xss_clean($input->post('idcabang'));
-		$pacinput       = $this->security->xss_clean($input->post('pac-input'));
+        $idcabang       = $this->security->xss_clean($input->post('idcabang'));
+        $lat            = $this->security->xss_clean($input->post('lat'));
+        $long           = $this->security->xss_clean($input->post('long'));
+
+        $this->form_validation->set_rules('nameaddress', 'Name Address', 'trim|required');
+        $this->form_validation->set_rules('address', 'Address', 'trim|required');
+        $this->form_validation->set_rules('phone', 'Phone Number', 'trim|required');
+        $this->form_validation->set_rules('lat', 'Select Location', 'trim|required');
+        $this->form_validation->set_rules('long', 'Select Location', 'trim|required');
+
+        if ($this->form_validation->run() == FALSE) {
+			$this->session->set_flashdata('error', $this->message->error_msg(validation_errors()));
+            redirect('widget/order/editaddress/'.$token.'?idcabang='.$idcabang);
+			return;
+		}
 
         $mdata = array(
             'title'         => $nameaddress,
             'alamat'        => $address,
             'phone'         => $phone,
+            'latitude'      => $lat,
+            'longitude'     => $long,
             'is_primary'    => 'yes'
         );
 
@@ -477,31 +509,33 @@ class Order extends CI_Controller
         $resultAddress      = $responseAddress->result->messages;
         
         // Get Cabang
-        $urlCabang 		= URLAPI . "/v1/mobile/outlet/getcabang_byid?id=".$_GET['cabang'];
+        $urlCabang 		= URLAPI . "/v1/mobile/outlet/getcabang_byid?id=".$idcabang;
 		$responseCabang 	= expatAPI($urlCabang);
         $resultCabang      = $responseCabang->result->messages;
-        // echo '<pre>'.print_r($resultCabang,true).'</pre>';
-        // die;
-        
+
+
         $origin = $resultAddress->address->latitude.','.$resultAddress->address->longitude;  // Latitude and longitude for origin
         $destination = $resultCabang->latitude.','.$resultCabang->longitude;  // Latitude and longitude for destination
         // echo $origin;
         // echo "<hr>";
         // echo $destination;
-        // die;
+        
         $route = $this->getFastestRoute($origin, $destination);
+        
         
         if ($route) {
             $legs = $route['legs'][0];
             $distance = $legs['distance'];
             $jarak = str_replace(' km', '', $distance['text']);  // Remove " km" from the distance text
             if ($jarak>$resultCabang->max){
-                $error = "Delivery Address is too far, max is ".$distance['text'];
-                //redirect order summary
+                $error = "Delivery Address is too far, max is ".$resultCabang->max ."km";
+                $this->session->set_flashdata('warning_maxarea', $error);
+                redirect("widget/order/ordersummary/".$token."?cabang=".$idcabang);
             }
         } else {
             $error = "No route found";
-            //redirect order summary
+            $this->session->set_flashdata('warning_maxarea', $error);
+            redirect("widget/order/ordersummary/".$token."?cabang=".$idcabang);
         }
 
 

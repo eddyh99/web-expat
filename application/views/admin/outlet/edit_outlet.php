@@ -44,7 +44,7 @@
                             <input type="text" class="form-control" id="long" name="long" value="<?= @$outlet->longitude?>" placeholder="Enter Longitude..." required autocomplete="off">
                         </div>
                         <div class="mb-3">
-                            <label for="address" class="form-label">Cabang</label>
+                            <label for="address" class="form-label">City</label>
                             <select class="addprovinsi-select2" id="provinsi" name="provinsi" required>
                                 <option value="Banda Aceh" <?= (@$outlet->provinsi == "Banda Aceh") ? 'selected' : "" ?>>Banda Aceh</option>
                                 <option value="Bali" <?= (@$outlet->provinsi == "Bali") ? 'selected' : "" ?>>Bali</option>

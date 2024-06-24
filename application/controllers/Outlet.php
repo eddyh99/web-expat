@@ -51,13 +51,13 @@ class Outlet extends CI_Controller
 
     public function addoutlet_process()
     {
-		$this->form_validation->set_rules('name', 'Name Outlet', 'trim|required');
+		$this->form_validation->set_rules('name', 'Name Outlet', 'trim|required|max_length[100]');
 		$this->form_validation->set_rules('address', 'Address Outlet', 'trim|required');
-		$this->form_validation->set_rules('opening', 'Opening', 'trim|required');
-		$this->form_validation->set_rules('contact', 'Contact', 'trim|required');
-		$this->form_validation->set_rules('provinsi', 'Province', 'trim|required');
-		$this->form_validation->set_rules('lat', 'Latitude', 'trim|required');
-		$this->form_validation->set_rules('long', 'Longitude', 'trim|required');
+		$this->form_validation->set_rules('opening', 'Opening', 'trim|required|max_length[255]');
+		$this->form_validation->set_rules('contact', 'Contact', 'trim|required|max_length[50]');
+		$this->form_validation->set_rules('provinsi', 'Province', 'trim|required|max_length[100]');
+		$this->form_validation->set_rules('lat', 'Latitude', 'trim|required|max_length[50]');
+		$this->form_validation->set_rules('long', 'Longitude', 'trim|required|max_length[50]');
 
         if ($this->form_validation->run() == FALSE) {
 			$this->session->set_flashdata('error', $this->message->error_msg(validation_errors()));
@@ -123,8 +123,6 @@ class Outlet extends CI_Controller
         $url = URLAPI . "/v1/outlet/getcabang_byid?id=".$id_outlet;
 		$result = expatAPI($url)->result->messages;
 
-        // echo '<pre>'.print_r($result,true).'</pre>';
-        // die;
         $data = array(
             'title'             => NAMETITLE . ' - Edit Outlet',
             'content'           => 'admin/outlet/edit_outlet',
@@ -140,13 +138,13 @@ class Outlet extends CI_Controller
 
     public function editoutlet_process()
     {
-        $this->form_validation->set_rules('name', 'Outlet Name', 'trim|required');
+        $this->form_validation->set_rules('name', 'Outlet Name', 'trim|required|max_length[100]');
 		$this->form_validation->set_rules('address', 'Address', 'trim|required');
-		$this->form_validation->set_rules('opening', 'opening', 'trim|required');
-		$this->form_validation->set_rules('contact', 'contact', 'trim|required');
+		$this->form_validation->set_rules('opening', 'opening', 'trim|required|max_length[255]');
+		$this->form_validation->set_rules('contact', 'contact', 'trim|required|max_length[50]');
 		$this->form_validation->set_rules('provinsi', 'Province', 'trim|required');
-        $this->form_validation->set_rules('lat', 'Latitude', 'trim|required');
-		$this->form_validation->set_rules('long', 'Longitude', 'trim|required');
+        $this->form_validation->set_rules('lat', 'Latitude', 'trim|required|max_length[50]');
+		$this->form_validation->set_rules('long', 'Longitude', 'trim|required|max_length[50]');
 
         $input      = $this->input;
         $urisegment   = $this->security->xss_clean($input->post('urisegment'));

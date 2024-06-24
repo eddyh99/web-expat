@@ -28,11 +28,11 @@
                         <input type="hidden" name="oldpass" value="<?= $member->passwd?>">
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" value="<?= @$member->nama?>" id="name" name="name" placeholder="Enter Name..." required autocomplete="off">
+                            <input type="text" class="form-control" value="<?= @$member->nama?>" id="name" name="name" placeholder="Enter Name..." required maxlength="100" autocomplete="off">
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="passwd" name="passwd" placeholder="Enter password..." autocomplete="off">
+                            <input type="password" class="form-control" id="passwd" name="passwd" placeholder="Enter password..." maxlength="100"  autocomplete="off">
                             <small class="text-danger">*leave blank if you don't want to change the password</small>
                         </div>
                         <div class="mb-3 col-3">
