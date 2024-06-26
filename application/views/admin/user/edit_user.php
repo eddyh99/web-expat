@@ -41,8 +41,11 @@
                         <div class="mb-3 col-3">
                             <label for="role" class="form-label">Role</label>
                             <select name="role" id="role" class="form-select">
-                            <option value="admin" <?php echo ($user->role=="admin")?"selected":"" ?>>Admin</option>
+                                <option value="admin" <?php echo ($user->role=="admin")?"selected":"" ?>>Admin</option>
                                 <option value="kasir" <?php echo ($user->role=="kasir")?"selected":"" ?>>Kasir</option>
+                                <option value="hr" <?php echo ($user->role=="hr")?"selected":"" ?>>HR</option>
+                                <option value="marketing" <?php echo ($user->role=="marketing")?"selected":"" ?>>Marketing</option>
+                                <option value="finance" <?php echo ($user->role=="finance")?"selected":"" ?>>Finance</option>
                             </select>
                         </div>
 

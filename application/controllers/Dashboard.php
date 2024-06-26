@@ -15,6 +15,8 @@ class Dashboard extends CI_Controller
 
     public function index()
     {
+        // echo '<pre>'.print_r($_SESSION,true).'</pre>';
+        // die;
         $data = array(
             'title'         => NAMETITLE . ' - Dashboard',
             'content'       => 'admin/dashboard/index',
