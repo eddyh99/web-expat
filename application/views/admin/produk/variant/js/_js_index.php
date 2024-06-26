@@ -216,4 +216,18 @@
         $('#editprice').attr('href', `<?= base_url()?>produk/edit_variant?produk=${encodeURI(btoa(valfilter))}&name=${encodeURI(btoa(textfilter))}`);
 	    table.ajax.reload();
 	})
+
+
+    $("#selectall").click(function(){
+        if($("#selectall").is(':checked') ){
+            $("#cabang > option").prop("selected","selected");
+            $("#cabang").trigger("change");
+        }else{
+            $("#cabang > option").prop("selected","");
+            $("#cabang").trigger("change");
+            // $("#cabang > option").removeAttr("selected");
+        }
+    });
+
+
 </script>
