@@ -76,4 +76,103 @@ class Auth extends CI_Controller
 		$this->session->sess_destroy();
 		redirect('/');
 	}
+
+
+
+	// ================= FORGOT PASSWORD FOR MOBILE =================
+
+	public function send_email($email)
+	{
+		$email = urldecode($email);
+		$email =  $this->security->xss_clean($email);
+		$subject = "Reset Your Expat. Roasters Apps Password";
+
+		$url = URLAPI . "/auth/get_resettoken?email=".$email;
+		$response = expatAPI($url);
+		$otp = $response->result->messages;
+
+		$message = "
+		<!DOCTYPE html>
+		<html lang='en'>
+
+		<head>
+			<meta name='color-scheme' content='light'>
+			<meta name='supported-color-schemes' content='light'>
+			<title>Forgot Password Expat. Roasters Apps</title>
+		</head>
+
+		<body>
+			<div style='
+			max-width: 420px;
+			margin: 0 auto;
+			position: relative;
+			padding: 1rem;
+			'>
+				<div style='
+				text-align: center;
+				padding: 3rem;
+				'>
+					<h3 style='
+					font-weight: 600;
+					font-size: 30px;
+					line-height: 45px;
+					color: #000000;
+					margin-bottom: 1rem;
+					text-align: center;
+					'>
+						Hi,
+					</h3>
+					<img src='" . base_url() . "assets/img/email_cover.png' alt='Expat. Roasters Apps ' height='140'>
+				</div>
+
+				<div style='
+				text-align: center;
+				padding-bottom: 1rem;
+				'>
+					<p style='
+					font-weight: 400;
+					font-size: 14px;
+					color: #000000;
+					'>
+						We received a request OTP to reset your password for your Expat. Roasters account. To proceed with your request, please use the following OTP
+					</p>
+					<h2 style='letter-spacing: 12px;'>$otp</h2>
+					<p style='
+					font-weight: 400;
+					font-size: 14px;
+					color: #000000;
+					'>
+						This code is valid for the next 1 minutes. If you didn't request a password reset, please ignore this email or contact our support team.
+
+					</p>
+					<p style='
+					font-weight: 400;
+					font-size: 14px;
+					color: #000000;
+					'>
+						Best regards,<br>  
+						The Expat. Roasters Team
+
+					</p>
+				</div>
+				<hr>
+				<hr>
+				<p style='
+				text-align: center;
+				font-weight: 400;
+				font-size: 12px;
+				color: #999999;
+				'>
+					Copyright © " . date('Y') . "
+				</p>
+			</div>
+		</body>
+		</html>";
+
+		sendmail($email, $subject, $message, $this->phpmailer_lib->load());
+	}
+
+
+
+
 }
