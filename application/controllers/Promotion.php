@@ -19,9 +19,7 @@ class Promotion extends CI_Controller
             'title'             => NAMETITLE . ' - Promotion',
             'content'           => 'admin/promotion/index',
             'extra'             => 'admin/promotion/js/_js_index',
-            'master_active'     => 'active',
-            'master_in'         => 'in',
-            'dropdown_promotion' => 'text-expat-green'
+            'promotion_active'  => 'active',
         );
         $this->load->view('layout/wrapper', $data);
 
@@ -49,9 +47,7 @@ class Promotion extends CI_Controller
             'title'         => NAMETITLE . ' - Add Promotion',
             'content'       => 'admin/promotion/add_promotion',
             'extra'         => 'admin/promotion/js/_js_index',
-            'master_active'     => 'active',
-            'master_in'         => 'in',
-            'dropdown_promotion' => 'text-expat-green'
+            'promotion_active'  => 'active',
         );
         $this->load->view('layout/wrapper', $data);
     }
@@ -128,9 +124,7 @@ class Promotion extends CI_Controller
             'content'           => 'admin/promotion/edit_promotion',
             'extra'             => 'admin/promotion/js/_js_index',
             'promotion'         => $result,
-            'master_active'     => 'active',
-            'master_in'         => 'in',
-            'dropdown_promotion'=> 'text-expat-green'
+            'promotion_active'   => 'active',
         );
 
         $this->load->view('layout/wrapper', $data);

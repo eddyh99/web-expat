@@ -93,10 +93,15 @@
                         <div class="mb-4 col-12">
                             <label for="cabang" class="form-label">Select Outlet</label>
                             <select name="cabang[]" multiple="multiple" id="cabang" class="form-control cabang_select2">
+                                <!-- <option value="all">All Outlet</option> -->
                                 <?php foreach($cabang as $cb){?>
                                     <option value="<?= $cb->id?>"><?= $cb->nama?></option>
                                 <?php }?>
                             </select>
+                            <input type="checkbox" id="selectall">
+                            <label for="selectall">
+                                Select All
+                            </label>
                         </div>
                         
                         <!-- <div class="mb-4">

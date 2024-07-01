@@ -41,6 +41,9 @@
                             <select name="role" id="role" class="form-select">
                                 <option value="admin">Admin</option>
                                 <option value="kasir">Kasir</option>
+                                <option value="hr">HR</option>
+                                <option value="marketing">Marketing</option>
+                                <option value="finance">Finance</option>
                             </select>
                         </div>
 

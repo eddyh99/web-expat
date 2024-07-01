@@ -26,8 +26,6 @@ function expatAPI($url, $postData = NULL)
 function mobileAPI($url, $postData = NULL, $token = NULL)
 {
 
-    // $token = 'bbe287cf3a3bf23306bb175c8461ce86a16f6a75';
-
     $ch     = curl_init($url);
     $headers    = array(
         'Authorization: Bearer ' . $token,
@@ -47,6 +45,32 @@ function mobileAPI($url, $postData = NULL, $token = NULL)
     curl_close($ch);
     return $result;
 }
+
+function sendmail($email, $subject, $message, $phpmailer)
+{
+    $mail = $phpmailer; 
+    $mail->isSMTP();
+    $mail->Host         = HOST_EMAIL;
+    $mail->SMTPAuth     = true;
+    $mail->Username     = USERNAME_EMAIL;
+    $mail->Password     = PASS_EMAIL;
+    $mail->SMTPAutoTLS	= true;
+    $mail->Port			= 587;
+
+
+    $mail->setFrom(USERNAME_EMAIL, NAMETITLE);
+    $mail->isHTML(true);
+
+    $mail->ClearAllRecipients();
+
+
+    $mail->Subject = $subject;
+    $mail->AddAddress($email);
+
+    $mail->msgHTML($message);
+    $mail->send();
+}
+
 
 
 
