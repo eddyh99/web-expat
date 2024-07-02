@@ -88,7 +88,11 @@ define('NAMETITLE','Expat. Roasters');
 
 
 //Inisialisasi Database Table
+// OLD
 define("URLAPI",'https://api-expats.softwarebali.com');
+// NEW 
+// define("URLAPI",'https://api.expatroasters.com');
+
 
 /*email config*/
 define('HOST_EMAIL', "sgp29.siteground.asia");
