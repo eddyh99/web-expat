@@ -74,14 +74,16 @@ class Order extends CI_Controller
         }
     }
     
-    //@todo display error to summary
+
+
 	public function ordersummary($token)
 	{	
         // Get Cookie
-        $cookie = stripslashes($_COOKIE['variant']);
-        $all_variant = json_decode($cookie, true);
-        // echo '<pre>'.print_r($all_variant,true).'</pre>';
-        
+        $cookie = stripslashes($_COOKIE['cartexpat']);
+        $cart = json_decode($cookie, true);
+
+        // echo '<pre>'.print_r($cart,true).'</pre>';
+        // die;
         // Get Alamat user
         $urlAddress 		= URLAPI . "/v1/mobile/order/last_address";
 		$responseAddress 	= mobileAPI($urlAddress, $mdata = NULL, $token);
@@ -94,8 +96,7 @@ class Order extends CI_Controller
 		$responseUser 	= mobileAPI($urlUser, $mdata = NULL, $token);
         $resultUser      = $responseUser->result->messages;
         
-        // echo '<pre>'.print_r($resultUser,true).'</pre>';
-        // die;
+
         // Get Cabang
         $urlCabang 		= URLAPI . "/v1/mobile/outlet/getcabang_byid?id=".$_GET['cabang'];
 		$responseCabang 	= expatAPI($urlCabang);
@@ -123,39 +124,60 @@ class Order extends CI_Controller
         
         //display error
                 
-        // Cek Detail Variant dan produk
+        // Cek Detail Optional, Additional, Satuan dan Produk
         // Assign ke new array
-        $variant = array();
-        foreach($all_variant as $av){
-            $detail_variant = expatAPI(URLAPI . "/v1/mobile/produk/get_detailbyid?id=".$av['id_variant'])->result->messages;
-            $detail_produk  = expatAPI(URLAPI . "/v1/mobile/produk/getproduk_byid?id=".$detail_variant->id_produk)->result->messages;
-            $data = array(
-                "id"                => $detail_variant->id,
-                "id_produk"         => $detail_variant->id_produk,
-                "picture"           => $detail_produk->picture,
-                "nama"              => $detail_produk->nama,
-                "additional"        => $detail_variant->additional,
-                "id_optional"       => $detail_variant->id_optional,
-                "optional"          => $detail_variant->optional,
-                "id_satuan"         => $detail_variant->id_satuan,
-                "satuan"            => $detail_variant->satuan,
-                "harga"             => $detail_variant->harga,
-                "jumlah"            => $av["jumlah"],
+        $selected_product = array();
+        foreach($cart as $ct){
+
+            $product = expatAPI(URLAPI . "/v1/produk/getproduk_byid?id=".$ct['idproduk'])->result->messages;
+            $show_opt = expatAPI(URLAPI . "/v1/optional/getoptional_byid?id=".$ct['idoptional'])->result->messages;
+            $show_st = expatAPI(URLAPI . "/v1/satuan/getsatuan_byid?id=".$ct['idsatuan'])->result->messages;
+            $show_ad = expatAPI(URLAPI . "/v1/additional/getadditional_byid?id=".$ct['idadditional'])->result->messages;
+
+            $price_product = ($product->price + $ct['price_optional'] +$ct['price_satuan'] + $ct['price_additional']);
+            $data =  (object) array(
+                "id_produk"         => $ct['idproduk'],
+                "picture"           => $product->picture,
+                "nama"              => $product->nama,
+                "quantity"          => $ct['jumlah'],
+                "optional_detail"   => ((empty($show_opt)) ? null :
+                    (object) array(
+                        "id_opt"    => $show_opt->id,
+                        "sku"       => $show_opt->sku,
+                        "optional"  => $show_opt->optional,
+                        "price"     => $show_opt->price,
+                    )
+                ),
+                "satuan_detail"   => ((empty($show_st)) ? null :  
+                    (object) array(
+                        "id_st"     => $show_st->id,
+                        "sku"       => $show_st->sku,
+                        "satuan"    => $show_st->satuan,
+                        "price"     => $show_st->price,
+                    )
+                ),
+                "additional_detail"   => ((empty($show_ad)) ? null :  
+                    (object) array(
+                        "id_ad"     => $show_ad->id,
+                        "sku"       => $show_ad->sku,
+                        "additional"=> $show_ad->additional,
+                        "price"     => $show_ad->price,
+                    )
+                ),
+                "price"   => $price_product,
             );
 
-            array_push($variant, $data);
+            array_push($selected_product, $data);
         }
 
-        // echo '<pre>'.print_r($variant,true).'</pre>';
-        // die;
 
         $mdata = array(
             'title'         => NAMETITLE . ' - Order',
             'content'       => 'widget/order/order',
             'extra'		    => 'widget/order/js/_js_order',
-            'variant'       => $variant, 
-            'all_variant'   => $all_variant,
+            'selected_product'  => $selected_product,
             'address'       => $resultAddress, 
+            'cartexpat'     => $cart,
             'cabang'        => $resultCabang, 
             'user'          => $resultUser,
             'token'         => $token
@@ -166,24 +188,47 @@ class Order extends CI_Controller
     public function kalkulasi_item($id, $jumlah = null)
     {
         // Get Cookie
-        $cookie = stripslashes($_COOKIE['variant']);
-        $all_variant = json_decode($cookie, true);
+        $cookie = stripslashes($_COOKIE['cartexpat']);
+        $cart = json_decode($cookie, true);
+
 
         // Kalkulasi Item 
         // Replace jumlah produk yang di pilih
-        $new_variant = array();
-        foreach($all_variant as $av){
-            if($av['id_variant'] == $id){
-                array_push($new_variant, array('id_variant' => $av['id_variant'], 'jumlah' => $jumlah));
+        $new_cart = array();
+        foreach($cart as $key => $ct){
+            if($key == $id){
+                array_push($new_cart, 
+                    array(
+                        "idproduk" => $ct["idproduk"],
+                        "idoptional" => $ct["idoptional"],
+                        "price_optional" => $ct["price_optional"],
+                        "idsatuan" => $ct["idsatuan"],
+                        "price_satuan" => $ct["price_satuan"],
+                        "idadditional" => $ct["idadditional"],
+                        "price_additional" => $ct["price_additional"],
+                        'jumlah' => $jumlah,
+                    )
+                );
             }else{
-                array_push($new_variant, array('id_variant' => $av['id_variant'], 'jumlah' => $av['jumlah']));
+                array_push($new_cart, 
+                    array(
+                        "idproduk" => $ct["idproduk"],
+                        "idoptional" => $ct["idoptional"],
+                        "price_optional" => $ct["price_optional"],
+                        "idsatuan" => $ct["idsatuan"],
+                        "price_satuan" => $ct["price_satuan"],
+                        "idadditional" => $ct["idadditional"],
+                        "price_additional" => $ct["price_additional"],
+                        'jumlah' => $ct["jumlah"],
+                    )
+                );
             }
         }
         
         // Set Cookie
-        $data = json_encode($new_variant);
-        setcookie('variant', "", time() - 3600, "/");
-        setcookie('variant', $data, 2147483647, "/");
+        $data = json_encode($new_cart);
+        setcookie('cartexpat', "", time() - 3600, "/");
+        setcookie('cartexpat', $data, 2147483647, "/");
 
         echo "SUKSES";
     }
@@ -192,22 +237,32 @@ class Order extends CI_Controller
     public function remove_item($id, $jumlah = null)
     {
         // Get Cookie
-        $cookie = stripslashes($_COOKIE['variant']);
-        $all_variant = json_decode($cookie, true);
+        $cookie = stripslashes($_COOKIE['cartexpat']);
+        $cart = json_decode($cookie, true);
 
         // Menyesuikan array baru dengan kalkulasi
-        $new_variant = array();
-        foreach($all_variant as $av){
-            if($av['id_variant'] != $id){
-                array_push($new_variant, array('id_variant' => $av['id_variant'], 'jumlah' => $av['jumlah']));
+        $new_cart = array();
+        foreach($cart as $key => $ct){
+            if($key != $id){
+                array_push($new_cart, 
+                    array(
+                        "idproduk" => $ct["idproduk"],
+                        "idoptional" => $ct["idoptional"],
+                        "price_optional" => $ct["price_optional"],
+                        "idsatuan" => $ct["idsatuan"],
+                        "price_satuan" => $ct["price_satuan"],
+                        "idadditional" => $ct["idadditional"],
+                        "price_additional" => $ct["price_additional"],
+                        'jumlah' => $ct["jumlah"],
+                    )
+                );
             }
         }
 
         // Set Cookie
-        $data = json_encode($new_variant);
-        setcookie('variant', "", time() - 3600, "/");
-        setcookie('variant', $data, 2147483647, "/");
-
+        $data = json_encode($new_cart);
+        setcookie('cartexpat', "", time() - 3600, "/");
+        setcookie('cartexpat', $data, 2147483647, "/");
         echo "Remove Item";
     }
 
@@ -215,24 +270,54 @@ class Order extends CI_Controller
     {
 
         // Get Cookie
-        $cookie = stripslashes(@$_COOKIE['variant']);
-        $all_variant = json_decode($cookie, true);
+        $cookie = stripslashes(@$_COOKIE['cartexpat']);
+        $cart = json_decode($cookie, true);
+
+        // echo '<pre>'.print_r($cart,true).'</pre>';
+        // die;
         
         // Get Produk by id
         $urlproduk = URLAPI . "/v1/produk/getproduk_byid?id=".$_GET['product'];
 		$resultproduk = expatAPI($urlproduk)->result->messages;
-        
-        // Get Variant produk
-        $variantproduk = expatAPI(URLAPI . "/v1/produk/get_varianbyid?id=".$_GET['product'])->result->messages;
-        // print_r(json_encode($variantproduk));
-        // die;
+
+
+        $optional    = ((empty($resultproduk->optional)) ? null : explode(",", $resultproduk->optional));
+        $new_opt = array();
+        if(!empty($optional)){
+            foreach($optional as $op){
+                $temp_opt = expatAPI(URLAPI . "/v1/optional/getoptional_byid?id=".$op)->result->messages;
+                array_push($new_opt, $temp_opt);
+            }
+        }
+
+
+        $satuan    = ((empty($resultproduk->satuan)) ? null : explode(",", $resultproduk->satuan));
+        $new_st = array();
+        if(!empty($satuan)){
+            foreach($satuan as $op){
+                $temp_st = expatAPI(URLAPI . "/v1/satuan/getsatuan_byid?id=".$op)->result->messages;
+                array_push($new_st, $temp_st);
+            }
+        }
+
+        $additional    = ((empty($resultproduk->additional)) ? null : explode(",", $resultproduk->additional));
+        $new_ad = array();
+        if(!empty($additional)){
+            foreach($additional as $op){
+                $temp_ad = expatAPI(URLAPI . "/v1/additional/getadditional_byid?id=".$op)->result->messages;
+                array_push($new_ad, $temp_ad);
+            }
+        }
+
         $mdata = array(
             'title'         => NAMETITLE . ' - Order Detail',
             'content'       => 'widget/order/detail_order',
             'extra'		    => 'widget/order/js/_js_index',
             'product'       => $resultproduk,
-            'variant'       => $variantproduk,
-            'totalorder'    => @count(@$all_variant)
+            'optional'      => $new_opt,
+            'satuan'        => $new_st,
+            'additional'    => $new_ad,
+            'totalorder'    => @count(@$cart)
 
         );
         $this->load->view('layout/wrapper', $mdata);
@@ -240,107 +325,131 @@ class Order extends CI_Controller
 
     public function setcookie_add_tocart()
     {
-        $input = $this->input;
-        $id = $this->security->xss_clean($input->post('id_variant'));
-        $total = $this->security->xss_clean($input->post('total_variant'));
-        $idcabang = $this->security->xss_clean($input->post('idcabang'));
-        $idproduk = $this->security->xss_clean($input->post('idproduk'));
+        $input      = $this->input;
+        $idcabang   = $this->security->xss_clean($input->post('idcabang'));
+        $idproduk   = $this->security->xss_clean($input->post('idproduk'));
+        $idoptional   = $this->security->xss_clean($input->post('idoptional'));
+        $optional   = $this->security->xss_clean($input->post('optional'));
+        $idsatuan     = $this->security->xss_clean($input->post('idsatuan'));
+        $satuan     = $this->security->xss_clean($input->post('satuan'));
+        $idadditional = $this->security->xss_clean($input->post('idadditional'));
+        $additional = $this->security->xss_clean($input->post('additional'));
+        $total      = $this->security->xss_clean($input->post('total_cart'));
         
-        
-        if(isset($_COOKIE['variant'])){
-            // Check ketika cookie tidak kosong
-            $cookie = stripslashes($_COOKIE['variant']);
-            $variant_available = json_decode($cookie, true);
-            
-            // Mencari produk dan variant yang sama &
-            // Replace cookie yang sudah ada dengan jumlah yang baru
-            foreach($variant_available as $key => $val){
-                if($val['id_variant'] == $id){
+        if(isset($_COOKIE['cartexpat'])){
+            $cookie = stripslashes($_COOKIE['cartexpat']);
+            $cart_rdy = json_decode($cookie, true);
+
+
+            foreach($cart_rdy as $key => $val){
+                if(
+                    $val['idproduk'] == $idproduk && $val['idoptional'] == $idoptional && 
+                    $val['idsatuan'] == $idsatuan && $val['idadditional'] == $idadditional 
+                ){
                     $total += $val['jumlah'];
-                    $mdata = array(
-                        "id_variant"    => $val['id_variant'],
-                        "jumlah"        => $total
-                    );
-                    unset($variant_available[$key]);
-                    array_push($variant_available, $mdata);
                     
-                    $newarr = array_values($variant_available);
+                    $mdata = array(
+                        "idproduk"          => $idproduk,
+                        "idoptional"        => $val['idoptional'],
+                        "price_optional"    => $val['price_optional'],
+                        "idsatuan"          => $val['idsatuan'],
+                        "price_satuan"      => $val['satuan'],
+                        "idadditional"      => $val['idadditional'],
+                        "price_additional"  => $val['additional'],
+                        "jumlah"            => $total
+                    );
+
+                    unset($cart_rdy[$key]);
+                    array_push($cart_rdy, $mdata);
+                    
+                    $newarr = array_values($cart_rdy);
                     $data = json_encode($newarr);
-                    setcookie('variant', "", time() - 3600, "/");
-                    setcookie('variant', $data, 2147483647, "/");
+                    setcookie('cartexpat', "", time() - 3600, "/");
+                    setcookie('cartexpat', $data, 2147483647, "/");
                     redirect('widget/order/detail?cabang='.$idcabang.'&product='.$idproduk);
                 }
             }
 
-            
-            // Tambahkan produk dan variant baru
+            // Tambahkan produk dan optional, satuan dan additional baru
             $mdata = array(
-                "id_variant"    => $id,
-                "jumlah"        => $total
-            );            
+                "idproduk"          => $idproduk,
+                "idoptional"        => (empty($idoptional) ? null : $idoptional),
+                "price_optional"    => (empty($optional) ? null : $optional),
+                "idsatuan"          => (empty($idsatuan) ? null : $idsatuan),
+                "price_satuan"      => (empty($satuan) ? null : $satuan),
+                "idadditional"      => (empty($idadditional) ? null : $idadditional),
+                "price_additional"  => (empty($additional) ? null : $additional),
+                "jumlah"            => $total
+            );         
 
-            array_push($variant_available, $mdata);
-            $data = json_encode($variant_available);
-            setcookie('variant', "", time() - 3600, "/");
-            setcookie('variant', $data, 2147483647, "/");
+            array_push($cart_rdy, $mdata);
+            $data = json_encode($cart_rdy);
+            setcookie('cartexpat', "", time() - 3600, "/");
+            setcookie('cartexpat', $data, 2147483647, "/");
             redirect('widget/order/detail?cabang='.$idcabang.'&product='.$idproduk);
-            
-            
-        }else{
-            // Check cookie ketika kosong
-            // Tambahkan produk dan variant baru
-            $variant_empty = array();
+
+
+        } else {
+
+            $cart_empty = array();
             $mdata = array(
-                "id_variant"    => $id,
-                "jumlah"        => $total
+                "idproduk"          => $idproduk,
+                "idoptional"        => (empty($idoptional) ? null : $idoptional),
+                "price_optional"    => (empty($optional) ? null : $optional),
+                "idsatuan"          => (empty($idsatuan) ? null : $idsatuan),
+                "price_satuan"      => (empty($satuan) ? null : $satuan),
+                "idadditional"      => (empty($idadditional) ? null : $idadditional),
+                "price_additional"  => (empty($additional) ? null : $additional),
+                "jumlah"            => $total
             );
-            array_push($variant_empty, $mdata);
-            $data = json_encode($variant_empty);
-            setcookie('variant', "", time() - 3600, "/");
-            setcookie('variant', $data, 2147483647, "/");
+
+            array_push($cart_empty, $mdata);
+            $data = json_encode($cart_empty);
+            setcookie('cartexpat', "", time() - 3600, "/");
+            setcookie('cartexpat', $data, 2147483647, "/");
             redirect('widget/order/detail?cabang='.$idcabang.'&product='.$idproduk);
         }
 
     }
     
-    public function get_harga_produk()
-    {
-        $input = $this->input;
-		$id_optional = $this->security->xss_clean($input->post('id_optional'));
-		$id_satuan = $this->security->xss_clean($input->post('id_satuan'));
-		$id_additional = $this->security->xss_clean($input->post('id_additional'));
+    // public function get_harga_produk()
+    // {
+    //     $input = $this->input;
+	// 	$id_optional = $this->security->xss_clean($input->post('id_optional'));
+	// 	$id_satuan = $this->security->xss_clean($input->post('id_satuan'));
+	// 	$id_additional = $this->security->xss_clean($input->post('id_additional'));
 
-        // Assign variabel ke dalam array
-        $mdata = array(
-            'id_optional'   => $id_optional,
-            'id_satuan'     => $id_satuan,
-            'id_additional' => $id_additional
-        );
+    //     // Assign variabel ke dalam array
+    //     $mdata = array(
+    //         'id_optional'   => $id_optional,
+    //         'id_satuan'     => $id_satuan,
+    //         'id_additional' => $id_additional
+    //     );
 
-        // Get variant by id produk
-        $url = URLAPI . "/v1/produk/get_varianbyid?id=".$_GET['product'];
-		$result = expatAPI($url)->result->messages;
+    //     // Get variant by id produk
+    //     $url = URLAPI . "/v1/produk/get_varianbyid?id=".$_GET['product'];
+	// 	$result = expatAPI($url)->result->messages;
         
 
-        // Cek apakah produk dan variant sesuai dengan dipilih user
-        $harga;
-        foreach($result as $dt){        
-            if($_GET['cabang'] == $dt->id_cabang){
-                if(
-                    $mdata['id_optional'] == $dt->id_optional && 
-                    $mdata['id_satuan'] == $dt->id_satuan && 
-                    $mdata['id_additional'] == $dt->id_additional
-                ){
-                    $datas = array(
-                        "id_variant"    => $dt->id,
-                        "harga"         => @$dt->harga
-                    );     
-                }
-            }
-        }
+    //     // Cek apakah produk dan variant sesuai dengan dipilih user
+    //     $harga;
+    //     foreach($result as $dt){        
+    //         if($_GET['cabang'] == $dt->id_cabang){
+    //             if(
+    //                 $mdata['id_optional'] == $dt->id_optional && 
+    //                 $mdata['id_satuan'] == $dt->id_satuan && 
+    //                 $mdata['id_additional'] == $dt->id_additional
+    //             ){
+    //                 $datas = array(
+    //                     "id_variant"    => $dt->id,
+    //                     "harga"         => @$dt->harga
+    //                 );     
+    //             }
+    //         }
+    //     }
 
-        echo json_encode(@$datas);
-    }
+    //     echo json_encode(@$datas);
+    // }
 
     public function loadaddress($token)
     {
@@ -488,26 +597,36 @@ class Order extends CI_Controller
 
     }
 
-    //@todo redirect ke order summary
     public function enterpin()
     {
         // Get Data from user
         $input          = $this->input;
 		$idcabang       = $this->security->xss_clean($input->post('id_cabang'));
-		$idvariant      = $this->security->xss_clean($input->post('id_variant'));
 		$idpengiriman   = $this->security->xss_clean($input->post('idpengiriman'));
-		$jumlah         = $this->security->xss_clean($input->post('jumlah'));
 		$token          = $this->security->xss_clean($input->post('usertoken'));
 		$note           = $this->security->xss_clean($input->post('inptnote'));
         $method		    = "expatbalance";
         $amount         = $this->security->xss_clean($input->post('amount'));
         $saldo          = $this->security->xss_clean($input->post('saldo'));
+        
+        $idproduk     = $this->security->xss_clean($input->post('idproduk'));
+        $idoptional     = $this->security->xss_clean($input->post('idoptional'));
+        $idadditional   = $this->security->xss_clean($input->post('idadditional'));
+        $idsatuan       = $this->security->xss_clean($input->post('idsatuan'));
+		$jumlah         = $this->security->xss_clean($input->post('jumlah'));
+
+        // echo '<pre>'.print_r($idproduk,true).'</pre>';
+        // echo '<pre>'.print_r($idoptional,true).'</pre>';
+        // echo '<pre>'.print_r($idsatuan,true).'</pre>';
+        // echo '<pre>'.print_r($idadditional,true).'</pre>';
+        // echo '<pre>'.print_r($jumlah,true).'</pre>';
 
         // Get Alamat user
         $urlAddress 		= URLAPI . "/v1/mobile/order/last_address";
 		$responseAddress 	= mobileAPI($urlAddress, $mdata = NULL, $token);
         $resultAddress      = $responseAddress->result->messages;
-        
+
+
         // Get Cabang
         $urlCabang 		= URLAPI . "/v1/mobile/outlet/getcabang_byid?id=".$idcabang;
 		$responseCabang 	= expatAPI($urlCabang);
@@ -516,13 +635,12 @@ class Order extends CI_Controller
 
         $origin = $resultAddress->address->latitude.','.$resultAddress->address->longitude;  // Latitude and longitude for origin
         $destination = $resultCabang->latitude.','.$resultCabang->longitude;  // Latitude and longitude for destination
-        // echo $origin;
-        // echo "<hr>";
-        // echo $destination;
+
         
         $route = $this->getFastestRoute($origin, $destination);
         
         
+        // Mengecek route valid atau tidak dengan jarak maxroute
         if ($route) {
             $legs = $route['legs'][0];
             $distance = $legs['distance'];
@@ -539,184 +657,82 @@ class Order extends CI_Controller
         }
 
 
-        // Get variant user dan ubah bentuk array
-        $temp_item = array();
-        foreach($idvariant as $keyid => $valid){
-            $temp['id_varian']   = $valid; 
-            foreach($jumlah as $keyjmlh => $valjmlh){
-                $temp['jumlah']   = $valjmlh;
-                if(($keyid == $keyjmlh) && ($keyjmlh == $keyid)){
-                    array_push($temp_item, $temp);
-                } 
+        // Mengubah format array biasa menjadi array assosiative 
+        // Dengan grouping index yang sama disetiap array
+        $originalArrays = array(
+            $jumlah, 
+            $idproduk, 
+            $idoptional, 
+            $idsatuan, 
+            $idadditional
+        );
+        $result = array();
+        $keys = array(
+            "jumlah", 
+            "idproduk", 
+            "idoptional", 
+            "idsatuan", 
+            "idadditional"
+        );
+
+        for ($i = 0; $i < count($idproduk); $i++) {
+            $temp = array();
+            for ($j = 0; $j < count($originalArrays); $j++) {
+                $temp[$keys[$j]] = $originalArrays[$j][$i];
             }
+            $result[] = $temp;
         }
 
-        
+
+        // Melakukan pemecahan array dengan sesuai kategori
+        $final_items = array();
+        foreach($result as $key => $dt){
+            $temp_produk['tipe']    = 'produk';
+            $temp_produk['id']      = $dt['idproduk'];
+            $temp_produk['jumlah']  = $dt['jumlah'];
+            $temp_produk['group']  = $key;
+
+            $temp_satuan['tipe']    = 'satuan';
+            $temp_satuan['id']      = $dt['idsatuan'];
+            $temp_satuan['jumlah']  = $dt['jumlah'];
+            $temp_satuan['group']  = $key;
+
+            array_push($final_items, ...array($temp_produk, $temp_satuan));
+            
+            if($dt['idoptional'] != 0){
+                $temp_optional['tipe']    = 'optional';
+                $temp_optional['id']      = $dt['idoptional'];
+                $temp_optional['jumlah']  = $dt['jumlah'];
+                $temp_optional['group']  = $key;
+                array_push($final_items, $temp_optional);
+            }
+            
+            if($dt['idadditional'] != 0){
+                $temp_additional['tipe']    = 'additional';
+                $temp_additional['id']      = $dt['idadditional'];
+                $temp_additional['jumlah']  = $dt['jumlah'];
+                $temp_additional['group']  = $key;
+                array_push($final_items, $temp_additional);
+            }
+
+        }
+                
         // Assign data user ke array
         $mdata = array(
             'id_pengiriman'     => (($idpengiriman != null) ? $idpengiriman : null),
             'id_cabang'         => $idcabang, 
             'is_pickup'         => (($idpengiriman != null) ? 'No' : 'Yes'),
             'note'              => ($note == null ? null : $note),
+            'alamat'            => (($idpengiriman != null) ? $resultAddress->address->alamat : null),
+            'phone'             => (($idpengiriman != null) ? $resultAddress->address->phone : null),
             'carabayar'         => $method,
-            'items'             => $temp_item
+            'items'             => $final_items
         );
 
-        /*
-        echo '<pre>'.print_r($mdata,true).'</pre>';
-        die;
-        */
         
         // Set Session Ordersummary
         $this->session->set_userdata('ordersummary', $mdata);
 
-
-        if($method != 'expatbalance'){
-            // Pengecekan jika tidak menggunakan expatbalance
-
-            // POST add transaksi
-            $url = URLAPI . "/v1/mobile/order/add_transaksi";
-            $response = mobileAPI($url, json_encode($mdata), $token);
-            $result = $response->result;
-
-            // Response add transaksi 
-            if($response->status == 200){
-                $invoiceID	= $result->messages;
-                if ($method=="credit"){
-
-                    // Jika menggunakan Credit Card
-                    $bodyreq = array (
-                                'order' => array (
-                                    'amount' 		 => $amount+($amount*0.03),
-                                    'invoice_number' => $invoiceID,
-                                    'currency' 		 => 'IDR',
-                                    'callback_url' 	 => base_url()."widget/order/notif/".$token,
-                                    "callback_url_cancel"	=> base_url()."widget/order/cancel",
-                                    "auto_redirect"			=> true,
-                                    "disable_retry_payment" => true,
-                                ),			
-                                'payment' => array (
-                                    'payment_due_date' => 60,
-                                    "payment_method_types" => [
-                                        "CREDIT_CARD"
-                                    ]
-                                ),
-                    );
-                }elseif ($method=="virtual"){
-
-                    // Jika menggunakan Virtual Account
-                    $bodyreq = array (
-                                'order' => array (
-                                    'amount' 		 => $amount,
-                                    'invoice_number' => $invoiceID,
-                                    'currency' 		 => 'IDR',
-                                    'callback_url' 	 => base_url()."widget/order/notif/".$token,
-                                    "callback_url_cancel"	=> base_url()."widget/order/cancel",
-                                    "auto_redirect"			=> true,
-                                    "disable_retry_payment" => true,
-                                ),			
-                                'payment' => array (
-                                    'payment_due_date' => 60,
-                                    "payment_method_types" => [
-                                        "VIRTUAL_ACCOUNT_BCA",
-                                        "VIRTUAL_ACCOUNT_BANK_MANDIRI",
-                                        "VIRTUAL_ACCOUNT_BANK_SYARIAH_MANDIRI",
-                                        "VIRTUAL_ACCOUNT_DOKU",
-                                        "VIRTUAL_ACCOUNT_BRI",
-                                        "VIRTUAL_ACCOUNT_BNI",
-                                        "VIRTUAL_ACCOUNT_BANK_PERMATA",
-                                        "VIRTUAL_ACCOUNT_BANK_CIMB",
-                                        "VIRTUAL_ACCOUNT_BANK_DANAMON"
-                                    ]
-                                ),
-                    );
-                }elseif($method=="wallet"){
-
-                    // Jika menggunakan E-Wallet
-                    $bodyreq = array (
-                                'order' => array (
-                                    'amount' 		 => $amount,
-                                    'invoice_number' => $invoiceID,
-                                    'currency' 		 => 'IDR',
-                                    'callback_url' 	 => base_url()."widget/order/notif/".$token,
-                                    "callback_url_cancel"	=> base_url()."widget/order/cancel",
-                                    "auto_redirect"			=> true,
-                                    "disable_retry_payment" => true,
-                                ),			
-                                'payment' => array (
-                                    'payment_due_date' => 60,
-                                    "payment_method_types" => [
-                                        "EMONEY_SHOPEEPAY",
-                                          "EMONEY_OVO",
-                                          "EMONEY_DANA",
-                                    ]
-                                ),
-                    );
-                }else{
-
-                    // Jika menggunakan QRIS
-                    $bodyreq = array (
-                                'order' => array (
-                                    'amount' 		 => $amount,
-                                    'invoice_number' => $invoiceID,
-                                    'currency' 		 => 'IDR',
-                                    'callback_url' 	 => base_url()."widget/order/notif/".$token,
-                                    "callback_url_cancel"	=> base_url()."widget/order/cancel",
-                                    "auto_redirect"			=> true,
-                                    "disable_retry_payment" => true,
-                                ),			
-                                'payment' => array (
-                                    'payment_due_date' => 60,
-                                    "payment_method_types" => [
-                                        "QRIS",
-                                    ]
-                                ),
-                    );
-                }
-        
-                // PROSES DOKU
-                $clientID		= "MCH-1352-1634273860130";
-                $dateTime 		= gmdate("Y-m-d H:i:s");
-                $isoDateTime 	= date(DATE_ISO8601, strtotime($dateTime));
-                $requestTime 	= substr($isoDateTime, 0, 19) . "Z";
-                $requestID		= time().uniqid();
-
-                $signature = $this->getsignature($clientID, $requestTime, $requestID, $bodyreq);
-
-                $url	= "https://api-sandbox.doku.com/checkout/v1/payment";
-                $ch = curl_init($url);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($bodyreq));
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                    'Content-Type: application/json',
-                    'Client-Id:' . $clientID,
-                    'Request-Id:' . $requestID,
-                    'Request-Timestamp:' . $requestTime,
-                    'Signature:' . "HMACSHA256=" . $signature,
-                ));
-        
-                // Set response json
-                $result = json_decode(curl_exec($ch));
-                $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        
-                curl_close($ch);
-                // setcookie('variant', "", time() - 3600, "/");
-
-                // Response DOKU
-                if ($result->message[0]=="SUCCESS"){
-                    redirect($result->response->payment->url);
-                }else{
-                    $this->session->set_flashdata("error","Your order cannot be processed");
-                    redirect("widget/order/ordersummary/".$token."?cabang=".$idcabang);
-                }
-            } else {
-                $this->session->set_flashdata('error', $result->messages->error);
-                redirect("widget/order/ordersummary/".$token."?cabang=".$idcabang);
-                return;
-            }
-        }
 
         // Jika menggunakan Expatbalance akan tetap berada di halaman enterpin
         // Cek jika saldo kurang dari total pembayaran
@@ -738,33 +754,6 @@ class Order extends CI_Controller
         
     }
 
-    public function cancel()
-	{
-        // Proses cancel DOKU
-		$this->session->set_flashdata("error","Your topup cannot be processed");
-		redirect("widget/order/ordersummary/".$token);
-	}
-
-	public function getsignature($clientId, $requestDate, $requestId, $requestBody){
-		$targetPath = "/checkout/v1/payment"; 
-		$secretKey = "SK-KHUvvn4fm3zXRIip0UWY";
-
-		// Generate Digest
-		$digestValue = base64_encode(hash('sha256', json_encode($requestBody), true));
-		
-		// Prepare Signature Component
-		$componentSignature = "Client-Id:" . $clientId . "\n" . 
-							  "Request-Id:" . $requestId . "\n" .
-							  "Request-Timestamp:" . $requestDate . "\n" . 
-							  "Request-Target:" . $targetPath . "\n" .
-							  "Digest:" . $digestValue;
-
-		// Calculate HMAC-SHA256 base64 from all the components above
-		$signature = base64_encode(hash_hmac('sha256', $componentSignature, $secretKey, true));
-		return $signature;
-
-	}
-	
     public function detail_process()
     {
         $input          = $this->input;
@@ -819,14 +808,14 @@ class Order extends CI_Controller
     public function removecookie()
     {
         // Remove Cookie dan session
-        setcookie('variant', "", time() - 3600, "/");
+        setcookie('cartexpat', "", time() - 3600, "/");
         $this->session->sess_destroy();
     }
 
     public function notif($token = NULL)
     {
         // Remove cookie dan session
-        setcookie('variant', "", time() - 3600, "/");
+        setcookie('cartexpat', "", time() - 3600, "/");
         $this->session->sess_destroy();
 
 
@@ -845,4 +834,28 @@ class Order extends CI_Controller
         );
         $this->load->view('layout/wrapper', $mdata);
     }
+
+    public function list_promotion($token)
+    {
+        $mdata = array(
+            'title'         => NAMETITLE . ' - List Promotion',
+            'content'       => 'widget/promotion/list_promotion',
+            'extra'		    => 'widget/promotion/js/_js_promotion',
+            'token'         => $token,
+        );
+        $this->load->view('layout/wrapper', $mdata);
+    }
+
+    public function claim_promotion($token)
+    {
+        $mdata = array(
+            'title'         => NAMETITLE . ' - Claim Promotion',
+            'content'       => 'widget/promotion/claim_promotion',
+            'extra'		    => 'widget/promotion/js/_js_promotion',
+            'token'         => $token,
+        );
+        $this->load->view('layout/wrapper', $mdata);
+    }
+
+
 }

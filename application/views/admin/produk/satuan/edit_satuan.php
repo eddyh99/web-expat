@@ -25,6 +25,7 @@
                     <form action="<?= base_url()?>produk/editsatuan_process" method="POST">
                         <input type="hidden" id="token" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                         <input type="hidden" name="urisegment" value="<?php echo $this->uri->segment('3')?>">
+                        <input type="hidden" class="form-control" id="sku" name="sku" maxlength="10" value="<?= @$detail->sku?>" placeholder="Enter SKU..." required autocomplete="off">
                         <div class="mb-4 col-12">
                             <label for="satuan_group" class="form-label">Satuan Group</label>
                             <select name="satuan_group" id="satuan_group" class="form-control satuan_group_select2">
@@ -36,6 +37,10 @@
                         <div class="mb-4">
                             <label for="satuan" class="form-label">Satuan Name</label>
                             <input type="text" class="form-control" id="satuan" value="<?= @$detail->satuan?>" name="satuan" placeholder="Enter satuan name..." required autocomplete="off">
+                        </div>
+                        <div class="mb-4">
+                            <label for="price" class="form-label">Price</label>
+                            <input type="text" class="money-input form-control" id="price" name="price" value="<?= @$detail->price?>" maxlength="100" placeholder="Enter price..." required autocomplete="off">
                         </div>
                         <button type="submit" class="btn btn-expat mt-3">Update Satuan</button>
                     </form>

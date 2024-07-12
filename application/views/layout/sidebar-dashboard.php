@@ -74,14 +74,14 @@
                         <span class="hide-menu">Setup Produk</span>
                     </a>
                     <ul aria-expanded="false" class="collapse first-level <?= @$dpd_in?>">
-                        <li class="ps-4 sidebar-item <?= @$dpd_active?>">
+                        <!-- <li class="ps-4 sidebar-item <?= @$dpd_active?>">
                             <a href="<?= base_url()?>produk" class="sidebar-link <?= @$dpd_produk?>">
                                 <div class="round-16 d-flex align-items-center justify-content-center">
                                     <i class="ti ti-circle fs-1"></i>
                                 </div>
                                 <span class="hide-menu">Produk</span>
                             </a>
-                        </li>
+                        </li> -->
                         <li class="ps-4 sidebar-item <?= @$dpd_active?>">
                             <a href="<?= base_url()?>produk/additional" class="sidebar-link <?= @$dpd_additional?>">
                                 <div class="round-16 d-flex align-items-center justify-content-center">
@@ -107,11 +107,11 @@
                             </a>
                         </li>
                         <li class="ps-4 sidebar-item <?= @$dpd_active?>">
-                            <a href="<?= base_url()?>produk/variant" class="sidebar-link <?= @$dpd_variant?>">
+                            <a href="<?= base_url()?>produk" class="sidebar-link <?= @$dpd_variant?>">
                                 <div class="round-16 d-flex align-items-center justify-content-center">
                                     <i class="ti ti-circle fs-1"></i>
                                 </div>
-                                <span class="hide-menu">Variant</span>
+                                <span class="hide-menu">Produk</span>
                             </a>
                         </li>
                     </ul>
@@ -177,14 +177,14 @@
                                 <span class="hide-menu">Setup Produk</span>
                             </a>
                             <ul aria-expanded="false" class="collapse first-level <?= @$dpd_in?>">
-                                <li class="ps-4 sidebar-item <?= @$dpd_active?>">
+                                <!-- <li class="ps-4 sidebar-item <?= @$dpd_active?>">
                                     <a href="<?= base_url()?>produk" class="sidebar-link <?= @$dpd_produk?>">
                                         <div class="round-16 d-flex align-items-center justify-content-center">
                                             <i class="ti ti-circle fs-1"></i>
                                         </div>
                                         <span class="hide-menu">Produk</span>
                                     </a>
-                                </li>
+                                </li> -->
                                 <li class="ps-4 sidebar-item <?= @$dpd_active?>">
                                     <a href="<?= base_url()?>produk/additional" class="sidebar-link <?= @$dpd_additional?>">
                                         <div class="round-16 d-flex align-items-center justify-content-center">
@@ -210,11 +210,11 @@
                                     </a>
                                 </li>
                                 <li class="ps-4 sidebar-item <?= @$dpd_active?>">
-                                    <a href="<?= base_url()?>produk/variant" class="sidebar-link <?= @$dpd_variant?>">
+                                    <a href="<?= base_url()?>produk" class="sidebar-link <?= @$dpd_variant?>">
                                         <div class="round-16 d-flex align-items-center justify-content-center">
                                             <i class="ti ti-circle fs-1"></i>
                                         </div>
-                                        <span class="hide-menu">Variant</span>
+                                        <span class="hide-menu">Produk</span>
                                     </a>
                                 </li>
                             </ul>

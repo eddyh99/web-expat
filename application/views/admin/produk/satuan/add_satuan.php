@@ -36,6 +36,14 @@
                             <label for="satuan" class="form-label">Satuan Name</label>
                             <input type="text" class="form-control" id="satuan" name="satuan" placeholder="Enter satuan name..." required autocomplete="off">
                         </div>
+                        <div class="mb-4">
+                            <label for="price" class="form-label">Price</label>
+                            <input type="text" class="money-input form-control" id="price" name="price" maxlength="100" placeholder="Enter price..." required autocomplete="off">
+                        </div>
+                        <div class="mb-4">
+                            <label for="sku" class="form-label">SKU</label>
+                            <input type="text" class="form-control" id="sku" name="sku" maxlength="10" placeholder="Enter SKU..." required autocomplete="off">
+                        </div>
                         <button type="submit" class="btn btn-expat mt-3">Save satuan</button>
                     </form>
                     

@@ -10,12 +10,12 @@
 
     var priceQuantity = [];
 
-    <?php foreach($variant as $vr){?>
+    <?php foreach($selected_product as $key => $product){?>
         priceQuantity.push(
             {
-                "id"    : <?= $vr['id']?>,
-                "price" : <?= $vr['harga']?>,
-                "jumlah" : <?= $vr['jumlah']?>,
+                "id"    : <?= $key?>,
+                "price" : <?= $product->price?>,
+                "jumlah" : <?= $product->quantity?>,
             }
         );
     <?php }?>
@@ -42,6 +42,8 @@
     function pluscart(id){
         $('#jumlah'+id).val( function(i, val) {
             ++val;
+            console.log("PLUS " + val);
+            console.log(val);
             $.ajax({
                 url: `<?=base_url()?>widget/order/kalkulasi_item/${id}/${val}`,
                 type: "POST",
@@ -66,6 +68,7 @@
         
         $('#jumlah'+id).val( function(i, val) {
             --val;
+            console.log("MINUS " + val);
             if(val < 1){
                 console.log("HILANGKAN PRODUK");
                 val = 0;

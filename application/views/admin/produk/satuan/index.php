@@ -22,9 +22,10 @@
                     <table id="table_list_satuan" class="table table-striped" style="width:100%">
                         <thead>
                             <tr>
-                                <th>No</th>
+                                <th>SKU</th>
                                 <th>Group</th>
                                 <th>Satuan</th>
+                                <th>Price</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -32,9 +33,10 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th>No</th>
+                                <th>SKU</th>
                                 <th>Group</th>
                                 <th>Satuan</th>
+                                <th>Price</th>
                                 <th>Action</th>
                             </tr>
                         </tfoot>

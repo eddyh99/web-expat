@@ -1,6 +1,6 @@
 <style>
-    .th-outlet-address {
-        width: 500px;
+    .th-outlet-desc {
+        width: 400px !important;
     }
 
 </style>
@@ -9,6 +9,7 @@
 
     var table = $('#table_list_produk').DataTable({
 		"scrollX": true,
+		// "order": [[0, 'desc']],
 		"ajax": {
 			"url": "<?=base_url()?>produk/list_allproduk",
 			"type": "POST",
@@ -24,10 +25,12 @@
 					return meta.row + meta.settings._iDisplayStart + 1;
 				}
 			},
+			{ data: 'sku' },
 			{ data: 'nama' },
+			{ data: 'price', render: $.fn.dataTable.render.number(',', '.', 0) },
 			{ data: 'deskripsi' },
-			{ data: 'kategori' },
-			{ data: 'favorite' },
+			// { data: 'kategori' },
+			// { data: 'favorite' },
 			{ 
                 data: null, "mRender": function(data, type, full, meta) {
 					var btnImage = `
@@ -39,17 +42,16 @@
 							<div class="modal-dialog">
 								<div class="modal-content">
 								<div class="modal-header">
-									<h1 class="modal-title fs-5" id="exampleModalLabel">Preview Image</h1>
+									<h1 class="modal-title fs-5" id="exampleModalLabel">More Information</h1>
 									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 								</div>
 								<div class="modal-body">
 									<div class="d-flex justify-content-center">
 										<img class="img-fluid" src="${full.picture}" alt="${full.nama}"/>
 									</div>
-									
 								</div>
 								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+									<button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
 								</div>
 								</div>
 							</div>
@@ -63,6 +65,11 @@
                         
                 } 
             },
+		],
+		"columnDefs": [
+			{ "width": "25%", "targets": 2 }, 
+			{ "width": "40%", "targets": 4 }, 
+			
 		],
 	});
 

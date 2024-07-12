@@ -15,15 +15,16 @@ class Produk extends CI_Controller
 
     public function index()
     {
+
         $data = array(
-            'title'             => NAMETITLE . ' - Produk',
+            'title'             => NAMETITLE . ' - Variant Produk',
             'content'           => 'admin/produk/index',
             'extra'             => 'admin/produk/js/_js_index',
             'master_active'     => 'active',
             'master_in'         => 'in',
             'dpd_active'        => 'active',
             'dpd_in'            => 'in',
-            'dpd_produk'        => 'text-expat-green'
+            'dpd_variant'       => 'text-expat-green'
         );
         $this->load->view('layout/wrapper', $data);
 
@@ -39,25 +40,55 @@ class Produk extends CI_Controller
 
     public function add_produk()
     {
-        $data = array(
-            'title'         => NAMETITLE . ' - Add Produk',
-            'content'       => 'admin/produk/add_produk',
-            'extra'         => 'admin/produk/js/_js_index',
-            'master_active' => 'active',
-            'master_in'     => 'in',
-            'dpd_active'    => 'active',
-            'dpd_in'        => 'in',
-            'dpd_produk'    => 'text-expat-green'
+        $result_allproduk   = expatAPI(URLAPI . "/v1/produk/get_allproduk")->result->messages;
+		$result_cabang      = expatAPI(URLAPI . "/v1/outlet/get_allcabang")->result->messages;
+
+        // Additional
+		$result_groupadd    = expatAPI(URLAPI . "/v1/additional/get_groupadditional")->result->messages;
+		$result_add         = expatAPI(URLAPI . "/v1/additional/get_alladditional")->result->messages;
+        
+        // Optional
+		$result_groupopt    = expatAPI(URLAPI . "/v1/optional/get_groupoptional")->result->messages;
+		$result_opt         = expatAPI(URLAPI . "/v1/optional/get_alloptional")->result->messages;
+
+        // Satuan
+		$result_groupst     = expatAPI(URLAPI . "/v1/satuan/get_groupsatuan")->result->messages;
+        $result_st          = expatAPI(URLAPI . "/v1/satuan/get_allsatuan")->result->messages;
+
+
+        $mdata = array(
+            'title'             => NAMETITLE . ' - Add Produk',
+            'content'           => 'admin/produk/add_produk',
+            'extra'             => 'admin/produk/js/_js_addproduk',
+            'allproduk'         => $result_allproduk,
+            'cabang'            => $result_cabang,
+            'groupadd'          => $result_groupadd,
+            'additional'        => $result_add,
+            'groupopt'          => $result_groupopt,
+            'optional'          => $result_opt,
+            'groupst'           => $result_groupst,
+            'satuan'            => $result_st,
+            'master_active'     => 'active',
+            'master_in'         => 'in',
+            'dpd_active'        => 'active',
+            'dpd_in'            => 'in',
+            'dpd_variant'       => 'text-expat-green'
         );
-        $this->load->view('layout/wrapper', $data);
+        $this->load->view('layout/wrapper', $mdata);
     }
 
     public function addproduk_process()
     {
-		$this->form_validation->set_rules('name', 'Name Produk', 'trim|max_length[255]|required');
+		$this->form_validation->set_rules('name', 'Name Product', 'trim|required');
 		$this->form_validation->set_rules('description', 'Description', 'trim|required');
+		$this->form_validation->set_rules('sku', 'SKU', 'trim|required');
+		$this->form_validation->set_rules('price', 'Price', 'trim|required');
         $this->form_validation->set_rules('kategori', 'Kategori', 'trim|required');
 		$this->form_validation->set_rules('favorite', 'Favorite', 'trim|required');
+		$this->form_validation->set_rules('additional[]', 'Additional', 'trim');
+		$this->form_validation->set_rules('optional[]', 'Optional', 'trim');
+		$this->form_validation->set_rules('satuan[]', 'Satuan', 'trim|required');
+		$this->form_validation->set_rules('cabang[]', 'Cabang', 'trim|required');
 
         if ($this->form_validation->run() == FALSE) {
 			$this->session->set_flashdata('error', $this->message->error_msg(validation_errors()));
@@ -66,37 +97,35 @@ class Produk extends CI_Controller
 		}
 
         $input          = $this->input;
-        $name           = $this->security->xss_clean($this->input->post("name"));
+        $produk         = $this->security->xss_clean($this->input->post("name"));
         $description    = $this->security->xss_clean($this->input->post("description"));
+        $sku            = $this->security->xss_clean($this->input->post("sku"));
+        $price          = $this->security->xss_clean($this->input->post("price"));
         $kategori       = $this->security->xss_clean($this->input->post("kategori"));
         $favorite       = $this->security->xss_clean($this->input->post("favorite"));
-
-        $image      = $this->security->xss_clean($_FILES['imgproduk']);
-        if(!empty($image['name'])){
-            $blob       = curl_file_create($image['tmp_name'],$image['type']);
-            $mdata = array(
-                "nama"          => $name,
-                "deskripsi"     => $description,
-                "is_favorite"   => $favorite,
-                "kategori"      => $kategori,
-                "image"         => $blob
-            );
-        }else{
-
-            $mdata = array(
-                "nama"          => $name,
-                "deskripsi"     => $description,
-                "is_favorite"   => $favorite,
-                "kategori"      => $kategori,
-            );
-
-        }
+        $additional     = $this->security->xss_clean($this->input->post("additional"));
+        $optional       = $this->security->xss_clean($this->input->post("optional"));
+        $satuan         = $this->security->xss_clean($this->input->post("satuan"));
+        $cabang         = $this->security->xss_clean($this->input->post("cabang"));
+        $image          = $this->security->xss_clean($_FILES['imgproduk']);
         
+        $mdata = array(
+            "nama"          => $produk,
+            "image"         => (empty($image['name']) ? null : curl_file_create($image['tmp_name'],$image['type'])),
+            "deskripsi"     => $description,
+            "sku"           => $sku,
+            "price"         => str_replace(",", "", $price),
+            "kategori"      => $kategori,
+            "is_favorite"   => $favorite,
+            "additional"    => (empty($additional) ? null : implode(",", $additional)),
+            "optional"      => (empty($optional) ? null : implode(",", $optional)),
+            "satuan"        => (empty($satuan) ? null : implode(",", $satuan)),
+            "cabang"        => implode(",", $cabang),
+        );
 
         $url = URLAPI . "/v1/produk/addProduk";
 		$response = expatAPI($url, json_encode($mdata));
         $result = $response->result;
-
 
         if($response->status == 200) {
             $this->session->set_flashdata('success', $result->messages);
@@ -111,84 +140,119 @@ class Produk extends CI_Controller
 
     public function edit_produk($id)
     {
-        $id_produk	= base64_decode($this->security->xss_clean($id));
+        $id_produk	        = base64_decode($this->security->xss_clean($id));
 
-        $url = URLAPI . "/v1/produk/getproduk_byid?id=".$id_produk;
-		$result = expatAPI($url)->result->messages;
+        $url                = URLAPI . "/v1/produk/getproduk_byid?id=".$id_produk;
+		$result             = expatAPI($url)->result->messages;
 
-        $data = array(
+		$result_cabang      = expatAPI(URLAPI . "/v1/outlet/get_allcabang")->result->messages;
+        $cabang_edit        = ((empty($result->cabang)) ? null : explode(",", $result->cabang));
+
+        // Additional
+		$result_groupadd    = expatAPI(URLAPI . "/v1/additional/get_groupadditional")->result->messages;
+		$result_add         = expatAPI(URLAPI . "/v1/additional/get_alladditional")->result->messages;
+        $additional_edit    = ((empty($result->additional)) ? null : explode(",", $result->additional));
+
+        // Optional
+		$result_groupopt    = expatAPI(URLAPI . "/v1/optional/get_groupoptional")->result->messages;
+		$result_opt         = expatAPI(URLAPI . "/v1/optional/get_alloptional")->result->messages;
+        $optional_edit      = ((empty($result->optional)) ? null : explode(",", $result->optional));
+        
+        
+        // Satuan
+		$result_groupst     = expatAPI(URLAPI . "/v1/satuan/get_groupsatuan")->result->messages;
+        $result_st          = expatAPI(URLAPI . "/v1/satuan/get_allsatuan")->result->messages;
+        $satuan_edit        = ((empty($result->satuan)) ? null : explode(",", $result->satuan));
+
+        $mdata = array(
             'title'             => NAMETITLE . ' - Edit Produk',
             'content'           => 'admin/produk/edit_produk',
-            'extra'             => 'admin/produk/js/_js_index',
-            'produk'            => $result,
+            'extra'             => 'admin/produk/js/_js_addproduk',
+            'id_product'        => $id, 
+            'product'           => $result,
+            'cabang'            => $result_cabang,
+            'cabang_edit'       => $cabang_edit,
+            'groupadd'          => $result_groupadd,
+            'additional'        => $result_add,
+            'additional_edit'   => $additional_edit,
+            'groupopt'          => $result_groupopt,
+            'optional'          => $result_opt,
+            'optional_edit'     => $optional_edit,
+            'groupst'           => $result_groupst,
+            'satuan'            => $result_st,
+            'satuan_edit'       => $satuan_edit,
             'master_active'     => 'active',
             'master_in'         => 'in',
             'dpd_active'        => 'active',
             'dpd_in'            => 'in',
-            'dpd_produk'        => 'text-expat-green'
+            'dpd_variant'       => 'text-expat-green'
         );
-
-        $this->load->view('layout/wrapper', $data);
+        $this->load->view('layout/wrapper', $mdata);
     }
 
-    public function editproduk_process()
+    public function editproduk_process($id)
     {
-		$this->form_validation->set_rules('name', 'Name Produk', 'trim|required|max_length[255]');
-		$this->form_validation->set_rules('description', 'Description', 'trim|required');
-		$this->form_validation->set_rules('kategori', 'Kategori', 'trim|required');
-		$this->form_validation->set_rules('favorite', 'Favorite', 'trim|required');
+        $id_product = base64_decode($this->security->xss_clean($id));
 
-        $input      = $this->input;
-        $urisegment   = $this->security->xss_clean($input->post('urisegment'));
+        $this->form_validation->set_rules('name', 'Name Product', 'trim|required');
+		$this->form_validation->set_rules('description', 'Description', 'trim|required');
+		$this->form_validation->set_rules('sku', 'SKU', 'trim|required');
+		$this->form_validation->set_rules('price', 'Price', 'trim|required');
+        $this->form_validation->set_rules('kategori', 'Kategori', 'trim|required');
+		$this->form_validation->set_rules('favorite', 'Favorite', 'trim|required');
+		$this->form_validation->set_rules('additional[]', 'Additional', 'trim');
+		$this->form_validation->set_rules('optional[]', 'Optional', 'trim');
+		$this->form_validation->set_rules('satuan[]', 'Satuan', 'trim|required');
+		$this->form_validation->set_rules('cabang[]', 'Cabang', 'trim|required');
 
         if ($this->form_validation->run() == FALSE) {
-			$this->session->set_flashdata('error_validation', $this->message->error_msg(validation_errors()));
-            redirect('produk/edit_produk/'.$urisegment);
+			$this->session->set_flashdata('error', $this->message->error_msg(validation_errors()));
+			redirect("produk/edit_produk");
 			return;
 		}
 
-        $id             = base64_decode($urisegment);
-        $name           = $this->security->xss_clean($this->input->post("name"));
+        $input          = $this->input;
+        $produk         = $this->security->xss_clean($this->input->post("name"));
         $description    = $this->security->xss_clean($this->input->post("description"));
+        $sku            = $this->security->xss_clean($this->input->post("sku"));
+        $price          = $this->security->xss_clean($this->input->post("price"));
         $kategori       = $this->security->xss_clean($this->input->post("kategori"));
         $favorite       = $this->security->xss_clean($this->input->post("favorite"));
-
+        $additional     = $this->security->xss_clean($this->input->post("additional"));
+        $optional       = $this->security->xss_clean($this->input->post("optional"));
+        $satuan         = $this->security->xss_clean($this->input->post("satuan"));
+        $cabang         = $this->security->xss_clean($this->input->post("cabang"));
+        $image          = $this->security->xss_clean($_FILES['imgproduk']);
         
-        $image      = $this->security->xss_clean(@$_FILES['imgproduk']);
-
-        if(!empty($image['name'])){
-            $blob       = curl_file_create($image['tmp_name'],$image['type']);
-            $mdata = array(
-                "nama"          => $name,
-                "deskripsi"     => $description,
-                "kategori"      => $kategori,
-                "is_favorite"   => $favorite,
-                "image"         => $blob
-            );
-        }else{
-            $mdata = array(
-                "nama"          => $name,
-                "deskripsi"     => $description,
-                "kategori"      => $kategori,
-                "is_favorite"   => $favorite,
-            );
-
-        }
+        
+        $mdata = array(
+            "nama"          => $produk,
+            "image"         => (empty($image['name']) ? null : curl_file_create($image['tmp_name'],$image['type'])),
+            "deskripsi"     => $description,
+            "sku"           => $sku,
+            "price"         => str_replace(",", "", $price),
+            "kategori"      => $kategori,
+            "is_favorite"   => $favorite,
+            "additional"    => (empty($additional) ? null : implode(",", $additional)),
+            "optional"      => (empty($optional) ? null : implode(",", $optional)),
+            "satuan"        => (empty($satuan) ? null : implode(",", $satuan)),
+            "cabang"        => implode(",", $cabang),
+        );
 
 
-        $url = URLAPI . "/v1/produk/updateProduk?id=".$id;
+        $url = URLAPI . "/v1/produk/updateProduk?id=".$id_product;
 		$response = expatAPI($url, json_encode($mdata));
         $result = $response->result;
-        // print_r($result);
-        // die;
-        if($response->status == 200){
+
+
+        if($response->status == 200) {
             $this->session->set_flashdata('success', $result->messages);
 			redirect('produk');
 			return;
         }else{
             $this->session->set_flashdata('error', $result->messages->error);
-            redirect('produk/edit_produk/'.$urisegment);
-            return;
+			redirect("produk/edit_produk/".$urisegment);
+			return;
         }
     }
 
@@ -209,11 +273,6 @@ class Produk extends CI_Controller
 
         redirect('produk');
     }
-
-
-
-
-    
 
 
 
@@ -269,6 +328,8 @@ class Produk extends CI_Controller
     {
 		$this->form_validation->set_rules('additional_group', 'Additional Group', 'trim|required|max_length[50]');
 		$this->form_validation->set_rules('additional', 'Additional Name', 'trim|required|max_length[100]');
+		$this->form_validation->set_rules('sku', 'SKU', 'trim|required|max_length[10]');
+		$this->form_validation->set_rules('price', 'Price', 'trim|required');
 
         if ($this->form_validation->run() == FALSE) {
 			$this->session->set_flashdata('error_validation', $this->message->error_msg(validation_errors()));
@@ -279,10 +340,14 @@ class Produk extends CI_Controller
         $input              = $this->input;
         $additional         = $this->security->xss_clean($this->input->post("additional"));
         $additional_group   = $this->security->xss_clean($this->input->post("additional_group"));
+        $sku                = $this->security->xss_clean($this->input->post("sku"));
+        $price              = $this->security->xss_clean($this->input->post("price"));
         
         $mdata = array(
             "additional"        => $additional,
             "additional_group"  => $additional_group,
+            "sku"               => $sku,
+            "price"             => str_replace(",", "", $price),
         );
 
         $url = URLAPI . "/v1/additional/addAdditional";
@@ -333,6 +398,8 @@ class Produk extends CI_Controller
     {
         $this->form_validation->set_rules('additional_group', 'Additional Group', 'trim|required|max_length[50]');
 		$this->form_validation->set_rules('additional', 'Additional Name', 'trim|required|max_length[100]');
+        $this->form_validation->set_rules('sku', 'SKU', 'trim|required|max_length[10]');
+		$this->form_validation->set_rules('price', 'Price', 'trim|required');
 
         $input      = $this->input;
         $urisegment   = $this->security->xss_clean($input->post('urisegment'));
@@ -346,10 +413,14 @@ class Produk extends CI_Controller
         $id                 = base64_decode($urisegment);
         $additional         = $this->security->xss_clean($this->input->post("additional"));
         $additional_group   = $this->security->xss_clean($this->input->post("additional_group"));
+        $sku                = $this->security->xss_clean($this->input->post("sku"));
+        $price              = $this->security->xss_clean($this->input->post("price"));
         
         $mdata = array(
             "additional"        => $additional,
             "additional_group"  => $additional_group,
+            "sku"               => $sku,
+            "price"             => str_replace(",", "", $price),
         );
 
         $url = URLAPI . "/v1/additional/updateAdditional?id=".$id;
@@ -441,6 +512,8 @@ class Produk extends CI_Controller
     {
 		$this->form_validation->set_rules('optional_group', 'Optional Group', 'trim|required|max_length[50]');
 		$this->form_validation->set_rules('optional', 'Optional Name', 'trim|required|max_length[100]');
+        $this->form_validation->set_rules('sku', 'SKU', 'trim|required|max_length[10]');
+		$this->form_validation->set_rules('price', 'Price', 'trim|required');
 
         if ($this->form_validation->run() == FALSE) {
 			$this->session->set_flashdata('error_validation', $this->message->error_msg(validation_errors()));
@@ -449,12 +522,16 @@ class Produk extends CI_Controller
 		}
 
         $input              = $this->input;
-        $optional         = $this->security->xss_clean($this->input->post("optional"));
-        $optional_group   = $this->security->xss_clean($this->input->post("optional_group"));
+        $optional           = $this->security->xss_clean($this->input->post("optional"));
+        $optional_group     = $this->security->xss_clean($this->input->post("optional_group"));
+        $sku                = $this->security->xss_clean($this->input->post("sku"));
+        $price              = $this->security->xss_clean($this->input->post("price"));
         
         $mdata = array(
             "optional"        => $optional,
             "optiongroup"     => $optional_group,
+            "sku"             => $sku,
+            "price"           => str_replace(",", "", $price),
         );
 
         $url = URLAPI . "/v1/optional/addoptional";
@@ -503,6 +580,8 @@ class Produk extends CI_Controller
     {
         $this->form_validation->set_rules('optional_group', 'optional Group', 'trim|required|max_length[50]');
 		$this->form_validation->set_rules('optional', 'optional Name', 'trim|required|max_length[100]');
+        $this->form_validation->set_rules('sku', 'SKU', 'trim|required|max_length[10]');
+		$this->form_validation->set_rules('price', 'Price', 'trim|required');
 
         $input      = $this->input;
         $urisegment   = $this->security->xss_clean($input->post('urisegment'));
@@ -514,12 +593,16 @@ class Produk extends CI_Controller
 		}
 
         $id                 = base64_decode($urisegment);
-        $optional         = $this->security->xss_clean($this->input->post("optional"));
-        $optional_group   = $this->security->xss_clean($this->input->post("optional_group"));
+        $optional           = $this->security->xss_clean($this->input->post("optional"));
+        $optional_group     = $this->security->xss_clean($this->input->post("optional_group"));
+        $sku                = $this->security->xss_clean($this->input->post("sku"));
+        $price              = $this->security->xss_clean($this->input->post("price"));
         
         $mdata = array(
-            "optional"      => $optional,
-            "optiongroup"   => $optional_group,
+            "optional"          => $optional,
+            "optiongroup"       => $optional_group,
+            "sku"               => $sku,
+            "price"             => str_replace(",", "", $price),
         );
 
         $url = URLAPI . "/v1/optional/updateOptional?id=".$id;
@@ -614,6 +697,8 @@ class Produk extends CI_Controller
     {
 		$this->form_validation->set_rules('satuan_group', 'satuan Group', 'trim|required|max_length[50]');
 		$this->form_validation->set_rules('satuan', 'satuan Name', 'trim|required|max_length[100]');
+        $this->form_validation->set_rules('sku', 'SKU', 'trim|required|max_length[10]');
+		$this->form_validation->set_rules('price', 'Price', 'trim|required');
 
         if ($this->form_validation->run() == FALSE) {
 			$this->session->set_flashdata('error_validation', $this->message->error_msg(validation_errors()));
@@ -622,12 +707,16 @@ class Produk extends CI_Controller
 		}
 
         $input              = $this->input;
-        $satuan         = $this->security->xss_clean($this->input->post("satuan"));
-        $satuan_group   = $this->security->xss_clean($this->input->post("satuan_group"));
+        $satuan             = $this->security->xss_clean($this->input->post("satuan"));
+        $satuan_group       = $this->security->xss_clean($this->input->post("satuan_group"));
+        $sku                = $this->security->xss_clean($this->input->post("sku"));
+        $price              = $this->security->xss_clean($this->input->post("price"));
         
         $mdata = array(
-            "satuan"        => $satuan,
-            "groupname"     => $satuan_group,
+            "satuan"            => $satuan,
+            "groupname"         => $satuan_group,
+            "sku"               => $sku,
+            "price"             => str_replace(",", "", $price),
         );
 
         $url = URLAPI . "/v1/satuan/addsatuan";
@@ -677,6 +766,8 @@ class Produk extends CI_Controller
     {
         $this->form_validation->set_rules('satuan_group', 'satuan Group', 'trim|required|max_length[50]');
 		$this->form_validation->set_rules('satuan', 'satuan Name', 'trim|required|max_length[100]');
+        $this->form_validation->set_rules('sku', 'SKU', 'trim|required|max_length[10]');
+		$this->form_validation->set_rules('price', 'Price', 'trim|required');
 
         $input      = $this->input;
         $urisegment   = $this->security->xss_clean($input->post('urisegment'));
@@ -690,10 +781,14 @@ class Produk extends CI_Controller
         $id                 = base64_decode($urisegment);
         $satuan         = $this->security->xss_clean($this->input->post("satuan"));
         $satuan_group   = $this->security->xss_clean($this->input->post("satuan_group"));
+        $sku                = $this->security->xss_clean($this->input->post("sku"));
+        $price              = $this->security->xss_clean($this->input->post("price"));
         
         $mdata = array(
             "satuan"      => $satuan,
             "groupname"   => $satuan_group,
+            "sku"               => $sku,
+            "price"             => str_replace(",", "", $price),
         );
 
         $url = URLAPI . "/v1/satuan/updatesatuan?id=".$id;
@@ -731,67 +826,79 @@ class Produk extends CI_Controller
     }
     
     
-    public function variant()
-    {
+    // public function variant()
+    // {
 
-        $url_produk = URLAPI . "/v1/produk/get_allproduk";
-		$response_produk = expatAPI($url_produk);
-        $result_produk = $response_produk->result->messages;
+    //     $url_produk = URLAPI . "/v1/produk/get_allproduk";
+	// 	$response_produk = expatAPI($url_produk);
+    //     $result_produk = $response_produk->result->messages;
 
 
-        $data = array(
-            'title'             => NAMETITLE . ' - Variant Produk',
-            'content'           => 'admin/produk/variant/index',
-            'extra'             => 'admin/produk/variant/js/_js_index',
-            'produk'            => $result_produk,
-            'master_active'     => 'active',
-            'master_in'         => 'in',
-            'dpd_active'        => 'active',
-            'dpd_in'            => 'in',
-            'dpd_variant'       => 'text-expat-green'
-        );
-        $this->load->view('layout/wrapper', $data);
+    //     $data = array(
+    //         'title'             => NAMETITLE . ' - Variant Produk',
+    //         'content'           => 'admin/produk/index',
+    //         'extra'             => 'admin/produk/js/_js_index',
+    //         'produk'            => $result_produk,
+    //         'master_active'     => 'active',
+    //         'master_in'         => 'in',
+    //         'dpd_active'        => 'active',
+    //         'dpd_in'            => 'in',
+    //         'dpd_variant'       => 'text-expat-green'
+    //     );
+    //     $this->load->view('layout/wrapper', $data);
 
-    }
+    // }
 
-    public function list_variant_produk()
-    {
-        $id_produk	= $this->security->xss_clean($this->input->post('id_produk'));
+    // public function list_variant_produk()
+    // {
+    //     $id_produk	= $this->security->xss_clean($this->input->post('id_produk'));
 
-		$url = URLAPI . "/v1/produk/get_varianbyid?id=".$id_produk;
-		$result = expatAPI($url)->result->messages;
-        echo json_encode($result);  
-    }
+	// 	$url = URLAPI . "/v1/produk/get_varianbyid?id=".$id_produk;
+	// 	$result = expatAPI($url)->result->messages;
+    //     echo json_encode($result);  
+    // }
 
     
-    public function add_variant()
-    {
+    // public function add_variant()
+    // {
 
-		$result_allproduk   = expatAPI(URLAPI . "/v1/produk/get_allproduk")->result->messages;
-		$result_cabang      = expatAPI(URLAPI . "/v1/outlet/get_allcabang")->result->messages;
-		$result_optional    = expatAPI(URLAPI . "/v1/optional/get_groupoptional")->result->messages;
-		$result_additional  = expatAPI(URLAPI . "/v1/additional/get_groupadditional")->result->messages;
-		$result_satuan      = expatAPI(URLAPI . "/v1/satuan/get_groupsatuan")->result->messages;
+	// 	$result_allproduk   = expatAPI(URLAPI . "/v1/produk/get_allproduk")->result->messages;
+	// 	$result_cabang      = expatAPI(URLAPI . "/v1/outlet/get_allcabang")->result->messages;
+
+    //     // Additional
+	// 	$result_groupadd    = expatAPI(URLAPI . "/v1/additional/get_groupadditional")->result->messages;
+	// 	$result_add         = expatAPI(URLAPI . "/v1/additional/get_alladditional")->result->messages;
+        
+    //     // Optional
+	// 	$result_groupopt    = expatAPI(URLAPI . "/v1/optional/get_groupoptional")->result->messages;
+	// 	$result_opt         = expatAPI(URLAPI . "/v1/optional/get_alloptional")->result->messages;
+
+    //     // Satuan
+	// 	$result_groupst     = expatAPI(URLAPI . "/v1/satuan/get_groupsatuan")->result->messages;
+    //     $result_st          = expatAPI(URLAPI . "/v1/satuan/get_allsatuan")->result->messages;
 
 
-        $mdata = array(
-            'title'             => NAMETITLE . ' - Add Variant Produk',
-            'content'           => 'admin/produk/variant/add_variant',
-            'extra'             => 'admin/produk/variant/js/_js_index',
-            'allproduk'         => $result_allproduk,
-            'cabang'            => $result_cabang,
-            'optional'          => $result_optional,
-            'additional'        => $result_additional,
-            'satuan'            => $result_satuan,
-            'master_active'     => 'active',
-            'master_in'         => 'in',
-            'dpd_active'        => 'active',
-            'dpd_in'            => 'in',
-            'dpd_variant'       => 'text-expat-green'
-        );
-        $this->load->view('layout/wrapper', $mdata);
+    //     $mdata = array(
+    //         'title'             => NAMETITLE . ' - Add Produk',
+    //         'content'           => 'admin/produk/variant/add_variant',
+    //         'extra'             => 'admin/produk/variant/js/_js_index',
+    //         'allproduk'         => $result_allproduk,
+    //         'cabang'            => $result_cabang,
+    //         'groupadd'          => $result_groupadd,
+    //         'additional'        => $result_add,
+    //         'groupopt'          => $result_groupopt,
+    //         'optional'          => $result_opt,
+    //         'groupst'           => $result_groupst,
+    //         'satuan'            => $result_st,
+    //         'master_active'     => 'active',
+    //         'master_in'         => 'in',
+    //         'dpd_active'        => 'active',
+    //         'dpd_in'            => 'in',
+    //         'dpd_variant'       => 'text-expat-green'
+    //     );
+    //     $this->load->view('layout/wrapper', $mdata);
 
-    }
+    // }
 
     public function variant_additional(){
         $url = URLAPI . "/v1/additional/get_alladditional";
@@ -814,126 +921,185 @@ class Produk extends CI_Controller
         echo json_encode($result);
     }
 
-    public function addvariant_process()
-    {
-		$this->form_validation->set_rules('produk', 'Produk', 'trim|required');
-		$this->form_validation->set_rules('additional[]', 'Additional', 'trim');
-		$this->form_validation->set_rules('optional[]', 'Optional', 'trim');
-		$this->form_validation->set_rules('satuan[]', 'Satuan', 'trim|required');
-		$this->form_validation->set_rules('cabang[]', 'Cabang', 'trim|required');
-		$this->form_validation->set_rules('harga', 'Harga', 'trim|required');
+    // public function addvariant_process()
+    // {
+	// 	$this->form_validation->set_rules('name', 'Name Product', 'trim|required');
+	// 	$this->form_validation->set_rules('description', 'Description', 'trim|required');
+	// 	$this->form_validation->set_rules('sku', 'SKU', 'trim|required');
+	// 	$this->form_validation->set_rules('price', 'Price', 'trim|required');
+    //     $this->form_validation->set_rules('kategori', 'Kategori', 'trim|required');
+	// 	$this->form_validation->set_rules('favorite', 'Favorite', 'trim|required');
+	// 	$this->form_validation->set_rules('additional[]', 'Additional', 'trim');
+	// 	$this->form_validation->set_rules('optional[]', 'Optional', 'trim');
+	// 	$this->form_validation->set_rules('satuan[]', 'Satuan', 'trim|required');
+	// 	$this->form_validation->set_rules('cabang[]', 'Cabang', 'trim|required');
 
-        if ($this->form_validation->run() == FALSE) {
-			$this->session->set_flashdata('error', $this->message->error_msg(validation_errors()));
-			redirect("produk/add_variant");
-			return;
-		}
+    //     if ($this->form_validation->run() == FALSE) {
+	// 		$this->session->set_flashdata('error', $this->message->error_msg(validation_errors()));
+	// 		redirect("produk/add_variant");
+	// 		return;
+	// 	}
 
-        $input          = $this->input;
-        $produk         = $this->security->xss_clean($this->input->post("produk"));
-        $additional     = $this->security->xss_clean($this->input->post("additional"));
-        $optional       = $this->security->xss_clean($this->input->post("optional"));
-        $satuan         = $this->security->xss_clean($this->input->post("satuan"));
-        $cabang         = $this->security->xss_clean($this->input->post("cabang"));
-        $harga         = $this->security->xss_clean($this->input->post("harga"));
+    //     $input          = $this->input;
+    //     $produk         = $this->security->xss_clean($this->input->post("name"));
+    //     $description    = $this->security->xss_clean($this->input->post("description"));
+    //     $sku            = $this->security->xss_clean($this->input->post("sku"));
+    //     $price          = $this->security->xss_clean($this->input->post("price"));
+    //     $kategori       = $this->security->xss_clean($this->input->post("kategori"));
+    //     $favorite       = $this->security->xss_clean($this->input->post("favorite"));
+    //     $additional     = $this->security->xss_clean($this->input->post("additional"));
+    //     $optional       = $this->security->xss_clean($this->input->post("optional"));
+    //     $satuan         = $this->security->xss_clean($this->input->post("satuan"));
+    //     $cabang         = $this->security->xss_clean($this->input->post("cabang"));
+    //     $image          = $this->security->xss_clean($_FILES['imgproduk']);
         
-        $mdata = array(
-            "additional"    => (empty($additional) ? array() : $additional),
-            "optional"      => (empty($optional) ? array() : $optional),
-            "satuan"        => (empty($satuan) ? array() : $satuan),
-            "cabang"        => $cabang,
-            "harga"         => str_replace(",", "", $harga),
-        );
+    //     $mdata = array(
+    //         "nama"          => $produk,
+    //         "image"         => (empty($image['name']) ? null : curl_file_create($image['tmp_name'],$image['type'])),
+    //         "deskripsi"     => $description,
+    //         "sku"           => $sku,
+    //         "price"         => str_replace(",", "", $price),
+    //         "kategori"      => $kategori,
+    //         "is_favorite"   => $favorite,
+    //         "additional"    => (empty($additional) ? null : implode(",", $additional)),
+    //         "optional"      => (empty($optional) ? null : implode(",", $optional)),
+    //         "satuan"        => (empty($satuan) ? null : implode(",", $satuan)),
+    //         "cabang"        => implode(",", $cabang),
+    //     );
 
-        // echo '<pre>'.print_r($mdata,true).'</pre>';
+    //     $url = URLAPI . "/v1/produk/addProduk";
+	// 	$response = expatAPI($url, json_encode($mdata));
+    //     $result = $response->result;
+
+    //     if($response->status == 200) {
+    //         $this->session->set_flashdata('success', $result->messages);
+	// 		redirect('produk/variant');
+	// 		return;
+    //     }else{
+    //         $this->session->set_flashdata('error', $result->messages->error);
+	// 		redirect('produk/add_variant');
+	// 		return;
+    //     }
+    // }
+
+    // public function edit_variant($id)
+    // {
+    //     $id_produk	        = base64_decode($this->security->xss_clean($id));
+
+    //     $url                = URLAPI . "/v1/produk/getproduk_byid?id=".$id_produk;
+	// 	$result             = expatAPI($url)->result->messages;
+
+	// 	$result_cabang      = expatAPI(URLAPI . "/v1/outlet/get_allcabang")->result->messages;
+    //     $cabang_edit        = ((empty($result->cabang)) ? null : explode(",", $result->cabang));
+
+    //     // Additional
+	// 	$result_groupadd    = expatAPI(URLAPI . "/v1/additional/get_groupadditional")->result->messages;
+	// 	$result_add         = expatAPI(URLAPI . "/v1/additional/get_alladditional")->result->messages;
+    //     $additional_edit    = ((empty($result->additional)) ? null : explode(",", $result->additional));
+
+
+    //     // Optional
+	// 	$result_groupopt    = expatAPI(URLAPI . "/v1/optional/get_groupoptional")->result->messages;
+	// 	$result_opt         = expatAPI(URLAPI . "/v1/optional/get_alloptional")->result->messages;
+    //     $optional_edit      = ((empty($result->optional)) ? null : explode(",", $result->optional));
         
-        $url = URLAPI . "/v1/produk/addvarian?id=".$produk;
-		$response = expatAPI($url, json_encode($mdata));
-        $result = $response->result;
-        // echo '<pre>'.print_r($response,true).'</pre>';
-        // die;
-        if($response->status == 200) {
-            $this->session->set_flashdata('success', $result->messages);
-			redirect('produk/variant');
-			return;
-        }else{
-            $this->session->set_flashdata('error', $result->messages->error);
-			redirect('produk/add_variant');
-			return;
-        }
-    }
-
-    public function edit_variant($id=null)
-    {
-
-        if($id != null){
-            $id_variant	= base64_decode($this->security->xss_clean($id));
-            $result   = expatAPI(URLAPI . "/v1/produk/get_detailbyid?id=".$id_variant)->result->messages;
-        }
-
-
-        $mdata = array(
-            'title'             => NAMETITLE . ' - Add Variant Produk',
-            'content'           => 'admin/produk/variant/edit_variant',
-            'extra'             => 'admin/produk/variant/js/_js_index',
-            'variant'           => @$result,
-            'master_active'     => 'active',
-            'master_in'         => 'in',
-            'dpd_active'        => 'active',
-            'dpd_in'            => 'in',
-            'dpd_variant'       => 'text-expat-green'
-        );
-        $this->load->view('layout/wrapper', $mdata);
-
-    }
-
-    public function editvariant_process()
-    {
-        $this->form_validation->set_rules('newharga', 'New Harga', 'trim|required');
-
-        $input      = $this->input;
         
-        $idproduk    = $this->security->xss_clean($input->post('idproduk'));
-        $urisegment   = $this->security->xss_clean($input->post('urisegment'));
+    //     // Satuan
+	// 	$result_groupst     = expatAPI(URLAPI . "/v1/satuan/get_groupsatuan")->result->messages;
+    //     $result_st          = expatAPI(URLAPI . "/v1/satuan/get_allsatuan")->result->messages;
+    //     $satuan_edit        = ((empty($result->satuan)) ? null : explode(",", $result->satuan));
 
+    //     $mdata = array(
+    //         'title'             => NAMETITLE . ' - Edit Produk',
+    //         'content'           => 'admin/produk/variant/edit_variant_test',
+    //         'extra'             => 'admin/produk/variant/js/_js_index',
+    //         'id_product'        => $id, 
+    //         'product'           => $result,
+    //         'cabang'            => $result_cabang,
+    //         'cabang_edit'       => $cabang_edit,
+    //         'groupadd'          => $result_groupadd,
+    //         'additional'        => $result_add,
+    //         'additional_edit'   => $additional_edit,
+    //         'groupopt'          => $result_groupopt,
+    //         'optional'          => $result_opt,
+    //         'optional_edit'     => $optional_edit,
+    //         'groupst'           => $result_groupst,
+    //         'satuan'            => $result_st,
+    //         'satuan_edit'       => $satuan_edit,
+    //         'master_active'     => 'active',
+    //         'master_in'         => 'in',
+    //         'dpd_active'        => 'active',
+    //         'dpd_in'            => 'in',
+    //         'dpd_variant'       => 'text-expat-green'
+    //     );
+    //     $this->load->view('layout/wrapper', $mdata);
 
-        if(empty($idproduk)){
-            if ($this->form_validation->run() == FALSE) {
-                $this->session->set_flashdata('error_validation', $this->message->error_msg(validation_errors()));
-                redirect("produk/edit_variant/".$urisegment);
-                return;
-            }
-        }else{
-            if ($this->form_validation->run() == FALSE) {
-                $this->session->set_flashdata('error_validation', $this->message->error_msg(validation_errors()));
-                redirect("produk/edit_variant?produk=".$idproduk);
-                return;
-            }
-        }
+    // }
 
-        $id             = base64_decode($urisegment);
-        $newharga       = str_replace(",", "", $this->security->xss_clean($this->input->post("newharga")));
+    // public function editvariant_process($id)
+    // {
+
+    //     $id_product = base64_decode($this->security->xss_clean($id));
+
+    //     $this->form_validation->set_rules('name', 'Name Product', 'trim|required');
+	// 	$this->form_validation->set_rules('description', 'Description', 'trim|required');
+	// 	$this->form_validation->set_rules('sku', 'SKU', 'trim|required');
+	// 	$this->form_validation->set_rules('price', 'Price', 'trim|required');
+    //     $this->form_validation->set_rules('kategori', 'Kategori', 'trim|required');
+	// 	$this->form_validation->set_rules('favorite', 'Favorite', 'trim|required');
+	// 	$this->form_validation->set_rules('additional[]', 'Additional', 'trim');
+	// 	$this->form_validation->set_rules('optional[]', 'Optional', 'trim');
+	// 	$this->form_validation->set_rules('satuan[]', 'Satuan', 'trim|required');
+	// 	$this->form_validation->set_rules('cabang[]', 'Cabang', 'trim|required');
+
+    //     if ($this->form_validation->run() == FALSE) {
+	// 		$this->session->set_flashdata('error', $this->message->error_msg(validation_errors()));
+	// 		redirect("produk/edit_variant");
+	// 		return;
+	// 	}
+
+    //     $input          = $this->input;
+    //     $produk         = $this->security->xss_clean($this->input->post("name"));
+    //     $description    = $this->security->xss_clean($this->input->post("description"));
+    //     $sku            = $this->security->xss_clean($this->input->post("sku"));
+    //     $price          = $this->security->xss_clean($this->input->post("price"));
+    //     $kategori       = $this->security->xss_clean($this->input->post("kategori"));
+    //     $favorite       = $this->security->xss_clean($this->input->post("favorite"));
+    //     $additional     = $this->security->xss_clean($this->input->post("additional"));
+    //     $optional       = $this->security->xss_clean($this->input->post("optional"));
+    //     $satuan         = $this->security->xss_clean($this->input->post("satuan"));
+    //     $cabang         = $this->security->xss_clean($this->input->post("cabang"));
+    //     $image          = $this->security->xss_clean($_FILES['imgproduk']);
         
+    //     $mdata = array(
+    //         "nama"          => $produk,
+    //         "image"         => (empty($image['name']) ? null : curl_file_create($image['tmp_name'],$image['type'])),
+    //         "deskripsi"     => $description,
+    //         "sku"           => $sku,
+    //         "price"         => str_replace(",", "", $price),
+    //         "kategori"      => $kategori,
+    //         "is_favorite"   => $favorite,
+    //         "additional"    => (empty($additional) ? null : implode(",", $additional)),
+    //         "optional"      => (empty($optional) ? array() : implode(",", $optional)),
+    //         "satuan"        => (empty($satuan) ? array() : implode(",", $satuan)),
+    //         "cabang"        => implode(",", $cabang),
+    //     );
 
-        if(empty($idproduk)){
-            $url = URLAPI . "/v1/produk/updateVarian?id=". $id ."&harga=". $newharga;
-        }else{
-            $url = URLAPI . "/v1/produk/updateVarian_byproduk?id=". $idproduk ."&harga=". $newharga;
-        }
-        
-		$response = expatAPI($url);
-        $result = $response->result;
-        
-        if($response->status == 200) {
-            $this->session->set_flashdata('success', $result->messages);
-			redirect('produk/variant');
-			return;
-        }else{
-            $this->session->set_flashdata('error', $result->messages->error);
-			redirect("produk/edit_variant/".$urisegment);
-			return;
-        }
-    }
+    //     $url = URLAPI . "/v1/produk/updateProduk?id=".$id_product;
+	// 	$response = expatAPI($url, json_encode($mdata));
+    //     $result = $response->result;
+
+
+    //     if($response->status == 200) {
+    //         $this->session->set_flashdata('success', $result->messages);
+	// 		redirect('produk/variant');
+	// 		return;
+    //     }else{
+    //         $this->session->set_flashdata('error', $result->messages->error);
+	// 		redirect("produk/edit_variant/".$urisegment);
+	// 		return;
+    //     }
+    // }
 
     public function delete_variant($id)
     {

@@ -17,14 +17,14 @@
 
     var harga ;
     var jumlah = 1;
-    $("#total_variant").val(jumlah);
+    $("#total_cart").val(jumlah);
 
     $('#jumlahcoffe').text(jumlah);
     $('#injumlahcoffe').val(jumlah);
     
     $('.fa-plus-circle').on('click', function(){
         jumlah++;
-        $("#total_variant").val(jumlah);
+        $("#total_cart").val(jumlah);
         $(".showprice").text((harga * jumlah).toLocaleString('en-US'));
         $('#jumlahcoffe').text(jumlah);
         $('#injumlahcoffe').val(jumlah);
@@ -34,12 +34,12 @@
         jumlah--;
         if(jumlah < 1){
             jumlah = 1;
-            $("#total_variant").val(jumlah);
+            $("#total_cart").val(jumlah);
             $(".showprice").text((harga * jumlah).toLocaleString('en-US'));
             $('#jumlahcoffe').text(jumlah);
             $('#injumlahcoffe').val(jumlah);
         }else{
-            $("#total_variant").val(jumlah);
+            $("#total_cart").val(jumlah);
             $(".showprice").text((harga * jumlah).toLocaleString('en-US'));
             $('#jumlahcoffe').text(jumlah);
             $('#injumlahcoffe').val(jumlah);
@@ -48,80 +48,59 @@
 
 
     $(document).ready(function(){
-        new Readmore('.article', {
+        new Readmore('article', {
             speed: 75,
             collapsedHeight: 95, 
         });
 
-        
+
+
+        // Input Radio Optional, Satuan, Additional is checked first
         if($(".optional").is(":checked")){
-            let rdy_optional = $("input[name='optional']:checked").val();
-            let rdy_satuan = $("input[name='satuan']:checked").val();
-            let rdy_additional = $("input[name='additional']:checked").val();
-
-            let rdata = {
-                id_optional: rdy_optional,
-                id_satuan: rdy_satuan,
-                id_additional: rdy_additional
-            }
-
-            $.ajax({
-                url: "<?=base_url()?>widget/order/get_harga_produk?product=<?= $_GET['product']?>&cabang=<?= $_GET['cabang']?>",
-                type: "POST",
-                data: rdata,
-                success: function (response) {
-                    let result = JSON.parse(response)
-                    if(result != null){
-                        $("#id_variant").val(result.id_variant);
-                        harga = Number(result.harga);
-                        $(".showprice").text(Number(result.harga).toLocaleString('en-US'));
-                    }else{
-                        harga = Number(0);
-                        $(".showprice").text(Number(0).toLocaleString('en-US'));
-                    }
-                    
-                    
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus);
-                }
-            });
+            let rdy_optional = $("input[name='optional']:checked").attr("data-opt");
+            let rdy_satuan = $("input[name='satuan']:checked").attr("data-st");
+            let rdy_additional = $("input[name='additional']:checked").attr("data-ad");
+            let baseprice = Number('<?= $product->price?>');
+            harga = baseprice;
+            $("#idoptional").val(rdy_optional);
+            $("#idsatuan").val(rdy_satuan);
+            $("#idadditional").val(rdy_additional);
         }
 
-
         
+        // Input Radio Optional, Satuan, Additional is changes
         $('.choose').on('change', function(){
-            let val_optional = $("input[name='optional']:checked").val();
-            let val_satuan = $("input[name='satuan']:checked").val();
-            let val_additional = $("input[name='additional']:checked").val();
+            let val_optional = $("input[name='optional']:checked");
+            let val_satuan = $("input[name='satuan']:checked");
+            let val_additional = $("input[name='additional']:checked");
+
+            console.log(val_optional.val());
+            console.log(val_optional.attr("data-opt"));
+
+            
+            $("#idoptional").val(val_optional.attr("data-opt"));
+            $("#idsatuan").val(val_satuan.attr("data-st"));
+            $("#idadditional").val(val_additional.attr("data-ad"));
 
             let mdata = {
-                id_optional: val_optional,
-                id_satuan: val_satuan,
-                id_additional: val_additional
+                price_optional: ((val_optional.val() == undefined) ? '0' : val_optional.val()),
+                price_satuan: ((val_satuan.val() == undefined) ? '0' : val_satuan.val()),
+                price_additional: ((val_additional.val() == undefined) ? '0' : val_additional.val())
             }
 
-            $.ajax({
-                url: "<?=base_url()?>widget/order/get_harga_produk?product=<?= $_GET['product']?>&cabang=<?= $_GET['cabang']?>",
-                type: "POST",
-                data: mdata,
-                success: function (response) {
-                    let result = JSON.parse(response)
-                    if(result != null){
-                        $("#id_variant").val(result.id_variant);
-                        harga = Number(result.harga);
-                        $(".showprice").text(Number(result.harga).toLocaleString('en-US'));
-                    }else{
-                        harga = Number(0);
-                        $(".showprice").text(Number(0).toLocaleString('en-US'));
-                    }
-                    
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus);
-                }
-            });
+            let baseprice = Number('<?= $product->price?>');
+            let total_price = baseprice + Number(mdata.price_optional) + Number(mdata.price_satuan) + Number(mdata.price_additional);
+            harga = total_price;
+            jumlah = 1;
+            $("#injumlahcoffe").val('1');
+            $('#jumlahcoffe').text('1');
+            $("#total_cart").val(jumlah);
+            $(".showprice").text(total_price.toLocaleString('en-US'));
+
         });
+
+
+
     });
 
     $( "#detailorder" ).on( "submit", function( event ) {
@@ -133,13 +112,8 @@
 
     function postMessage(){
         Total.postMessage('<?= @$totalorder?>');
-        // console.log('<?= @$totalorder?>');
     }
     postMessage();
-
-    $(function() {  
-        
-    });
 
 
 </script>

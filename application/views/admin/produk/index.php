@@ -23,10 +23,12 @@
                         <thead>
                             <tr>
                                 <th>No</th>
+                                <th>SKU</th>
                                 <th>Name</th>
-                                <th class="th-outlet-address">Description</th>
-                                <th>Category</th>
-                                <th>Favorite</th>
+                                <th>Base Price</th>
+                                <th >Description</th>
+                                <!-- <th>Category</th>
+                                <th>Favorite</th> -->
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -35,10 +37,12 @@
                         <tfoot>
                             <tr>
                                 <th>No</th>
+                                <th>SKU</th>
                                 <th>Name</th>
+                                <th>Base Price</th>
                                 <th>Description</th>
-                                <th>Category</th>
-                                <th>Favorite</th>
+                                <!-- <th>Category</th>
+                                <th>Favorite</th> -->
                                 <th>Action</th>
                             </tr>
                         </tfoot>

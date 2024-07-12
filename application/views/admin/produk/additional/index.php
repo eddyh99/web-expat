@@ -17,14 +17,15 @@
             <div class="card border-expat w-100">
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
-                        <h5 class="card-title fw-semibold mb-4">List Additional Produk</h5>
+                        <h5 class="card-title fw-semibold mb-4">List Additional</h5>
                     </div>
                     <table id="table_list_additional" class="table table-striped" style="width:100%">
                         <thead>
                             <tr>
-                                <th>No</th>
+                                <th>SKU</th>
                                 <th>Group</th>
                                 <th>Additional</th>
+                                <th>Price</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -32,9 +33,10 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th>No</th>
+                                <th>SKU</th>
                                 <th>Group</th>
                                 <th>Additional</th>
+                                <th>Price</th>
                                 <th>Action</th>
                             </tr>
                         </tfoot>
