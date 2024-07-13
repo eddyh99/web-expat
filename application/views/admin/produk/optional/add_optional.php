@@ -21,7 +21,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     <?php } ?>
-                    <h5 class="card-title fw-semibold mb-4">Add Optional Produk</h5>
+                    <h5 class="card-title fw-semibold mb-4">Add Optional</h5>
                     <form action="<?= base_url()?>produk/addoptional_process" method="POST">
                         <input type="hidden" id="token" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                         <div class="mb-4 col-12">
@@ -35,6 +35,14 @@
                         <div class="mb-4">
                             <label for="optional" class="form-label">Optional Name</label>
                             <input type="text" class="form-control" id="optional" name="optional" placeholder="Enter optional name..." required autocomplete="off">
+                        </div>
+                        <div class="mb-4">
+                            <label for="price" class="form-label">Price</label>
+                            <input type="text" class="money-input form-control" id="price" name="price" maxlength="100" placeholder="Enter price..." required autocomplete="off">
+                        </div>
+                        <div class="mb-4">
+                            <label for="sku" class="form-label">SKU</label>
+                            <input type="text" class="form-control" id="sku" name="sku" maxlength="10" placeholder="Enter SKU..." required autocomplete="off">
                         </div>
                         <button type="submit" class="btn btn-expat mt-3">Save optional</button>
                     </form>

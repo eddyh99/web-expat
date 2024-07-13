@@ -55,7 +55,18 @@ class Settings extends CI_Controller
         );
 
         $url = URLAPI . "/v1/settings/updateSetting";    
-        $response = expatAPI($url,json_encode($mdata))->result;
-        print_r($response);
+        $response = expatAPI($url,json_encode($mdata));
+        $result = $response->result;
+
+  
+        if($response->status == 200){
+            $this->session->set_flashdata('success', $result->messages);
+			redirect('settings');
+			return;
+        }else{
+            $this->session->set_flashdata('error', $result->messages->error);
+            redirect('settings');
+            return;
+        }
     }
 }

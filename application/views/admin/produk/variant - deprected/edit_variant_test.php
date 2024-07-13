@@ -2,7 +2,7 @@
 <div class="container-fluid">
     <div class="row my-4">
         <div class="col-lg-12 d-flex align-items-strech">
-            <a href="<?= base_url()?>produk" class="btn btn-outline-expat d-flex align-items-center">
+            <a href="<?= base_url()?>produk/variant" class="btn btn-outline-expat d-flex align-items-center">
                 <i class="ti ti-chevron-left fs-5 me-1"></i>
                 <span>
                     Back
@@ -22,10 +22,10 @@
                         </div>
                     <?php } ?>
                     <h5 class="card-title fw-semibold mb-4">Add Product</h5>
-                    <form action="<?= base_url()?>produk/editproduk_process/<?= $id_product?>" enctype='multipart/form-data' method="POST">
+                    <form action="<?= base_url()?>produk/editvariant_process/<?= $id_product?>" enctype='multipart/form-data' method="POST">
                         <input type="hidden" id="token" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                         <div class="row">
-                            <div class="col-12 col-lg-6">
+                            <div class="col-6">
                                 <div class="mb-3 ">
                                     <label for="name" class="form-label">Name Product</label>
                                     <input type="text" class="form-control" id="name" value="<?= $product->nama?>" name="name" placeholder="Enter produk name..." required maxlength="255" autocomplete="off" maxlength="55">
@@ -74,18 +74,18 @@
                             </div>
 
 
-                            <div class="col-12 col-lg-6">
+                            <div class="col-6">
                                 <div class="rounded-2 p-4 mb-4" style="border: 2px dashed #72A28A;">
                                     <div class="mb-4 col-12">
-                                        <label for="additional" class="form-label">Additional</label>
-                                        <select name="additional[]" multiple="multiple" id="additional" class="form-control additional_select2">
+                                        <label for="additonal" class="form-label">Additional</label>
+                                        <select name="additonal[]" multiple="multiple" id="additonal" class="form-control additional_select2">
                                             <?php foreach($groupadd as $ga){?>
                                                 <optgroup label="<?= $ga->additional_group?>">
                                                     <?php 
                                                     foreach($additional as $ad){
                                                         if($ga->additional_group == $ad->additional_group){
                                                     ?>
-                                                        <option value="<?= $ad->id?>" <?php echo (@in_array($ad->id, $additional_edit)) ? 'selected': ''?> >
+                                                        <option value="<?= $ad->id?>" <?php echo (in_array($ad->id, $additional_edit)) ? 'selected': ''?> >
                                                             <?= $ad->additional?>
                                                         </option>
                                                     <?php 
@@ -105,7 +105,7 @@
                                                     foreach($optional as $op){
                                                         if($gop->optiongroup == $op->optiongroup){
                                                     ?>
-                                                        <option value="<?= $op->id?>" <?php echo (@in_array($op->id, $optional_edit)) ? 'selected': ''?> > 
+                                                        <option value="<?= $op->id?>" <?php echo (in_array($op->id, $optional_edit)) ? 'selected': ''?> > 
                                                             <?= $op->optional?>
                                                         </option>
                                                     <?php 
@@ -126,7 +126,7 @@
                                                     foreach($satuan as $st){
                                                         if($gst->groupname == $st->groupname){
                                                     ?>
-                                                        <option value="<?= $st->id?>" <?php echo (@in_array($st->id, $satuan_edit)) ? 'selected': ''?> >
+                                                        <option value="<?= $st->id?>" <?php echo (in_array($st->id, $satuan_edit)) ? 'selected': ''?> >
                                                             <?= $st->satuan?>
                                                         </option>
                                                     <?php 

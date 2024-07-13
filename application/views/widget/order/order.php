@@ -107,39 +107,50 @@
             </div>
 
             <hr style="border-bottom: 2px solid #fff;">
-            <?php foreach($variant as $vr){?>
-                <div id="itempreview<?= $vr['id']?>" class="item-preview-order d-flex flex-column align-items-start justify-content-between py-4 my-3">
+            <?php foreach($selected_product as $key => $product){?>
+                <div id="itempreview<?= $key?>" class="item-preview-order d-flex flex-column align-items-start justify-content-between py-4 my-3">
                     <div class="d-flex align-items-start">
-                        <img src="<?= $vr['picture']?>" alt="img">
+                        <img src="<?= $product->picture?>" alt="img">
                         <div class="item-detail ms-3">
-                            <h3><?= $vr['nama']?></h3>
-                            <span class="color-expat-secondary"><?= $vr['additional']?> | <?= $vr['optional']?> | <?= $vr['satuan']?></span><br>
-                            <span class="color-expat-secondary"><?= number_format($vr['harga'], 2) ?></span>
+                            <h3><?= $product->nama?></h3>
+                            <span class="color-expat-secondary">
+                                <?php echo ((empty($product->additional_detail)) ? null : $product->additional_detail->additional) ?> | 
+                                <?php echo ((empty($product->optional_detail)) ? null : $product->optional_detail->optional) ?>  | 
+                                <?php echo ((empty($product->satuan_detail)) ? null : $product->satuan_detail->satuan) ?>
+                            </span>
+                            <br>
+                            <span class="color-expat-secondary"><?= number_format($product->price, 2) ?></span>
                         </div>
                         
                     </div>
                     <div class="d-flex justify-content-between align-items-center mt-3">
-                        <i onclick="minuscart('<?= $vr['id']?>')" class="fas fa-minus-circle minus-<?= $vr['id']?> fs-5" style="cursor: pointer;"></i>
-                        <!-- <input type="hidden" name="injumlahcoffe" id="injumlahcoffe"> -->
+                        <i onclick="minuscart('<?= $key?>')" class="fas fa-minus-circle minus-<?= $key?> fs-5" style="cursor: pointer;"></i>
                         <span class="d-block" style="width: 34px;">
-                            <input type="hidden" name="id_variant[]" value="<?= $vr['id']?>">
-                            <input type="number" name="jumlah[]" class="text-center w-100 border-0 bg-transparent text-white" id="jumlah<?= $vr['id']?>" value="<?= $vr['jumlah']?>">
+                            <input type="hidden" name="idproduk[]" value="<?= $product->id_produk?>">
+                            <input type="hidden" name="idadditional[]" value="<?php echo ((empty($product->additional_detail)) ? 0 : $product->additional_detail->id_ad) ?>">
+                            <input type="hidden" name="idoptional[]" value="<?php echo ((empty($product->optional_detail)) ? 0 : $product->optional_detail->id_opt) ?>">
+                            <input type="hidden" name="idsatuan[]" value="<?php echo ((empty($product->satuan_detail)) ? 0 : $product->satuan_detail->id_st) ?>">
+                            <input type="number" name="jumlah[]" class="text-center w-100 border-0 bg-transparent text-white" id="jumlah<?= $key?>" value="<?= $product->quantity?>">
                         </span>
-                        <i onclick="pluscart('<?= $vr['id']?>')"  class="fas fa-plus-circle plus-<?= $vr['id']?> fs-5" style="cursor: pointer;"></i>
+                        <i onclick="pluscart('<?= $key?>')"  class="fas fa-plus-circle plus-<?= $key?> fs-5" style="cursor: pointer;"></i>
                     </div>
                 </div>
             <?php }?>
             <hr style="border-bottom: 8px solid #fff;">
 
             <div>
-                <div class="d-flex justify-content-between mt-2">
+                <a href="<?= base_url()?>widget/order/list_promotion/<?= $token?>?cabang=<?= $_GET['cabang']?>" class="d-flex justify-content-between align-items-center mt-2">
                     <label for="" class="label-input-voucher">
                         <img height="30" src="<?= base_url()?>assets/img/widget/icon-voucher.png" alt="icon">
-                        <input type="text" placeholder="Have a promotion code ?" class="form-input-voucher">
+                        <span>
+                            VOUCHER
+                        </span>
+                        <input type="hidden" placeholder="Have a promotion code ?" class="form-input-voucher">
                     </label>
+                    <i class="fas fa-chevron-right"></i>
                     <!-- Todo: CHECK KODE VOUCHER VALID OR NOT -->
-                    <a class="btn btn-primary rounded-1" style="font-size: 14px;" href="">Apply</a>
-                </div>
+                    <!-- <a class="btn btn-primary rounded-1" style="font-size: 14px;" href="">Apply</a> -->
+                </a>
             </div>
 
             <hr style="border-bottom: 2px solid #fff;">
@@ -165,10 +176,6 @@
             <div id="totalsummary" class="d-flex justify-content-between align-items-center">
                 <h4 class="f-lora color-expat fw-bold">Total Payment</h4>
                 <span>Rp 
-                    <?php 
-                        // $total -= 0;
-                        // echo number_format($total, 2);
-                    ?>
                     <span  class="total-price-span">
 
                     </span>
@@ -184,6 +191,12 @@
                    <input type="hidden" name="saldo" value="<?= $user->saldo?>">
                 </a>
             </div>
+
+            
+            <div id="button-order" class="d-flex w-100 mt-3">
+                <button type="submit" id="ordernow" class="btn btn-expat w-100 py-3 <?= (empty($cartexpat) || @isset($_SESSION["warning_maxarea"])) ? "disabled": ""?>">ORDER</button>
+            </div>
+            
 
             <!-- <div>
                 <div class="d-flex justify-content-between mt-2">
@@ -237,10 +250,6 @@
             </div> -->
             
 
-            <div id="button-order" class="d-flex w-100 mt-3">
-                <button type="submit" id="ordernow" class="btn btn-expat w-100 py-3 <?= (empty($all_variant) || @isset($_SESSION["warning_maxarea"])) ? "disabled": ""?>">ORDER</button>
-            </div>
-            
         </form>
     </div>
 </div>

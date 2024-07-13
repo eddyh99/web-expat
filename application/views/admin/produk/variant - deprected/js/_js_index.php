@@ -63,74 +63,74 @@
         $('#editprice').attr('href', `<?= base_url()?>produk/edit_variant?produk=${encodeURI(btoa(valfilter))}&name=${encodeURI(btoa(textfilter))}`);
     });
 
-    $("#group_additional").on("change", function(){
-        // console.log($(this).val());
-        $("#additional option").remove();
-        let group_add = $(this).val();
-        $.ajax({
-            url: "<?=base_url()?>produk/variant_additional",
-            type: "POST",
-            success: function (response) {
-                let result = JSON.parse(response);
-                console.log(result);
-                result.forEach((el) => {
-                    if(group_add == el.additional_group){
-                        $('.additional_select2').append(`<option value="${el.id}">${el.additional}</option>`);
-                    }
-                })
+    // $("#group_additional").on("change", function(){
+    //     // console.log($(this).val());
+    //     $("#additional option").remove();
+    //     let group_add = $(this).val();
+    //     $.ajax({
+    //         url: "<?=base_url()?>produk/variant_additional",
+    //         type: "POST",
+    //         success: function (response) {
+    //             let result = JSON.parse(response);
+    //             console.log(result);
+    //             result.forEach((el) => {
+    //                 if(group_add == el.additional_group){
+    //                     $('.additional_select2').append(`<option value="${el.id}">${el.additional}</option>`);
+    //                 }
+    //             })
                 
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log(textStatus);
-            }
-        });
-    });
+    //         },
+    //         error: function(jqXHR, textStatus, errorThrown) {
+    //             console.log(textStatus);
+    //         }
+    //     });
+    // });
 
-    $("#group_optional").on("change", function(){
-        // console.log($(this).val());
-        $("#optional option").remove();
-        let group_opt = $(this).val();
-        $.ajax({
-            url: "<?=base_url()?>produk/variant_optional",
-            type: "POST",
-            success: function (response) {
-                let result = JSON.parse(response);
-                console.log(result);
-                result.forEach((el) => {
-                    if(group_opt == el.optiongroup){
-                        $('.optional_select2').append(`<option value="${el.id}">${el.optional}</option>`);
-                    }
-                })
+    // $("#group_optional").on("change", function(){
+    //     // console.log($(this).val());
+    //     $("#optional option").remove();
+    //     let group_opt = $(this).val();
+    //     $.ajax({
+    //         url: "<?=base_url()?>produk/variant_optional",
+    //         type: "POST",
+    //         success: function (response) {
+    //             let result = JSON.parse(response);
+    //             console.log(result);
+    //             result.forEach((el) => {
+    //                 if(group_opt == el.optiongroup){
+    //                     $('.optional_select2').append(`<option value="${el.id}">${el.optional}</option>`);
+    //                 }
+    //             })
                 
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log(textStatus);
-            }
-        });
-    });
+    //         },
+    //         error: function(jqXHR, textStatus, errorThrown) {
+    //             console.log(textStatus);
+    //         }
+    //     });
+    // });
 
-    $("#group_satuan").on("change", function(){
-        // console.log($(this).val());
-        $("#satuan option").remove();
-        let group_st = $(this).val();
-        $.ajax({
-            url: "<?=base_url()?>produk/variant_satuan",
-            type: "POST",
-            success: function (response) {
-                let result = JSON.parse(response);
-                console.log(result);
-                result.forEach((el) => {
-                    if(group_st == el.groupname){
-                        $('.satuan_select2').append(`<option value="${el.id}">${el.satuan}</option>`);
-                    }
-                })
+    // $("#group_satuan").on("change", function(){
+    //     // console.log($(this).val());
+    //     $("#satuan option").remove();
+    //     let group_st = $(this).val();
+    //     $.ajax({
+    //         url: "<?=base_url()?>produk/variant_satuan",
+    //         type: "POST",
+    //         success: function (response) {
+    //             let result = JSON.parse(response);
+    //             console.log(result);
+    //             result.forEach((el) => {
+    //                 if(group_st == el.groupname){
+    //                     $('.satuan_select2').append(`<option value="${el.id}">${el.satuan}</option>`);
+    //                 }
+    //             })
                 
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log(textStatus);
-            }
-        });
-    });
+    //         },
+    //         error: function(jqXHR, textStatus, errorThrown) {
+    //             console.log(textStatus);
+    //         }
+    //     });
+    // });
 
 
 

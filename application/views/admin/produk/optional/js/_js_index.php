@@ -27,14 +27,10 @@
 			}
 		},
 		"columns": [
-			{ 	data: null,
-				"sortable": false, 
-					render: function (data, type, row, meta) {
-					return meta.row + meta.settings._iDisplayStart + 1;
-				}
-			},
+			{ data: 'sku' },
 			{ data: 'optiongroup' },
 			{ data: 'optional' },
+			{ data: 'price', render: $.fn.dataTable.render.number(',', '.', 0) },
 			{ 
                 data: null, "mRender": function(data, type, full, meta) {
                     var btnEdit ='<a href="<?=base_url()?>produk/edit_optional/'+encodeURI(btoa(full.id))+'" class="btn btn-success mx-1 my-1"><i class="ti ti-pencil-minus fs-4"></i></a>'

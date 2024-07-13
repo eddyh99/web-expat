@@ -6,15 +6,15 @@
         <form id="detailorder" action="<?= base_url()?>widget/order/setcookie_add_tocart" method="POST">
             <input type="hidden" name="idcabang" value="<?= $_GET['cabang']?>">
             <input type="hidden" name="idproduk" value="<?= $_GET['product']?>">
-            <input type="hidden" name="id_variant" id="id_variant">
-            <input type="hidden" name="total_variant" id="total_variant">
+            <input type="hidden" name="idoptional" id="idoptional">
+            <input type="hidden" name="idsatuan" id="idsatuan">
+            <input type="hidden" name="idadditional" id="idadditional">
+            <input type="hidden" name="total_cart" id="total_cart">
             <div class="mt-3">
                 <h1><?= $product->nama?></h1>
                 <article class="article desc"><?= $product->deskripsi?></article>
-                <h3 class="greenprice">Rp <span class="showprice">-</span></h3>
+                <h3 class="greenprice">Rp <span class="showprice"><?= number_format($product->price, 0 ,".",",")?></span></h3>
             </div>
-            <!-- <button type="button" class="btn btn-primary" id="liveToastBtn">Show live toast</button> -->
-
             <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
                 <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="toast-header">
@@ -28,61 +28,47 @@
                 </div>
             </div>
             <hr style="border-bottom: 8px solid #fff;">
-            <div class="mt-3 mb-4">
-                <h3 class="f-lora">Option</h3>
 
+            <div class="mt-3 mb-4">
+                
+                <?php if(!empty($optional)){?>
+                    <h3 class="f-lora">Option</h3>
                 <?php 
-                    $check_optional = array();
-                    $temp_optional = array();
-                    $finaloptional = array();
-                    foreach($variant as $vr){
-                        if(isset($vr->id_optional)){
-                            if($vr->id_cabang == $_GET['cabang']){
-                                if(in_array($vr->optional, $check_optional)){
-                                    echo "";
-                                }else{
-                                    array_push($check_optional, $vr->optional);
-                                    $temp_optional = array(
-                                        "idoptional"  => $vr->id_optional,
-                                        "optional"    => $vr->optional
-                                    );
-                                    array_push($finaloptional, $temp_optional);
-                                }
-                            }
+                    }
+                    foreach($optional as $op){
+                        if($op->price == 0){
+                ?>
+                    <div class="pt-2">
+                        <label for="<?= $op->sku?>" class="d-flex justify-content-between">
+                            <span><?= $op->optional?></span>
+                            <input type="radio" id="<?= $op->sku?>" data-opt="<?= $op->id?>" value="<?= $op->price?>" class="choose optional" name="optional" checked>
+                        </label>
+                    </div>
+                <?php 
                         }
                     }
+                ?>
 
-                if(isset($finaloptional)){
-                    foreach($finaloptional as $key => $val){
-                        if($key == 0){
+                <?php 
+                    foreach($optional as $op){
+                        if($op->price != 0){
+                ?>
+                    <div class="pt-2">
+                        <label for="<?= $op->sku?>" class="d-flex justify-content-between">
+                            <span><?= $op->optional?> <small>( +<?= number_format($op->price, 0 ,".",",")?>)</small></span>
+                            <input type="radio" id="<?= $op->sku?>" data-opt="<?= $op->id?>" class="choose" value="<?= $op->price?>" name="optional">
+                        </label>
+                    </div>
+                <?php 
+                        }
+                    }
                 ?>
                     
-                    <div class="pt-2">
-                        <label for="<?= $val['optional']?>" class="d-flex justify-content-between">
-                            <span><?= $val['optional']?></span>
-                            <input type="radio" id="<?= $val['optional']?>" class="choose optional" value="<?= $val['idoptional']?>" name="optional" checked>
-                        </label>
-                    </div>
-
-                <?php 
-                        } else {    
-                ?>
-                    <div class="pt-2">
-                        <label for="<?= $val['optional']?>" class="d-flex justify-content-between">
-                            <span><?= $val['optional']?></span>
-                            <input type="radio" id="<?= $val['optional']?>" class="choose optional" value="<?= $val['idoptional']?>" name="optional" >
-                        </label>
-                    </div>
-                <?php 
-                        }
-                    }
-                }
-                ?>
-
             </div>
             <hr style="border-bottom: 2px solid #fff;">
             <div class="mt-3 mb-4">
                 <?php 
+                    if(!empty($satuan)){
                     if($product->kategori == "drink"){
                 ?>
                     <h3 class="f-lora">Cup Size</h3>
@@ -90,46 +76,33 @@
                     <h3 class="f-lora">Portion Of Food</h3>
                 <?php } else {?>
                     <h3 class="f-lora">Satuan</h3>
-                <?php } ?>
+                <?php }} ?>
+
 
 
                 <?php 
-                    $check_satuan = array();
-                    $temp_satuan = array();
-                    $finalsatuan = array();
-                    foreach($variant as $vr){
-                        if(isset($vr->id_satuan)){
-                            if($vr->id_cabang == $_GET['cabang']){
-                                if(in_array($vr->satuan, $check_satuan)){
-                                    echo "";
-                                }else{
-                                    array_push($check_satuan, $vr->satuan);
-                                    $temp_satuan = array(
-                                        "idsatuan"  => $vr->id_satuan,
-                                        "satuan"    => $vr->satuan
-                                    );
-                                    array_push($finalsatuan, $temp_satuan);
-                                }
-                            }
-                        }
-                    }
-
-                    // echo '<pre>'.print_r($finalsatuan,true).'</pre>';
-
-                   foreach($finalsatuan as $key => $val){
-                       if($key == 0){
+                    foreach($satuan as $st){
+                        if($st->price == 0){
                 ?>
                     <div class="pt-2">
-                        <label for="<?= $val['satuan']?>" class="d-flex justify-content-between">
-                            <span><?= $val['satuan']?></span>
-                            <input type="radio" id="<?= $val['satuan']?>" class="choose" value="<?= $val['idsatuan']?>" name="satuan" checked>
+                        <label for="<?= $st->sku?>" class="d-flex justify-content-between">
+                            <span><?= $st->satuan?></span>
+                            <input type="radio" id="<?= $st->sku?>" data-st="<?= $st->id?>" value="<?= $st->price?>" class="choose" name="satuan" checked>
                         </label>
                     </div>
-                <?php   } else {?>
+                <?php 
+                        }
+                    }
+                ?>
+
+                <?php 
+                    foreach($satuan as $st){
+                        if($st->price != 0){
+                ?>
                     <div class="pt-2">
-                        <label for="<?= $val['satuan']?>" class="d-flex justify-content-between">
-                            <span><?= $val['satuan']?></span>
-                            <input type="radio" id="<?= $val['satuan']?>" class="choose" value="<?= $val['idsatuan']?>" name="satuan">
+                        <label for="<?= $st->sku?>" class="d-flex justify-content-between">
+                            <span><?= $st->satuan?> <small>( +<?= number_format($st->price, 0 ,".",",")?>)</small></span>
+                            <input type="radio" id="<?= $st->sku?>" data-st="<?= $st->id?>" value="<?= $st->price?>" class="choose" name="satuan">
                         </label>
                     </div>
                 <?php 
@@ -142,51 +115,40 @@
             <hr style="border-bottom: 2px solid #fff;">
             <div class="mt-3 mb-4">
                 
+                <?php if(!empty($additional)){?>
                 <h3 class="f-lora">Additional</h3>
+                <?php }?>
+
+
                 <?php 
-                    $check_additional = array();
-                    $temp_additional = array();
-                    $finaladditional = array();
-                    foreach($variant as $vr){
-                        if(isset($vr->id_additional)){
-                            if($vr->id_cabang == $_GET['cabang']){
-                                if(in_array($vr->additional, $check_additional)){
-                                    echo "";
-                                }else{
-                                    array_push($check_additional, $vr->additional);
-                                    $temp_additional = array(
-                                        "idadditional"  => $vr->id_additional,
-                                        "additional"    => $vr->additional
-                                    );
-                                    array_push($finaladditional, $temp_additional);
-                                }
-                            }
+                    foreach($additional as $ad){
+                        if($ad->price == 0){
+                ?>
+                    <div class="pt-2">
+                        <label for="<?= $ad->sku?>" class="d-flex justify-content-between">
+                            <span><?= $ad->additional?></span>
+                            <input type="radio" id="<?= $ad->sku?>" data-ad="<?= $ad->id?>" value="<?= $ad->price?>" class="choose" name="additional" checked>
+                        </label>
+                    </div>
+                <?php 
                         }
                     }
+                ?>
 
-
-                    foreach($finaladditional as $key => $val){
-                        if($key == 0){
+                <?php 
+                    foreach($additional as $ad){
+                        if($ad->price != 0){
                 ?>
                     <div class="pt-2">
-                        <label for="<?= $val['additional']?>" class="d-flex justify-content-between">
-                            <span><?= $val['additional']?></span>
-                            <input type="radio" id="<?= $val['additional']?>" class="choose" value="<?= $val['idadditional']?>" name="additional" checked>
-                        </label>
-                    </div>
-                    
-                <?php } else {?>
-                    <div class="pt-2">
-                        <label for="<?= $val['additional']?>" class="d-flex justify-content-between">
-                            <span><?= $val['additional']?></span>
-                            <input type="radio" id="<?= $val['additional']?>" class="choose" value="<?= $val['idadditional']?>" name="additional">
+                        <label for="<?= $ad->sku?>" class="d-flex justify-content-between">
+                            <span><?= $ad->additional?> <small>( +<?= number_format($ad->price, 0 ,".",",")?>)</small></span>
+                            <input type="radio" id="<?= $ad->sku?>" data-ad="<?= $ad->id?>" value="<?= $ad->price?>" class="choose" name="additional">
                         </label>
                     </div>
                 <?php 
-                        } 
+                        }
                     }
                 ?>
-
 
             </div>
             <div class="pt-2">

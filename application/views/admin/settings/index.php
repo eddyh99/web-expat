@@ -10,7 +10,7 @@
         <div class="col-lg-12 d-flex align-items-strech">
             <div class="card border-expat w-100">
                 <div class="card-body">
-                <?php if (@isset($_SESSION["error"])) { ?>
+                    <?php if (@isset($_SESSION["error"])) { ?>
                         <div class="col-12 alert alert-danger alert-dismissible fade show" role="alert">
                             <span class="notif-login f-poppins"><?= $_SESSION["error"] ?></span>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -25,10 +25,10 @@
                         </div>
                         <div class="mb-3">
                             <label for="dfee" class="form-label">Delivery Fee</label>
-                            <input type="text" class="form-control" id="dfee" name="dfee" placeholder="Enter Delivery Fee..." value="<?=($config[1]->content=="delivery_fee") ? $config[1]->value:0 ?>" required autocomplete="off">
+                            <input type="text" class="form-control money-input" id="dfee" name="dfee" placeholder="Enter Delivery Fee..." value="<?=($config[1]->content=="delivery_fee") ? $config[1]->value:0 ?>" required autocomplete="off">
                         </div>
                         <div class="mb-3">
-                            <label for="maxarea" class="form-label">Max Area Delivery</label>
+                            <label for="maxarea" class="form-label">Max Area Delivery (KM)</label>
                             <input type="text" class="form-control" id="maxarea" name="maxarea" placeholder="Enter Max Area Delivery..." value="<?=($config[2]->content=="max_area") ? $config[2]->value:0 ?>" required autocomplete="off">
                         </div>
                         <button type="submit" class="btn btn-expat mt-3">Save Settings</button>

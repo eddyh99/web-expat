@@ -17,17 +17,16 @@
             <div class="card border-expat w-100">
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between mb-5">
-                        <h5 class="card-title fw-semibold mb-4">List Variant Produk</h5>
+                        <h5 class="card-title fw-semibold mb-4">List Produk</h5>
                         <div class="d-flex align-items-center">
                             <select id="produk_filter" class="form-select w-100" name="produk_filter">
                                 <?php foreach($produk as $p){?>
                                     <option value="<?= $p->id?>"><?= $p->nama?></option>
                                 <?php }?>
                             </select>
-                            <div class="ms-3 d-flex align-items-center">
-                                <!-- <button id="filter" class="btn btn-warning"><i class="ti ti-filter fs-5 me-1"></i>Filter</button> -->
+                            <!-- <div class="ms-3 d-flex align-items-center">
                                 <a id="editprice" class="btn btn-primary" style="min-width: max-content;"><i class="ti ti-pencil-minus fs-5 me-1"></i>Edit All Price</a>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <table id="table_list_variant" class="table table-striped" style="width:100%">
