@@ -266,6 +266,21 @@ class Order extends CI_Controller
         echo "Remove Item";
     }
 
+    public function getquantitycart()
+    {
+        // Get Cookie
+        $cookie = stripslashes(@$_COOKIE['cartexpat']);
+        $cart = json_decode($cookie, true);
+
+        $mdata = array(
+            'totalorder'  => @count(@$cart)
+        );
+
+        $this->load->view('widget/order/js/_js_quantitycart', $mdata);
+
+    }
+
+
     public function detail()
     {
 

@@ -17,8 +17,6 @@
 
 <script>
     $('#tanggal').daterangepicker({
-        // startDate: moment().startOf('month'),
-        // endDate: moment().endOf('month'),
         startDate: moment().add(-31, 'days'),
         endDate: moment().add(0, 'days'),
         opens: 'right',
