@@ -59,6 +59,19 @@ class Topup extends CI_Controller
         $amount     = str_replace(",","",$this->security->xss_clean($input->post('amount')));
 		$method		= $this->security->xss_clean($input->post('methodpayment'));
 		
+		if ($amount>1000000){
+		    echo "The maximum allowed top-up is IDR 1,000,000.";
+		}
+
+		$url 		= URLAPI . "/v1/mobile/member/get_userdetail";
+		$response 	= mobileAPI($url,null,$token);
+		if ($response->status==200){
+		    $saldo=$response->result->messages->saldo;
+		    if ($amount>(1000000-$saldo)){
+		        echo "Your remaining top-up balance is ".number_format(1000000-$saldo).". The maximum allowed balance is IDR 1,000,000";
+		    }
+		}
+
 		$invoiceID	= date("Ymd").uniqid();
 		// echo "<pre>".print_r($_POST,true)."</pre>";
 		if ($method=="credit"){

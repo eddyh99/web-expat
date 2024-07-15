@@ -287,12 +287,35 @@
                                 </div>
                                 <span class="hide-menu">Order</span>
                             </a>
-                        
                         </li>
+                        <!-- <li class="sidebar-item">
+                            <a href="<?= base_url()?>history/member" class="sidebar-link <?= @$dropdown_hmember?>">
+                                <div class="round-16 ms-3 d-flex align-items-center justify-content-center">
+                                    <i class="ti ti-user-search"></i>
+                                </div>
+                                <span class="hide-menu">Members</span>
+                            </a>
+                        </li> -->
                     </ul>
                 </li>
 
                 <?php }?>
+
+                <li class="nav-small-cap">
+                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                    <span class="hide-menu">Reports</span>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link <?= @$rmembers_active?>" href="<?= base_url()?>report/members" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-user-search"></i>
+                        </span>
+                        <span class="hide-menu">
+                            Report Members
+                        </span>
+                    </a>
+                </li>
+
 
                 <!-- <li class="sidebar-item">
                     <a class="sidebar-link  <?= @$historytopup_active?>" href="<?= base_url()?>topup/history" aria-expanded="false">
@@ -304,7 +327,7 @@
                         </span>
                     </a>
                 </li> -->
-                <li class="sidebar-item mb-5 pb-5">
+                <li class="sidebar-item my-2 pb-5">
                     <a class="sidebar-link" href="<?= base_url()?>auth/logout" aria-expanded="false">
                         <span>
                             <i class="ti ti-logout"></i>

@@ -15,7 +15,7 @@
     }
 
 
-    var harga ;
+    var harga = Number('<?= $product->price?>');
     var jumlah = 1;
     $("#total_cart").val(jumlah);
 
@@ -24,6 +24,7 @@
     
     $('.fa-plus-circle').on('click', function(){
         jumlah++;
+        console.log(harga);
         $("#total_cart").val(jumlah);
         $(".showprice").text((harga * jumlah).toLocaleString('en-US'));
         $('#jumlahcoffe').text(jumlah);
@@ -54,14 +55,11 @@
         });
 
 
-
         // Input Radio Optional, Satuan, Additional is checked first
         if($(".optional").is(":checked")){
             let rdy_optional = $("input[name='optional']:checked").attr("data-opt");
             let rdy_satuan = $("input[name='satuan']:checked").attr("data-st");
             let rdy_additional = $("input[name='additional']:checked").attr("data-ad");
-            let baseprice = Number('<?= $product->price?>');
-            harga = baseprice;
             $("#idoptional").val(rdy_optional);
             $("#idsatuan").val(rdy_satuan);
             $("#idadditional").val(rdy_additional);

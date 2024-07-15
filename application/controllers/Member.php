@@ -356,33 +356,61 @@ class Member extends CI_Controller
         $platinum = array();
 
         foreach($response as $dt){
-            if($dt->content == 'Bronze' || $dt->content == 'poin_bronze') {
+            if ($dt->content == 'Bronze' || $dt->content == 'poin_bronze' || 
+                $dt->content == 'step1_bronze' || $dt->content == 'step2_bronze' || 
+                $dt->content == 'step3_bronze' || $dt->content == 'step4_bronze' ||
+                $dt->content == 'step5_bronze' || $dt->content == 'step6_bronze')
+            {
+
                 if($dt->content == 'Bronze'){
                     $temp_bronze['tipe'] = 'Bronze';
                     $temp_bronze['deskripsi'] = $dt->value;
-                }else{
+                }else if($dt->content == 'poin_bronze'){
                     $temp_bronze['minpoin'] = $dt->value;
+                }else{
+                    $temp_bronze[str_replace("_bronze", "", $dt->content)] = $dt->value;
                 }
-            } else if($dt->content == 'Silver' || $dt->content == 'poin_silver') {
+            } 
+            else if( $dt->content == 'Silver' || $dt->content == 'poin_silver' || 
+                    $dt->content == 'step1_silver' || $dt->content == 'step2_silver' || 
+                    $dt->content == 'step3_silver' || $dt->content == 'step4_silver' ||
+                    $dt->content == 'step5_silver' || $dt->content == 'step6_silver') 
+            {
                 if($dt->content == 'Silver'){
                     $temp_silver['tipe'] = 'Silver';
                     $temp_silver['deskripsi'] = $dt->value;
-                }else{
+                }else if($dt->content == 'poin_silver'){
                     $temp_silver['minpoin'] = $dt->value;
+                }else{
+                    $temp_silver[str_replace("_silver", "", $dt->content)] = $dt->value;
                 }
-            } else if($dt->content == 'Gold' || $dt->content == 'poin_gold') {
+            } 
+            else if($dt->content == 'Gold' || $dt->content == 'poin_gold'  || 
+                    $dt->content == 'step1_gold' || $dt->content == 'step2_gold' || 
+                    $dt->content == 'step3_gold' || $dt->content == 'step4_gold' ||
+                    $dt->content == 'step5_gold' || $dt->content == 'step6_gold') 
+            {
                 if($dt->content == 'Gold'){
                     $temp_gold['tipe'] = 'Gold';
                     $temp_gold['deskripsi'] = $dt->value;
-                }else{
+                }else if($dt->content == 'poin_gold'){
                     $temp_gold['minpoin'] = $dt->value;
+                }else{
+                    $temp_gold[str_replace("_gold", "", $dt->content)] = $dt->value;
                 }
-            } else if($dt->content == 'Platinum' || $dt->content == 'poin_platinum') {
+            } 
+            else if($dt->content == 'Platinum' || $dt->content == 'poin_platinum'|| 
+                    $dt->content == 'step1_platinum' || $dt->content == 'step2_platinum' || 
+                    $dt->content == 'step3_platinum' || $dt->content == 'step4_platinum' ||
+                    $dt->content == 'step5_platinum' || $dt->content == 'step6_platinum') 
+            {
                 if($dt->content == 'Platinum'){
                     $temp_platinum['tipe'] = 'Platinum';
                     $temp_platinum['deskripsi'] = $dt->value;
-                }else{
+                }else if($dt->content == 'poin_platinum'){
                     $temp_platinum['minpoin'] = $dt->value;
+                }else{
+                    $temp_platinum[str_replace("_platinum", "", $dt->content)] = $dt->value;
                 }
             } 
         }
@@ -396,9 +424,15 @@ class Member extends CI_Controller
         $final = array();
         foreach($result as $dt){
             if($dt['tipe'] == $type){
-                $temp['tipe']   = $dt['tipe'];
+                $temp['tipe']       = $dt['tipe'];
                 $temp['deskripsi']  = $dt['deskripsi'];
                 $temp['minpoin']    = $dt['minpoin'];
+                $temp['step1']    = $dt['step1'];
+                $temp['step2']    = $dt['step2'];
+                $temp['step3']    = $dt['step3'];
+                $temp['step4']    = $dt['step4'];
+                $temp['step5']    = $dt['step5'];
+                $temp['step6']    = $dt['step6'];
                 array_push($final, $temp);
             }
         }
@@ -424,11 +458,23 @@ class Member extends CI_Controller
         $this->form_validation->set_rules('type', 'Type', 'trim|required');
         $this->form_validation->set_rules('description', 'Description', 'trim|required');
         $this->form_validation->set_rules('minpoin', 'Min Poin', 'trim|required');
+        $this->form_validation->set_rules('step1', 'Step 1', 'trim|required');
+        $this->form_validation->set_rules('step2', 'Step 2', 'trim|required');
+        $this->form_validation->set_rules('step3', 'Step 3', 'trim|required');
+        $this->form_validation->set_rules('step4', 'Step 4', 'trim|required');
+        $this->form_validation->set_rules('step5', 'Step 5', 'trim|required');
+        $this->form_validation->set_rules('step6', 'Step 6', 'trim|required');
         
-        $input      = $this->input;
-        $type       = $this->security->xss_clean($this->input->post("type"));
-        $description       = $this->security->xss_clean($this->input->post("description"));
-        $minpoin       = $this->security->xss_clean($this->input->post("minpoin"));
+        $input          = $this->input;
+        $type           = $this->security->xss_clean($this->input->post("type"));
+        $description    = $this->security->xss_clean($this->input->post("description"));
+        $minpoin        = $this->security->xss_clean($this->input->post("minpoin"));
+        $step1          = $this->security->xss_clean($this->input->post("step1"));
+        $step2          = $this->security->xss_clean($this->input->post("step2"));
+        $step3          = $this->security->xss_clean($this->input->post("step3"));
+        $step4          = $this->security->xss_clean($this->input->post("step4"));
+        $step5          = $this->security->xss_clean($this->input->post("step5"));
+        $step6          = $this->security->xss_clean($this->input->post("step6"));
 
 
         if ($this->form_validation->run() == FALSE) {
@@ -438,9 +484,15 @@ class Member extends CI_Controller
 		}
 
         $mdata = array(
-            "type"      => $type,
-            "description" => $description,
-            "minpoin"       => $minpoin
+            "type"          => $type,
+            "description"   => $description,
+            "minpoin"       => $minpoin,
+            "step1"         => $step1,
+            "step2"         => $step2,
+            "step3"         => $step3,
+            "step4"         => $step4,
+            "step5"         => $step5,
+            "step6"         => $step6,
         );
 
         $url = URLAPI . "/v1/settings/updatemembership";

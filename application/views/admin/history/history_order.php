@@ -38,7 +38,7 @@
                     <table id="table_history_order" class="table table-striped" style="width:100%">
                         <thead>
                             <tr>
-                                <th>Member</th>
+                                <th>ID Member</th>
                                 <th>Date</th>
                                 <th>Invoice</th>
                                 <th>Outlet</th>
@@ -50,7 +50,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th>Member</th>
+                                <th>ID Member</th>
                                 <th>Date</th>
                                 <th>Invoice</th>
                                 <th>Outlet</th>

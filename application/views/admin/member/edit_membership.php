@@ -42,27 +42,27 @@
                         <div class="d-flex flex-column flex-md-row">
                             <div class="m-3">
                                 <label for="step1" class="form-label">Step 1</label>
-                                <input type="number" class="form-control" id="step1" name="step1"  placeholder="Enter Step 1" required autocomplete="off">
+                                <input type="number" class="form-control" value="<?= $result[0]['step1']?>" id="step1" name="step1"  placeholder="Enter Step 1" required autocomplete="off">
                             </div>
                             <div class="m-3">
                                 <label for="step2" class="form-label">Step 2</label>
-                                <input type="number" class="form-control" id="step2" name="step2"  placeholder="Enter Step 2" required autocomplete="off">
+                                <input type="number" class="form-control" value="<?= $result[0]['step2']?>" id="step2" name="step2"  placeholder="Enter Step 2" required autocomplete="off">
                             </div>
                             <div class="m-3">
                                 <label for="step3" class="form-label">Step 3</label>
-                                <input type="number" class="form-control" id="step3" name="step3"  placeholder="Enter Step 3" required autocomplete="off">
+                                <input type="number" class="form-control" value="<?= $result[0]['step3']?>" id="step3" name="step3"  placeholder="Enter Step 3" required autocomplete="off">
                             </div>
                             <div class="m-3">
                                 <label for="step4" class="form-label">Step 4</label>
-                                <input type="number" class="form-control" id="step4" name="step4"  placeholder="Enter Step 4" required autocomplete="off">
+                                <input type="number" class="form-control" value="<?= $result[0]['step4']?>" id="step4" name="step4"  placeholder="Enter Step 4" required autocomplete="off">
                             </div>
                             <div class="m-3">
                                 <label for="step5" class="form-label">Step 5</label>
-                                <input type="number" class="form-control" id="step5" name="step5"  placeholder="Enter Step 5" required autocomplete="off">
+                                <input type="number" class="form-control" value="<?= $result[0]['step5']?>" id="step5" name="step5"  placeholder="Enter Step 5" required autocomplete="off">
                             </div>
                             <div class="m-3">
                                 <label for="step6" class="form-label">Step 6</label>
-                                <input type="number" class="form-control" id="step6" name="step6"  placeholder="Enter Step 6" required autocomplete="off">
+                                <input type="number" class="form-control" value="<?= $result[0]['step6']?>" id="step6" name="step6"  placeholder="Enter Step 6" required autocomplete="off">
                             </div>
                         </div>
                         <div class=" my-4">
