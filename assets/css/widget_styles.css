@@ -194,9 +194,17 @@ a:hover {
 }
 
 
-.card-input-amount-select:checked + .span-amount{
-    color: var(--expat-bg-primary);
+/* .card-input-amount-select:checked + .span-amount{
     font-weight: 700;
+} */
+
+.app-content .app-member .label-amount span.active {
+    color: #FFFFFF !important;
+}
+
+
+.active-topup {
+    background-color: var(--expat-bg-primary) !important;
 }
 
 

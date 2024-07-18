@@ -221,10 +221,14 @@ class Topup extends CI_Controller
 		$amount     = str_replace(",","",$this->security->xss_clean($this->input->post('amount')));
         $_POST["amount"]=$amount;
 
+		$customamount     = str_replace(",","",$this->security->xss_clean($this->input->post('customamount')));
+        $_POST["customamount"]=$customamount;
+
 
 		$this->form_validation->set_rules('token', 'Token', 'trim|required');
 		$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
-		$this->form_validation->set_rules('amount', 'Amount', 'trim|required|greater_than[0]|less_than_equal_to[1000000]');
+		$this->form_validation->set_rules('amount', 'Amount', 'trim|greater_than[0]|less_than_equal_to[1000000]');
+		$this->form_validation->set_rules('customamount', 'Amount', 'trim|greater_than[0]|less_than_equal_to[1000000]');
 		$this->form_validation->set_rules('methodpayment', 'Method', 'trim|required');
 		
 		
@@ -239,15 +243,18 @@ class Topup extends CI_Controller
 		$token      = $this->security->xss_clean($input->post('token'));
 		$email      = $this->security->xss_clean($input->post('email'));
         $amount     = $this->security->xss_clean($input->post('amount'));
+        $customamount     = $this->security->xss_clean($input->post('customamount'));
         $method		= $this->security->xss_clean($input->post('methodpayment'));
 
 		$mdata = array(
 			"token"		=> $token,
 			"email"		=> $email,
-			"amount"	=> $amount,
+			"amount"	=> (empty($customamount) ? $amount : $customamount),
 			"method"	=> $method
 		);
 
+		echo '<pre>'.print_r($mdata,true).'</pre>';
+		die;
 		$mdata = array(
             'title'     => NAMETITLE . ' - Topup Success',
             'content'   => 'widget/topup/topup_summary',
