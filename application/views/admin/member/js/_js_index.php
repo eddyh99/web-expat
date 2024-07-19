@@ -46,7 +46,7 @@
 			{ 
                 data: null, "mRender": function(data, type, full, meta) {
                     var btnActive ='<a href="<?=base_url()?>member/manual_activation/'+encodeURI(btoa(full.id))+'" class="btn btn-primary  my-1"><i class="ti ti-key fs-4"></i></a>'
-                    var btnEnabled ='<a href="<?=base_url()?>member/edit_user/'+encodeURI(btoa(full.username))+'" class="btn btn-primary  my-1"><i class="ti ti-arrow-back fs-4"></i></a>'
+                    var btnEnabled ='<a href="<?=base_url()?>member/edit_user/'+encodeURI(btoa(full.id))+'" class="btn btn-primary  my-1"><i class="ti ti-arrow-back fs-4"></i></a>'
                     var btnEdit ='<a href="<?=base_url()?>member/edit_member/'+encodeURI(btoa(full.id))+'" class="btn btn-success my-1"><i class="ti ti-pencil-minus fs-4"></i></a>'
 					var btnDelete = '<a href="<?=base_url()?>member/delete/'+encodeURI(btoa(full.id))+'" class="del-data btn btn-danger my-1"><i class="ti ti-trash"></i></a>';
 					return `

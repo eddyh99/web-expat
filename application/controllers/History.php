@@ -164,6 +164,7 @@ class History extends CI_Controller
             $multiple_detail[$dt->prd_group][] = $dt;
         }
 
+
         $final_detail = array();
         foreach($multiple_detail as $md){
             foreach($md as $dt){

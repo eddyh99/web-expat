@@ -205,8 +205,7 @@ class Topup extends CI_Controller
 		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
 		curl_close($ch);
-		//echo "<pre>".print_r($result,true)."</pre>";
-		//die;
+		
 		if ($result->message[0]=="SUCCESS"){
 			redirect($result->response->payment->url);
 		}else{
@@ -253,8 +252,7 @@ class Topup extends CI_Controller
 			"method"	=> $method
 		);
 
-		echo '<pre>'.print_r($mdata,true).'</pre>';
-		die;
+
 		$mdata = array(
             'title'     => NAMETITLE . ' - Topup Success',
             'content'   => 'widget/topup/topup_summary',
@@ -279,7 +277,7 @@ class Topup extends CI_Controller
         $this->load->view('layout/wrapper', $mdata);
 	}
 	
-	public function cancel()
+	public function cancel($token = NULL)
 	{
 		$this->session->set_flashdata("error","Your topup cannot be processed");
 		redirect(base_url()."widget/topup/membertopup/".$token);

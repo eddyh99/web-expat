@@ -119,7 +119,7 @@
                                 <?php echo ((empty($product->satuan_detail)) ? null : $product->satuan_detail->satuan) ?>
                             </span>
                             <br>
-                            <span class="color-expat-secondary"><?= number_format($product->price, 2) ?></span>
+                            <span class="color-expat-secondary">Rp <?= number_format($product->price,0,",",".") ?></span>
                         </div>
                         
                     </div>
@@ -167,7 +167,10 @@
                 </div>
                 <div class="fee d-flex justify-content-between align-items-center">
                     <span>Fee Delivery</span>
-                    <span>Rp. <?php echo number_format($address->delivery_fee, 2) ?></span>
+                    <span>Rp
+                        <span class="deliveryfee-span">   
+                        </span>
+                    </span>
                 </div>
             </div>
 
@@ -187,7 +190,7 @@
             <div id="balanceuser" class="d-flex justify-content-between align-items-center mt-3">
                 <a class="btn btn-expat px-3 py-1">
                     <span>Your Balance</span>
-                   Rp <?php echo number_format($user->saldo, 2) ?>
+                   Rp <?php echo number_format($user->saldo,0,",",".") ?>
                    <input type="hidden" name="saldo" value="<?= $user->saldo?>">
                 </a>
             </div>

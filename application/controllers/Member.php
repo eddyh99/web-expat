@@ -41,8 +41,8 @@ class Member extends CI_Controller
         foreach($response as $dt){
             if($dt->status == 'active'){
                 $mdata = array(
-                    "id" => $dt->id,
-                    "memberid" => $dt->memberid,
+                    "id" => $dt->memberid,
+                    "qrmember" => $dt->qrmember,
                     "email" => $dt->email,
                     "nama" => $dt->nama,
                     "dob" => $dt->dob,
@@ -53,8 +53,8 @@ class Member extends CI_Controller
                 array_push($resultActive, $mdata);
             }else if($dt->status == 'new'){
                 $mdata = array(
-                    "id" => $dt->id,
-                    "memberid" => $dt->memberid,
+                    "id" => $dt->memberid,
+                    "qrmember" => $dt->qrmember,
                     "email" => $dt->email,
                     "nama" => $dt->nama,
                     "dob" => $dt->dob,
@@ -65,8 +65,8 @@ class Member extends CI_Controller
                 array_push($resultNew, $mdata);
             }else if($dt->status == 'disabled'){
                 $mdata = array(
-                    "id" => $dt->id,
-                    "memberid" => $dt->memberid,
+                    "id" => $dt->memberid,
+                    "qrmember" => $dt->qrmember,
                     "email" => $dt->email,
                     "nama" => $dt->nama,
                     "dob" => $dt->dob,

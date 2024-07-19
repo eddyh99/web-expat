@@ -55,7 +55,7 @@
                     data: null,
                     "sortable": false, 
                     render: function (data, type, row, meta) {
-                        return `<a class="text-decoration-underline text-black" href="<?= base_url()?>report/summarymember/${encodeURI(btoa(row.id_member))}">${row.qrmember}</a>`;    
+                        return `<a class="text-decoration-underline text-black" href="<?= base_url()?>report/summarymember/${encodeURI(btoa(row.memberid))}">${row.qrmember}</a>`;    
                     
                     }
                 },

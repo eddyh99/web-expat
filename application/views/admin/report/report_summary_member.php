@@ -13,11 +13,11 @@
                     <div class="row">
                         <div class="col-4">
                             <div>
-                                <img class="img-fluid w-50" src="<?= $memberm->picture?>" alt="img">
+                                <img class="img-fluid w-50" src="<?= $member->picture?>" alt="img">
                                 <!-- image masih salah -->
                             </div>
                             <div>
-                                <span><?= $member->memberid?></span>
+                                <!-- <span><?= $member->memberid?></span> -->
                             </div>
                             <div>
                                 <h5 class="mt-3"><?= $member->nama?></h5>
@@ -31,7 +31,7 @@
                             </div>
                             <div>
                                 <h5>Membership: </h5>
-                                <span><?= $member->membership?> | <?= $memberm->poin?> poin</span>
+                                <span><?= $member->membership?> | <?= $member->poin?> poin</span>
                             </div>
                             <div>
                                 <h5>Gender: </h5>
@@ -49,7 +49,7 @@
                             </div>
                             <div>
                                 <h5>Saldo: </h5>
-                                <span>Rp <?=  number_format($memberm->saldo,2,".",",")?></span>
+                                <span>Rp <?=  number_format($member->saldo,2,".",",")?></span>
                             </div>
                         </div>
                     </div>

@@ -26,7 +26,7 @@
         jumlah++;
         console.log(harga);
         $("#total_cart").val(jumlah);
-        $(".showprice").text((harga * jumlah).toLocaleString('en-US'));
+        $(".showprice").text((harga * jumlah).toLocaleString('en-ID'));
         $('#jumlahcoffe').text(jumlah);
         $('#injumlahcoffe').val(jumlah);
     })
@@ -36,12 +36,12 @@
         if(jumlah < 1){
             jumlah = 1;
             $("#total_cart").val(jumlah);
-            $(".showprice").text((harga * jumlah).toLocaleString('en-US'));
+            $(".showprice").text((harga * jumlah).toLocaleString('en-ID'));
             $('#jumlahcoffe').text(jumlah);
             $('#injumlahcoffe').val(jumlah);
         }else{
             $("#total_cart").val(jumlah);
-            $(".showprice").text((harga * jumlah).toLocaleString('en-US'));
+            $(".showprice").text((harga * jumlah).toLocaleString('en-ID'));
             $('#jumlahcoffe').text(jumlah);
             $('#injumlahcoffe').val(jumlah);
         }
@@ -93,7 +93,7 @@
             $("#injumlahcoffe").val('1');
             $('#jumlahcoffe').text('1');
             $("#total_cart").val(jumlah);
-            $(".showprice").text(total_price.toLocaleString('en-US'));
+            $(".showprice").text(total_price.toLocaleString('en-ID'));
 
         });
 

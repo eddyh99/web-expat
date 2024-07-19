@@ -62,8 +62,8 @@ class Report extends CI_Controller
         foreach($response as $dt){
             if($dt->status == 'active'){
                 $mdata = array(
-                    "id" => $dt->id,
-                    "qrmember" => $dt->memberid,
+                    "id" => $dt->memberid,
+                    "qrmember" => $dt->qrmember,
                     "email" => $dt->email,
                     "nama" => $dt->nama,
                     "dob" => $dt->dob,
@@ -86,12 +86,13 @@ class Report extends CI_Controller
         $url = URLAPI . "/v1/member/get_byid?id=".$idmember;
 		$result_member = expatAPI($url)->result->messages;
 
-        $token = sha1(utf8_encode($result_member->email . $result_member->passwd)); 
+        // $token = sha1(utf8_encode($result_member->email . $result_member->passwd)); 
 
 
-        $url_memberm 		= URLAPI . "/v1/mobile/member/get_userdetail";
-		$response_memberm 	= mobileAPI($url_memberm, $mdata = NULL, $token);
-        $result_memberm      = $response_memberm->result->messages;
+        // $url_memberm 		= URLAPI . "/v1/mobile/member/get_userdetail";
+		// $response_memberm 	= mobileAPI($url_memberm, $mdata = NULL, $token);
+        // $result_memberm      = $response_memberm->result->messages;
+
 
 
         $data = array(
@@ -99,7 +100,7 @@ class Report extends CI_Controller
             'content'           => 'admin/report/report_summary_member',
             'extra'             => 'admin/report/js/_js_reportmember',
             'member'            => $result_member,
-            'memberm'           => $result_memberm,
+            // 'memberm'           => $result_memberm,
             'idmember'          => $idmember,
             'rmembers_active'   => 'active',
         );
