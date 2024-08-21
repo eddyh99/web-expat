@@ -26,6 +26,13 @@
 
     });
 
+    $('#subkategori').select2({
+        placeholder: "Sub Kategori",
+        tags: true,
+        selectOnClose: true,
+        allowClear: true,
+        theme: "bootstrap"
+    });
     
     $("#selectall").click(function(){
         if($("#selectall").is(':checked') ){

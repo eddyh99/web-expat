@@ -58,6 +58,10 @@ class Promotion extends CI_Controller
 		$this->form_validation->set_rules('promotion_type', 'Promotion Type', 'trim|required');
 		$this->form_validation->set_rules('start_date', 'Start Date', 'trim|required');
 		$this->form_validation->set_rules('end_date', 'End Date', 'trim|required');
+		$this->form_validation->set_rules('milestone', 'Milestone', 'trim|required|greater_than_equal_to[0]');
+		$this->form_validation->set_rules('minimum', 'Minimum Purchase', 'trim|required|greater_than[0]');
+		$this->form_validation->set_rules('discount_type', 'Discount Type', 'trim|required');
+
 
         if ($this->form_validation->run() == FALSE) {
 			$this->session->set_flashdata('error_validation', $this->message->error_msg(validation_errors()));
@@ -70,6 +74,10 @@ class Promotion extends CI_Controller
         $promotion_type     = $this->security->xss_clean($this->input->post("promotion_type"));
         $start_date         = $this->security->xss_clean($this->input->post("start_date"));
         $end_date           = $this->security->xss_clean($this->input->post("end_date"));
+        $milestone          = $this->security->xss_clean($this->input->post("milestone"));
+        $minimum            = $this->security->xss_clean($this->input->post("minimum"));
+        $discount_type      = $this->security->xss_clean($this->input->post("discount_type"));
+        $disc_amount        = $this->security->xss_clean($this->input->post("disc_amount"));
 
         $image      = $this->security->xss_clean(@$_FILES['imgpromotion']);
 
@@ -81,6 +89,10 @@ class Promotion extends CI_Controller
                 "start_date"  => $start_date,
                 "end_date"    => $end_date,
                 "image"       => $blob,
+                'milestone'   => $milestone,
+                'minimum'     => $minimum,
+                'discount_type' => $discount_type,
+                'disc_amount'   => $disc_amount,
             );
         }else{
 
@@ -89,6 +101,10 @@ class Promotion extends CI_Controller
                 "tipe"        => $promotion_type,
                 "start_date"  => $start_date,
                 "end_date"    => $end_date,
+                'milestone'   => $milestone,
+                'minimum'     => $minimum,
+                'discount_type' => $discount_type,
+                'disc_amount'   => $disc_amount,
             );
 
         }
@@ -136,6 +152,9 @@ class Promotion extends CI_Controller
 		$this->form_validation->set_rules('promotion_type', 'Promotion Type', 'trim|required');
 		$this->form_validation->set_rules('start_date', 'Start Date', 'trim|required');
 		$this->form_validation->set_rules('end_date', 'End Date', 'trim|required');
+		$this->form_validation->set_rules('milestone', 'Milestone', 'trim|required|greater_than_equal_to[0]');
+		$this->form_validation->set_rules('minimum', 'Minimum Purchase', 'trim|required|greater_than[0]');
+		$this->form_validation->set_rules('discount_type', 'Discount Type', 'trim|required');
 
         $input      = $this->input;
         $urisegment   = $this->security->xss_clean($input->post('urisegment'));
@@ -156,6 +175,11 @@ class Promotion extends CI_Controller
         $end_date           = $this->security->xss_clean($this->input->post("end_date"));
         $new_end_date       = date("Y-m-d", strtotime($end_date)); 
 
+        $milestone          = $this->security->xss_clean($this->input->post("milestone"));
+        $minimum            = $this->security->xss_clean($this->input->post("minimum"));
+        $discount_type      = $this->security->xss_clean($this->input->post("discount_type"));
+        $disc_amount        = $this->security->xss_clean($this->input->post("disc_amount"));
+
 
         $image      = $this->security->xss_clean(@$_FILES['imgpromotion']);
         if(!empty($image['name'])){
@@ -166,6 +190,10 @@ class Promotion extends CI_Controller
                 "start_date"  => $new_start_date,
                 "end_date"    => $new_end_date,
                 "image"       => $blob,
+                'milestone'   => $milestone,
+                'minimum'     => $minimum,
+                'discount_type' => $discount_type,
+                'disc_amount'   => $disc_amount,
             );
         }else{
 
@@ -174,6 +202,10 @@ class Promotion extends CI_Controller
                 "tipe"        => $promotion_type,
                 "start_date"  => $new_start_date,
                 "end_date"    => $new_end_date,
+                'milestone'   => $milestone,
+                'minimum'     => $minimum,
+                'discount_type' => $discount_type,
+                'disc_amount'   => $disc_amount,
             );
 
         }

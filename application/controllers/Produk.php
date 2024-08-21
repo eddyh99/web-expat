@@ -55,6 +55,8 @@ class Produk extends CI_Controller
 		$result_groupst     = expatAPI(URLAPI . "/v1/satuan/get_groupsatuan")->result->messages;
         $result_st          = expatAPI(URLAPI . "/v1/satuan/get_allsatuan")->result->messages;
 
+		$result_sub         = expatAPI(URLAPI . "/v1/produk/get_subkategori")->result->messages;
+
 
         $mdata = array(
             'title'             => NAMETITLE . ' - Add Produk',
@@ -68,6 +70,7 @@ class Produk extends CI_Controller
             'optional'          => $result_opt,
             'groupst'           => $result_groupst,
             'satuan'            => $result_st,
+            'subkategori'       => $result_sub,
             'master_active'     => 'active',
             'master_in'         => 'in',
             'dpd_active'        => 'active',
@@ -83,7 +86,8 @@ class Produk extends CI_Controller
 		$this->form_validation->set_rules('description', 'Description', 'trim|required');
 		$this->form_validation->set_rules('sku', 'SKU', 'trim|required');
 		$this->form_validation->set_rules('price', 'Price', 'trim|required');
-        $this->form_validation->set_rules('kategori', 'Kategori', 'trim|required');
+        $this->form_validation->set_rules('kategori', 'Category', 'trim|required');
+        $this->form_validation->set_rules('subkategori', 'Sub Category', 'trim|required');
 		$this->form_validation->set_rules('favorite', 'Favorite', 'trim|required');
 		$this->form_validation->set_rules('additional[]', 'Additional', 'trim');
 		$this->form_validation->set_rules('optional[]', 'Optional', 'trim');
@@ -102,6 +106,7 @@ class Produk extends CI_Controller
         $sku            = $this->security->xss_clean($this->input->post("sku"));
         $price          = $this->security->xss_clean($this->input->post("price"));
         $kategori       = $this->security->xss_clean($this->input->post("kategori"));
+        $subkategori    = $this->security->xss_clean($this->input->post("subkategori"));
         $favorite       = $this->security->xss_clean($this->input->post("favorite"));
         $additional     = $this->security->xss_clean($this->input->post("additional"));
         $optional       = $this->security->xss_clean($this->input->post("optional"));
@@ -116,6 +121,7 @@ class Produk extends CI_Controller
             "sku"           => $sku,
             "price"         => str_replace(",", "", $price),
             "kategori"      => $kategori,
+            "subkategori"   => $subkategori,
             "is_favorite"   => $favorite,
             "additional"    => (empty($additional) ? null : implode(",", $additional)),
             "optional"      => (empty($optional) ? null : implode(",", $optional)),
@@ -164,6 +170,8 @@ class Produk extends CI_Controller
         $result_st          = expatAPI(URLAPI . "/v1/satuan/get_allsatuan")->result->messages;
         $satuan_edit        = ((empty($result->satuan)) ? null : explode(",", $result->satuan));
 
+		$result_sub         = @expatAPI(URLAPI . "/v1/produk/get_subkategori")->result->messages;
+
         $mdata = array(
             'title'             => NAMETITLE . ' - Edit Produk',
             'content'           => 'admin/produk/edit_produk',
@@ -181,6 +189,7 @@ class Produk extends CI_Controller
             'groupst'           => $result_groupst,
             'satuan'            => $result_st,
             'satuan_edit'       => $satuan_edit,
+            'subkategori'       => $result_sub,
             'master_active'     => 'active',
             'master_in'         => 'in',
             'dpd_active'        => 'active',
@@ -198,7 +207,8 @@ class Produk extends CI_Controller
 		$this->form_validation->set_rules('description', 'Description', 'trim|required');
 		$this->form_validation->set_rules('sku', 'SKU', 'trim|required');
 		$this->form_validation->set_rules('price', 'Price', 'trim|required');
-        $this->form_validation->set_rules('kategori', 'Kategori', 'trim|required');
+        $this->form_validation->set_rules('kategori', 'Category', 'trim|required');
+        $this->form_validation->set_rules('subkategori', 'Sub Category', 'trim|required');
 		$this->form_validation->set_rules('favorite', 'Favorite', 'trim|required');
 		$this->form_validation->set_rules('additional[]', 'Additional', 'trim');
 		$this->form_validation->set_rules('optional[]', 'Optional', 'trim');
@@ -217,6 +227,7 @@ class Produk extends CI_Controller
         $sku            = $this->security->xss_clean($this->input->post("sku"));
         $price          = $this->security->xss_clean($this->input->post("price"));
         $kategori       = $this->security->xss_clean($this->input->post("kategori"));
+        $subkategori    = $this->security->xss_clean($this->input->post("subkategori"));
         $favorite       = $this->security->xss_clean($this->input->post("favorite"));
         $additional     = $this->security->xss_clean($this->input->post("additional"));
         $optional       = $this->security->xss_clean($this->input->post("optional"));
@@ -232,6 +243,7 @@ class Produk extends CI_Controller
             "sku"           => $sku,
             "price"         => str_replace(",", "", $price),
             "kategori"      => $kategori,
+            "subkategori"   => $subkategori,
             "is_favorite"   => $favorite,
             "additional"    => (empty($additional) ? null : implode(",", $additional)),
             "optional"      => (empty($optional) ? null : implode(",", $optional)),
@@ -243,7 +255,6 @@ class Produk extends CI_Controller
         $url = URLAPI . "/v1/produk/updateProduk?id=".$id_product;
 		$response = expatAPI($url, json_encode($mdata));
         $result = $response->result;
-
 
         if($response->status == 200) {
             $this->session->set_flashdata('success', $result->messages);

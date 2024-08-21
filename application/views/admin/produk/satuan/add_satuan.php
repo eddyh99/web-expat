@@ -42,7 +42,7 @@
                         </div>
                         <div class="mb-4">
                             <label for="sku" class="form-label">SKU</label>
-                            <input type="text" class="form-control" id="sku" name="sku" maxlength="10" placeholder="Enter SKU..." required autocomplete="off">
+                            <input type="text" class="form-control" id="sku" name="sku" maxlength="30" placeholder="Enter SKU..." required autocomplete="off">
                         </div>
                         <button type="submit" class="btn btn-expat mt-3">Save satuan</button>
                     </form>

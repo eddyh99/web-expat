@@ -25,7 +25,7 @@
                     <form action="<?= base_url()?>produk/editoptional_process" method="POST">
                         <input type="hidden" id="token" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                         <input type="hidden" name="urisegment" value="<?php echo $this->uri->segment('3')?>">
-                        <input type="hidden" class="form-control" id="sku" name="sku" maxlength="10" value="<?= @$detail->sku?>" placeholder="Enter SKU..." required autocomplete="off">
+                        <input type="hidden" class="form-control" id="sku" name="sku" maxlength="30" value="<?= @$detail->sku?>" placeholder="Enter SKU..." required autocomplete="off">
                         <div class="mb-4 col-12">
                             <label for="optional_group" class="form-label">Optional Group</label>
                             <select name="optional_group" id="optional_group" class="form-control optional_group_select2">
