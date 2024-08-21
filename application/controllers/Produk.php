@@ -87,7 +87,7 @@ class Produk extends CI_Controller
 		$this->form_validation->set_rules('favorite', 'Favorite', 'trim|required');
 		$this->form_validation->set_rules('additional[]', 'Additional', 'trim');
 		$this->form_validation->set_rules('optional[]', 'Optional', 'trim');
-		$this->form_validation->set_rules('satuan[]', 'Satuan', 'trim|required');
+		$this->form_validation->set_rules('satuan[]', 'Satuan', 'trim');
 		$this->form_validation->set_rules('cabang[]', 'Cabang', 'trim|required');
 
         if ($this->form_validation->run() == FALSE) {
