@@ -25,7 +25,7 @@
                     <form action="<?= base_url()?>member/editmember_process" method="POST">
                         <input type="hidden" id="token" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                         <input type="hidden" name="urisegment" value="<?php echo $this->uri->segment('3')?>">
-                        <input type="hidden" name="oldpass" value="<?= $member->passwd?>">
+                        <input type="hidden" name="oldpass" value="<?= @$member->passwd?>">
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
                             <input type="text" class="form-control" value="<?= @$member->nama?>" id="name" name="name" placeholder="Enter Name..." required maxlength="100" autocomplete="off">

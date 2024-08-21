@@ -82,15 +82,11 @@ class Order extends CI_Controller
         $cookie = stripslashes($_COOKIE['cartexpat']);
         $cart = json_decode($cookie, true);
 
-        // echo '<pre>'.print_r($cart,true).'</pre>';
-        // die;
         // Get Alamat user
         $urlAddress 		= URLAPI . "/v1/mobile/order/last_address";
 		$responseAddress 	= mobileAPI($urlAddress, $mdata = NULL, $token);
         $resultAddress      = $responseAddress->result->messages;
 
-        // echo '<pre>'.print_r($resultAddress,true).'</pre>';
-        // die;
         // Get User detail
         $urlUser 		= URLAPI . "/v1/mobile/member/get_userdetail";
 		$responseUser 	= mobileAPI($urlUser, $mdata = NULL, $token);
@@ -101,8 +97,6 @@ class Order extends CI_Controller
         $urlCabang 		= URLAPI . "/v1/mobile/outlet/getcabang_byid?id=".$_GET['cabang'];
 		$responseCabang 	= expatAPI($urlCabang);
         $resultCabang      = $responseCabang->result->messages;
-        // echo '<pre>'.print_r($resultCabang,true).'</pre>';
-        // die;
         
         $origin = @$resultAddress->address->latitude.','.@$resultAddress->address->longitude;  // Latitude and longitude for origin
         $destination = @$resultCabang->latitude.','.$resultCabang->longitude;  // Latitude and longitude for destination
@@ -266,6 +260,21 @@ class Order extends CI_Controller
         echo "Remove Item";
     }
 
+    public function getquantitycart()
+    {
+        // Get Cookie
+        $cookie = stripslashes(@$_COOKIE['cartexpat']);
+        $cart = json_decode($cookie, true);
+
+        $mdata = array(
+            'totalorder'  => @count(@$cart)
+        );
+
+        $this->load->view('widget/order/js/_js_quantitycart', $mdata);
+
+    }
+
+
     public function detail()
     {
 
@@ -273,8 +282,6 @@ class Order extends CI_Controller
         $cookie = stripslashes(@$_COOKIE['cartexpat']);
         $cart = json_decode($cookie, true);
 
-        // echo '<pre>'.print_r($cart,true).'</pre>';
-        // die;
         
         // Get Produk by id
         $urlproduk = URLAPI . "/v1/produk/getproduk_byid?id=".$_GET['product'];
@@ -456,8 +463,7 @@ class Order extends CI_Controller
         // Get Address
         $url = URLAPI . "/v1/mobile/order/last_address";
 		$result = mobileAPI($url, $mdata=NULL, $token)->result->messages->address;
-        echo json_encode($result);  
-        die;    
+        echo json_encode($result);    
     }
 
     
@@ -468,8 +474,6 @@ class Order extends CI_Controller
 		$responseAddress 	= mobileAPI($urlAddress, $mdata = NULL, $token);
         $resultAddress      = $responseAddress->result->messages;
 
-        // echo '<pre>'.print_r($resultAddress,true).'</pre>';
-        // die;
         $mdata = array(
             'title'         => NAMETITLE . ' - Add Address',
             'content'       => 'widget/address/add_address',
@@ -635,24 +639,31 @@ class Order extends CI_Controller
 
         $origin = $resultAddress->address->latitude.','.$resultAddress->address->longitude;  // Latitude and longitude for origin
         $destination = $resultCabang->latitude.','.$resultCabang->longitude;  // Latitude and longitude for destination
-
         
         $route = $this->getFastestRoute($origin, $destination);
         
-        
         // Mengecek route valid atau tidak dengan jarak maxroute
-        if ($route) {
-            $legs = $route['legs'][0];
-            $distance = $legs['distance'];
-            $jarak = str_replace(' km', '', $distance['text']);  // Remove " km" from the distance text
-            if ($jarak>$resultCabang->max){
-                $error = "Delivery Address is too far, max is ".$resultCabang->max ."km";
+        if(!empty($idpengiriman)){
+            if ($route) {
+                $legs = $route['legs'][0];
+                $distance = $legs['distance'];
+                $jarak = str_replace(' km', '', $distance['text']);  // Remove " km" from the distance text
+                if ($jarak>$resultCabang->max){
+                    $error = "Delivery Address is too far, max is ".$resultCabang->max ."km";
+                    $this->session->set_flashdata('warning_maxarea', $error);
+                    redirect("widget/order/ordersummary/".$token."?cabang=".$idcabang);
+                }
+            } else {
+                $error = "No route found";
                 $this->session->set_flashdata('warning_maxarea', $error);
                 redirect("widget/order/ordersummary/".$token."?cabang=".$idcabang);
             }
-        } else {
-            $error = "No route found";
-            $this->session->set_flashdata('warning_maxarea', $error);
+        }
+        
+   
+        // Check apakah produk yang di checkout kosong
+        if(empty($idproduk)){
+            $this->session->set_flashdata('error', 'You don`t have any product to checkout');
             redirect("widget/order/ordersummary/".$token."?cabang=".$idcabang);
         }
 
@@ -666,6 +677,7 @@ class Order extends CI_Controller
             $idsatuan, 
             $idadditional
         );
+
         $result = array();
         $keys = array(
             "jumlah", 
@@ -799,7 +811,7 @@ class Order extends CI_Controller
                 return;
             }
         }else{
-            $this->session->set_flashdata('error', $result->messages->error);
+            $this->session->set_flashdata('error', 'Please enter your pin');
             return;
         }
     }
@@ -818,13 +830,6 @@ class Order extends CI_Controller
         setcookie('cartexpat', "", time() - 3600, "/");
         $this->session->sess_destroy();
 
-
-        // $url = URLAPI . "/v1/mobile/order/list_transaksi";
-		// $response = mobileAPI($url, $mdata = NULL, $token);
-        // $result = $response->result->messages;
-
-        // echo '<pre>'.print_r($result,true).'</pre>';
-        // die;
 
         $mdata = array(
             'title'     => NAMETITLE . ' - Order Detail',

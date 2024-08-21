@@ -59,16 +59,16 @@ class Topup extends CI_Controller
         $amount     = str_replace(",","",$this->security->xss_clean($input->post('amount')));
 		$method		= $this->security->xss_clean($input->post('methodpayment'));
 		
-		if ($amount>2000000){
-		    echo "The maximum allowed top-up is IDR 2,000,000.";
+		if ($amount>1000000){
+		    echo "The maximum allowed top-up is IDR 1,000,000.";
 		}
-		
+
 		$url 		= URLAPI . "/v1/mobile/member/get_userdetail";
 		$response 	= mobileAPI($url,null,$token);
 		if ($response->status==200){
 		    $saldo=$response->result->messages->saldo;
-		    if ($amount>(2000000-$saldo)){
-		        echo "Your remaining top-up balance is ".number_format(2000000-$saldo).". The maximum allowed balance is IDR 2,000,000";
+		    if ($amount>(1000000-$saldo)){
+		        echo "Your remaining top-up balance is ".number_format(1000000-$saldo).". The maximum allowed balance is IDR 1,000,000";
 		    }
 		}
 
@@ -205,8 +205,7 @@ class Topup extends CI_Controller
 		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
 		curl_close($ch);
-		//echo "<pre>".print_r($result,true)."</pre>";
-		//die;
+		
 		if ($result->message[0]=="SUCCESS"){
 			redirect($result->response->payment->url);
 		}else{
@@ -221,10 +220,14 @@ class Topup extends CI_Controller
 		$amount     = str_replace(",","",$this->security->xss_clean($this->input->post('amount')));
         $_POST["amount"]=$amount;
 
+		$customamount     = str_replace(",","",$this->security->xss_clean($this->input->post('customamount')));
+        $_POST["customamount"]=$customamount;
+
 
 		$this->form_validation->set_rules('token', 'Token', 'trim|required');
 		$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
-		$this->form_validation->set_rules('amount', 'Amount', 'trim|required|greater_than[0]|less_than_equal_to[1000000]');
+		$this->form_validation->set_rules('amount', 'Amount', 'trim|greater_than[0]|less_than_equal_to[1000000]');
+		$this->form_validation->set_rules('customamount', 'Amount', 'trim|greater_than[0]|less_than_equal_to[1000000]');
 		$this->form_validation->set_rules('methodpayment', 'Method', 'trim|required');
 		
 		
@@ -239,14 +242,16 @@ class Topup extends CI_Controller
 		$token      = $this->security->xss_clean($input->post('token'));
 		$email      = $this->security->xss_clean($input->post('email'));
         $amount     = $this->security->xss_clean($input->post('amount'));
+        $customamount     = $this->security->xss_clean($input->post('customamount'));
         $method		= $this->security->xss_clean($input->post('methodpayment'));
 
 		$mdata = array(
 			"token"		=> $token,
 			"email"		=> $email,
-			"amount"	=> $amount,
+			"amount"	=> (empty($customamount) ? $amount : $customamount),
 			"method"	=> $method
 		);
+
 
 		$mdata = array(
             'title'     => NAMETITLE . ' - Topup Success',
@@ -272,7 +277,7 @@ class Topup extends CI_Controller
         $this->load->view('layout/wrapper', $mdata);
 	}
 	
-	public function cancel()
+	public function cancel($token = NULL)
 	{
 		$this->session->set_flashdata("error","Your topup cannot be processed");
 		redirect(base_url()."widget/topup/membertopup/".$token);

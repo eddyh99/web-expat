@@ -12,7 +12,7 @@
                 <div class="card-body">
                     <div class="d-flex flex-column align-items-start flex-lg-row align-items-lg-center justify-content-between">
                         <h5 class="card-title fw-semibold mb-4">List Order</h5>
-                        <div class="d-flex flex-column align-items-end flex-md-row col-12 col-lg-8">
+                        <!-- <div class="d-flex flex-column align-items-end flex-md-row col-12 col-lg-8">
                             <div class="col-12 col-md-6 mx-2 my-2 my-md-0">
                                 <label class="text-start form-label d-block mb-2">Range Date</label>
                                 <input type="text" id="tanggal" name="tanggal" class="form-control" autocomplete="off">
@@ -32,17 +32,18 @@
                                     Filter
                                 </button>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <br>
-                    <table id="table_history_order" class="table table-striped" style="width:100%">
+                    <table id="" class="table table-striped" style="width:100%">
                         <thead>
                             <tr>
                                 <th>ID Member</th>
-                                <th>Date</th>
-                                <th>Invoice</th>
-                                <th>Outlet</th>
-                                <th>Status</th>
+                                <!-- <th>Date</th> -->
+                                <th>Last Order</th>
+                                <th>Last Topup</th>
+
+                                <th>Membership</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -51,10 +52,11 @@
                         <tfoot>
                             <tr>
                                 <th>ID Member</th>
-                                <th>Date</th>
-                                <th>Invoice</th>
-                                <th>Outlet</th>
-                                <th>Status</th>
+                                <!-- <th>Date</th> -->
+                                <th>Last Order</th>
+                                <th>Last Topup</th>
+
+                                <th>Membership</th>
                                 <th>Action</th>
                             </tr>
                         </tfoot>

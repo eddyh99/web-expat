@@ -60,7 +60,7 @@
                                                                 <select class=" form-select" id="driver" name="driver" >
                                                                     <?php 
                                                                     foreach($staff as $st){
-                                                                        if($st->cabang == $detail[0]->cabang){
+                                                                        if($st->cabang == $detail[0]->cabang && $st->is_driver == 'yes'){
                                                                     ?>
                                                                         <option value="<?= $st->staffid?>"><?= $st->nama?></option>
                                                                     <?php 
@@ -77,7 +77,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <h6 class="mt-2 fst-italic"><span id="drivername"><?= $detail[0]->nama?></span></h6>
+                                        <h6 class="mt-2 fst-italic"><span id="drivername"><?= $detail[0]->namadriver?></span></h6>
                                     </div>
                                 <?php } ?>
                                 
@@ -96,20 +96,20 @@
                                 <?php
                                     $price = 0;
                                     foreach($detail as $dt){
-                                    $price += $dt->harga;
+                                    $price += ($dt->hargaproduk +  @$dt->hargaoptional + @$dt->hargasatuan + @$dt->hargaadditional) * $dt->jumlah;
                                 ?>
                                     <div class="col-12">
                                         <div class="card border-start border-success">
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center justify-content-start">
                                                     <div>
-                                                        <img class="img-produk" src="<?= $dt->imgprod?>" alt="">
+                                                        <img class="img-produk" src="<?= $dt->imgprod?>" alt="img">
                                                     </div>
                                                     <div class="ms-3">
-                                                        <h4 class="card-title fs-7"><?= $dt->nama?></h4>
-                                                        <p class="card-subtitle my-1"><?= $dt->optional?> | <?= $dt->additional?> | <?= $dt->satuan?></p>
+                                                        <h4 class="card-title fs-7"><?= $dt->namaproduk?></h4>
+                                                        <p class="card-subtitle my-1"><?= @$dt->namaoptional?> | <?= @$dt->namaadditional?> | <?= @$dt->namasatuan?></p>
                                                         <p class="card-subtitle my-1">Quantity <?= $dt->jumlah?></p>
-                                                        <p class="card-subtitle my-1">Rp <?=  number_format($dt->harga,2,".",",")?></p>
+                                                        <p class="card-subtitle my-1">Rp <?=  number_format((($dt->hargaproduk +  @$dt->hargaoptional + @$dt->hargasatuan + @$dt->hargaadditional) * $dt->jumlah),2,".",",")?></p>
                                                     </div>
                                                 </div>
                                             </div>

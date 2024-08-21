@@ -13,7 +13,7 @@
             <div class="mt-3">
                 <h1><?= $product->nama?></h1>
                 <article class="article desc"><?= $product->deskripsi?></article>
-                <h3 class="greenprice">Rp <span class="showprice"><?= number_format($product->price, 0 ,".",",")?></span></h3>
+                <h3 class="greenprice">Rp <span class="showprice"><?= number_format($product->price, 0,",",".")?></span></h3>
             </div>
             <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
                 <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -55,7 +55,7 @@
                 ?>
                     <div class="pt-2">
                         <label for="<?= $op->sku?>" class="d-flex justify-content-between">
-                            <span><?= $op->optional?> <small>( +<?= number_format($op->price, 0 ,".",",")?>)</small></span>
+                            <span><?= $op->optional?> <small>( +<?= number_format($op->price, 0,",",".")?>)</small></span>
                             <input type="radio" id="<?= $op->sku?>" data-opt="<?= $op->id?>" class="choose" value="<?= $op->price?>" name="optional">
                         </label>
                     </div>
@@ -101,7 +101,7 @@
                 ?>
                     <div class="pt-2">
                         <label for="<?= $st->sku?>" class="d-flex justify-content-between">
-                            <span><?= $st->satuan?> <small>( +<?= number_format($st->price, 0 ,".",",")?>)</small></span>
+                            <span><?= $st->satuan?> <small>( +<?= number_format($st->price, 0,",",".")?>)</small></span>
                             <input type="radio" id="<?= $st->sku?>" data-st="<?= $st->id?>" value="<?= $st->price?>" class="choose" name="satuan">
                         </label>
                     </div>
@@ -141,7 +141,7 @@
                 ?>
                     <div class="pt-2">
                         <label for="<?= $ad->sku?>" class="d-flex justify-content-between">
-                            <span><?= $ad->additional?> <small>( +<?= number_format($ad->price, 0 ,".",",")?>)</small></span>
+                            <span><?= $ad->additional?> <small>( +<?= number_format($ad->price, 0,",",".")?>)</small></span>
                             <input type="radio" id="<?= $ad->sku?>" data-ad="<?= $ad->id?>" value="<?= $ad->price?>" class="choose" name="additional">
                         </label>
                     </div>

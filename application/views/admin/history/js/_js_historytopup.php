@@ -2,6 +2,14 @@
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.css" />
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
+<!-- Button Export Datatables -->
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+
 
 <script>
     $('#tanggal').daterangepicker({
@@ -21,6 +29,10 @@
     var table = $('#table_history_topup').DataTable({
             "scrollX": true,
             "order": [ 1, "desc" ],
+            "dom": 'Bfrtip',
+            "buttons": [
+                'excel', 'pdf',
+            ],
             "ajax": {
                 "url": "<?=base_url()?>history/get_history_topup",
                 "type": "POST",
@@ -34,8 +46,13 @@
                 }
             },
             "columns": [
-                {   
-                    data: 'id_member', 
+                { 
+                    data: null,
+                    "sortable": false, 
+                    render: function (data, type, row, meta) {
+                        return `<a class="text-decoration-underline text-black" href="<?= base_url()?>report/summarymember/${encodeURI(btoa(row.id_member))}">${row.qrmember}</a>`;    
+                    
+                    }
                 },
                 {   
                     data: 'tanggal', 

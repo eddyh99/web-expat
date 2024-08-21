@@ -14,8 +14,19 @@
         $('.additional_select2').select2();
    
         $('.satuan_select2').select2();
+
+        $("#images-logo").on("change",function(){	
+          const $input = $(this);
+          const reader = new FileReader();
+          reader.onload = function(){
+            $("#image-container").attr("src", reader.result);
+          }
+          reader.readAsDataURL($input[0].files[0]);
+        });
+
     });
 
+    
     $("#selectall").click(function(){
         if($("#selectall").is(':checked') ){
             $("#cabang > option").prop("selected","selected");

@@ -1,21 +1,3 @@
-
-<!--<div class="apps-topbar alerts row py-4">
-    <div class="apps-member mx-auto col-12 col-lg-8" style="border-bottom: none;">
-        <div class="alert-notif d-flex justify-content-between px-2 px-lg-0">
-            <div class="action-icon">
-                <a href="#" class="text-white">
-                    <i class="fas fa-chevron-left fs-1"></i>
-                </a>
-            </div>
-            <div class="action">
-                <a class="text-white text-decoration-none fs-5">TOP UP</a>
-            </div>
-            <div class="action">
-            </div>
-        </div>
-    </div>
-</div>!-->
-
 <div class="app-content px-2 row pt-3 mb-5 pb-5">
     <div class="app-member mx-auto col-12 col-lg-8">
         <?php if (@isset($_SESSION["error"])) { ?>
@@ -70,9 +52,8 @@
                 </div>
             </div>
             
-            <!-- <br><br>
-            <input type="text" name="amount" placeholder="Enter specific value" class="input-amount-topup-specifict money-input"> -->
-            
+            <br><br>
+            <input type="text" id="customamount" name="customamount" placeholder="Enter specific value" class="input-amount-topup-specifict money-input">
             <br><br>
             <h6 class="text-white">PAYMENT METHOD (by doku)</h6>
             <label for="selectcredit" class="label-method-payment my-3">

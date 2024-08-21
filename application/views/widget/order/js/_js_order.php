@@ -9,6 +9,8 @@
 <script>
 
     var priceQuantity = [];
+    var deliveryfee = <?= $address->delivery_fee?>;
+    $(".deliveryfee-span").text(`${deliveryfee.toLocaleString('en-ID')}`);
 
     <?php foreach($selected_product as $key => $product){?>
         priceQuantity.push(
@@ -21,7 +23,6 @@
     <?php }?>
 
     $('input[type=radio][name=cartdelivery]').on("change", function() {  
-        console.log(this.value);
         if($(this).val() == "pickup"){  
             $('#idpengiriman').val(""); 
             $('#address').hide();
@@ -29,6 +30,9 @@
             $('#labelpickup').addClass('bg-expat');
             $('#labeldelivery').removeClass('bg-expat');
             $("#ordernow").removeClass('disabled')
+            deliveryfee = 0;
+            $(".deliveryfee-span").text(0);
+            kalkulasiprice();
         }
         else if($(this).val() == "delivery"){
             $('#idpengiriman').val(<?= @$address->id?>); 
@@ -36,6 +40,9 @@
             $('#pickupoutlet').hide();
             $('#labelpickup').removeClass('bg-expat');
             $('#labeldelivery').addClass('bg-expat');
+            deliveryfee = <?= $address->delivery_fee?>;
+            $(".deliveryfee-span").text(`${deliveryfee.toLocaleString('en-ID')}`);
+            kalkulasiprice();
         }
     });
 
@@ -48,10 +55,10 @@
                 url: `<?=base_url()?>widget/order/kalkulasi_item/${id}/${val}`,
                 type: "POST",
                 success: function (response) {
-                    console.log(response);
+                    console.log("");
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus);
+                    console.log("");
                 }
             });
             priceQuantity.forEach((el, i) => {
@@ -94,10 +101,10 @@
                     url: `<?=base_url()?>widget/order/kalkulasi_item/${id}/${val}`,
                     type: "POST",
                     success: function (response) {
-                        console.log(response);
+                        console.log("");
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
-                        console.log(textStatus);
+                        console.log("");
                     }
                 });
                 priceQuantity.forEach((el, i) => {
@@ -115,17 +122,16 @@
         let subtotal = 0;
         let total = 0;
         let totalsummary = 0;
-        let deliveryfee = <?= $address->delivery_fee?>;
-        console.log(deliveryfee);
         priceQuantity.forEach((el, i) => {
             subtotal = el.price * el.jumlah;
             total += subtotal;
         });
         totalsummary = total + deliveryfee;
-        $(".price-span").text(`${total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`);
+        $(".price-span").text(`${total.toLocaleString('en-ID')}`);
         $("#amount").val(totalsummary);
-        $(".total-price-span").text(`${totalsummary.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`);
+        $(".total-price-span").text(`${totalsummary.toLocaleString('en-ID')}`);
     }
+
     kalkulasiprice();
 
 

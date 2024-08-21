@@ -82,9 +82,6 @@
           const reader = new FileReader();
           reader.onload = function(){
             $("#image-container").attr("src", reader.result);
-            // var tempImg = [reader.result]
-            // console.log(tempImg);
-            // tempImg.forEach(b64toblob);
           }
           reader.readAsDataURL($input[0].files[0]);
         });

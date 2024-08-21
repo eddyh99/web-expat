@@ -1,3 +1,8 @@
+	
+				</div>
+			</div>
+		</div>
+	</div>
 
 
     <script src="<?= base_url()?>assets/js/pincodeinput.js"></script>
