@@ -54,6 +54,33 @@
                                 </label>
                             </div>
                         </div>
+                        <div class="mb-3 col-3">
+                            <label for="end_date" class="form-label">Milestone</label>
+                            <div class="form-control d-flex">
+                                <input type="number" class="w-100 border-0" name="milestone" id="milestone" value="<?=$promotion->milestone?>" >
+                            </div>
+                            <label for="end_date" class="cursor-pointer"><small>*fill 0 if this promotion for all milestone</small></label>
+                        </div>
+                        <div class="mb-3 col-3">
+                            <label for="end_date" class="form-label">Minimum Purchase</label>
+                            <div class="form-control d-flex">
+                                <input type="number" class="w-100 border-0" name="minimum" id="minimum"  value="<?=$promotion->minimum?>" >
+                            </div>
+                        </div>
+                        <div class="mb-3 col-3">
+                            <label for="discount_type" class="form-label">Discount Type?</label>
+                            <select name="discount_type" id="discount_type" class="form-select">
+                                <option value="persen" <?=($promotion->discount_type=="persen")?"selected":""?>>Percentage</option>
+                                <option value="fixed" <?=($promotion->discount_type=="fixed")?"selected":""?>>Fixed Amount</option>
+                                <option value="free item" <?=($promotion->discount_type=="free item")?"selected":""?>>Free Item</option>
+                            </select>
+                        </div>
+                        <div class="mb-3 col-3">
+                            <label for="end_date" class="form-label">Discount Amount</label>
+                            <div class="form-control d-flex">
+                                <input type="text" class="w-100 border-0" name="disc_amount" id="disc_amount" value="<?=$promotion->potongan?>" >
+                            </div>
+                        </div>
                         <div class="mb-3">   
                             <label for="images-logo" class="form-label">Image</label>   
                             <div class="d-flex flex-column">

@@ -32,14 +32,12 @@ class Employe extends CI_Controller
         // $status     = $this->security->xss_clean($this->input->post('status'));
 		$url = URLAPI . "/v1/member/get_allmember?role=pegawai";
 		$response = expatAPI($url)->result->messages;   
-
         // $resultNew = array();
         // $resultDisabled = array();
         $resultActive = array();
         foreach($response as $dt){
             if($dt->status == 'active'){
                 $mdata = array(
-                    "id" => $dt->id,
                     "memberid" => $dt->memberid,
                     "email" => $dt->email,
                     "nama" => $dt->nama,
@@ -77,6 +75,7 @@ class Employe extends CI_Controller
 		$this->form_validation->set_rules('name', 'Name', 'trim|required|max_length[100]');
 		$this->form_validation->set_rules('gender', 'Gender', 'trim|required');
 		$this->form_validation->set_rules('is_driver', 'Is Driver', 'trim|required');
+        $this->form_validation->set_rules('plafon', 'Plafon', 'trim|required');
 
         if ($this->form_validation->run() == FALSE) {
 			$this->session->set_flashdata('error_validation', $this->message->error_msg(validation_errors()));
@@ -90,6 +89,7 @@ class Employe extends CI_Controller
         $name       = $this->security->xss_clean($input->post('name'));
         $gender     = $this->security->xss_clean($input->post('gender'));
         $is_driver  = $this->security->xss_clean($input->post('is_driver'));
+        $plafon     = $this->security->xss_clean($input->post('plafon'));
 
         $mdata = array(
             "email"         => $email,
@@ -97,6 +97,7 @@ class Employe extends CI_Controller
             "nama"          => $name,
             "gender"        => $gender,
             "role"          => 'pegawai',
+            "plafon"        => $plafon,
             'membership'    => 'bronze',
             "is_driver"     => $is_driver,
         );
@@ -126,8 +127,6 @@ class Employe extends CI_Controller
 
         $url = URLAPI . "/v1/member/get_byid?id=".$id_member;
 		$result = expatAPI($url)->result->messages;
-
-
         $data = array(
             'title'             => NAMETITLE . ' - Edit Employe',
             'content'           => 'admin/employe/edit_employe',
@@ -146,6 +145,7 @@ class Employe extends CI_Controller
 		$this->form_validation->set_rules('name', 'Name', 'trim|required|max_length[100]');
 		$this->form_validation->set_rules('gender', 'Gender', 'trim|required');
 		$this->form_validation->set_rules('is_driver', 'Driver', 'trim|required');
+		$this->form_validation->set_rules('plafon', 'Plafon', 'trim|required');
 
         $input      = $this->input;
         $urisegment   = $this->security->xss_clean($input->post('urisegment'));
@@ -162,16 +162,17 @@ class Employe extends CI_Controller
         $newpasswd  = $this->security->xss_clean($input->post('passwd'));
         $gender     = $this->security->xss_clean($input->post('gender'));
         $is_driver  = $this->security->xss_clean($input->post('is_driver'));
+        $plafon     = $this->security->xss_clean($input->post('plafon'));
 
         
 
         if (empty($newpasswd)){
             $mdata = array(
-                "passwd"        => $oldpass,
                 "nama"          => $name,
                 "gender"        => $gender,
                 "membership"    => 'bronze',
                 "is_driver"     => $is_driver,
+                "plafon"        => $plafon,
                 "role"          => 'pegawai'
             );
         }else{
@@ -181,6 +182,7 @@ class Employe extends CI_Controller
                 "gender"        => $gender,
                 "membership"    => 'bronze',
                 "is_driver"     => $is_driver,
+                "plafon"        => $plafon,
                 "role"          => 'pegawai'
             );
         
@@ -188,7 +190,7 @@ class Employe extends CI_Controller
         $url = URLAPI . "/v1/member/updateMember?id=".$id;
 		$response = expatAPI($url, json_encode($mdata));
         $result = $response->result;
-
+        //print_r($response);die;
 
         if($response->status == 200){
             $this->session->set_flashdata('success', $result->messages);

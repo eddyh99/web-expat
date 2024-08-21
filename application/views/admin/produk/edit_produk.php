@@ -42,9 +42,17 @@
                                         <option value="retail" <?= ($product->kategori=="retail")?"selected":"" ?>>Retail</option>
                                     </select>
                                 </div>
+                                <div class="mb-4 col-12">
+                                    <label for="subkategori" class="form-label">Sub Category</label>
+                                    <select name="subkategori" id="subkategori" class="form-control">
+                                        <?php foreach($subkategori as $dt){?>
+                                            <option <?= ($product->subkategori==$dt->subkategori)?"selected":""?> value="<?= $dt->subkategori?>"><?= $dt->subkategori?></option>
+                                        <?php }?>
+                                    </select>
+                                </div>                                
                                 <div class="mb-4">
                                     <label for="sku" class="form-label">SKU</label>
-                                    <input type="text" class="form-control" value="<?= $product->sku?>" id="sku" name="sku" maxlength="100" placeholder="Enter SKU..." required autocomplete="off">
+                                    <input type="text" class="form-control" value="<?= $product->sku?>" id="sku" name="sku" maxlength="30" placeholder="Enter SKU..." required autocomplete="off">
                                 </div>
                                 <div class="mb-4">
                                     <label for="price" class="form-label">Base Price</label>

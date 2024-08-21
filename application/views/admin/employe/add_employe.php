@@ -33,8 +33,8 @@
                             <input type="password" class="form-control " id="passwd" name="passwd" placeholder="Enter password..." required maxlength="100" autocomplete="off">
                         </div>
                         <div class="mb-3">
-                            <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter name..." required maxlength="100" autocomplete="off">
+                            <label for="plafon" class="form-label">Plafon</label>
+                            <input type="number" class="form-control" id="plafon" name="plafon" placeholder="Enter name..." required maxlength="100" autocomplete="off">
                         </div>
                         <div class="mb-3 col-3">
                             <label for="gender" class="form-label">Gender</label>
@@ -42,6 +42,10 @@
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
                             </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter name..." required maxlength="100" autocomplete="off">
                         </div>
                         <div class="mb-3 col-3">
                             <label for="is_driver" class="form-label">Are you driver?</label>

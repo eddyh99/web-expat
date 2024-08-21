@@ -36,8 +36,8 @@
 			{ data: 'plafon' },
 			{ 
                 data: null, "mRender": function(data, type, full, meta) {
-                    var btnEdit ='<a href="<?=base_url()?>employe/edit_employe/'+encodeURI(btoa(full.id))+'" class="btn btn-success mx-1 my-1"><i class="ti ti-pencil-minus fs-4"></i></a>'
-					var btnDelete = '<a href="<?=base_url()?>employe/delete/'+encodeURI(btoa(full.id))+'" class="del-data btn btn-danger my-1"><i class="ti ti-trash"></i></a>';
+                    var btnEdit ='<a href="<?=base_url()?>employe/edit_employe/'+encodeURI(btoa(full.memberid))+'" class="btn btn-success mx-1 my-1"><i class="ti ti-pencil-minus fs-4"></i></a>'
+					var btnDelete = '<a href="<?=base_url()?>employe/delete/'+encodeURI(btoa(full.memberid))+'" class="del-data btn btn-danger my-1"><i class="ti ti-trash"></i></a>';
 					return `
 						${btnEdit} ${btnDelete}`; 
                 
