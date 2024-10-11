@@ -16,12 +16,30 @@
         $('.satuan_select2').select2();
 
         $("#images-logo").on("change",function(){	
-          const $input = $(this);
-          const reader = new FileReader();
-          reader.onload = function(){
-            $("#image-container").attr("src", reader.result);
-          }
-          reader.readAsDataURL($input[0].files[0]);
+            const $input = $(this);
+            const file = $input[0].files[0];
+            
+            // Check if file size is greater than 2MB 
+            if (file.size > 2 * 1024 * 1024) {
+                Swal.fire({
+                    html: 'File size maximum 2MB',
+                    position: 'top',
+                    timer: 3000,
+                    showCloseButton: true,
+                    showConfirmButton: false,
+                    icon: 'error',
+                    timer: 2000,
+                    timerProgressBar: true,
+                });
+                $input.val(''); 
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(){
+                $("#image-container").attr("src", reader.result);
+            }
+            reader.readAsDataURL($input[0].files[0]);
         });
 
     });

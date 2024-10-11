@@ -82,6 +82,24 @@ class Promotion extends CI_Controller
         $image      = $this->security->xss_clean(@$_FILES['imgpromotion']);
 
         if(!empty($image['name'])){
+
+            // Maximum 2MB in bytes 
+            $maxSize = 2 * 1024 * 1024; 
+    
+            // Allowed MIME types for images
+            $allowedTypes = array('image/jpeg', 'image/png', 'image/jpg');
+
+            if ($image['size'] > $maxSize) {
+                $this->session->set_flashdata('error', 'Your image is too big, Maximum 2MB');
+                redirect("promotion/add_promotion");
+                return;
+            } else if (!in_array($image['type'], $allowedTypes)){
+                $this->session->set_flashdata('error', 'Error: Invalid file type. Only JPEG, JPG, and PNG are allowed.');
+                redirect("promotion/add_promotion");
+                return;
+            }
+ 
+
             $blob       = curl_file_create($image['tmp_name'],$image['type']);
             $mdata = array(
                 "deskripsi"   => $description,
@@ -113,8 +131,6 @@ class Promotion extends CI_Controller
 		$response = expatAPI($url, json_encode($mdata));
         $result = $response->result;
         
-        // echo '<pre>'.print_r($response,true).'</pre>';
-        // die;
 
         if($response->status == 200) {
             $this->session->set_flashdata('success', $result->messages);
@@ -183,6 +199,23 @@ class Promotion extends CI_Controller
 
         $image      = $this->security->xss_clean(@$_FILES['imgpromotion']);
         if(!empty($image['name'])){
+
+            // Maximum 2MB in bytes 
+            $maxSize = 2 * 1024 * 1024; 
+
+            // Allowed MIME types for images
+            $allowedTypes = array('image/jpeg', 'image/png', 'image/jpg');
+
+            if ($image['size'] > $maxSize) {
+                $this->session->set_flashdata('error', 'Your image is too big, Maximum 2MB');
+                redirect("promotion/add_promotion");
+                return;
+            } else if (!in_array($image['type'], $allowedTypes)){
+                $this->session->set_flashdata('error', 'Error: Invalid file type. Only JPEG, JPG, and PNG are allowed.');
+                redirect("promotion/add_promotion");
+                return;
+            }
+
             $blob       = curl_file_create($image['tmp_name'],$image['type']);
             $mdata = array(
                 "deskripsi"   => $description,

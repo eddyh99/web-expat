@@ -76,6 +76,23 @@ class Outlet extends CI_Controller
 
         $image      = $this->security->xss_clean($_FILES['imgoutlet']);
         if(!empty($image['name'])){
+
+            // Maximum 2MB in bytes 
+            $maxSize = 2 * 1024 * 1024; 
+            
+            // Allowed MIME types for images
+            $allowedTypes = array('image/jpeg', 'image/png', 'image/jpg');
+
+            if ($image['size'] > $maxSize) {
+                $this->session->set_flashdata('error', 'Your image is too big, Maximum 2MB');
+                redirect("outlet/add_outlet");
+                return;
+            } else if (!in_array($image['type'], $allowedTypes)){
+                $this->session->set_flashdata('error', 'Error: Invalid file type. Only JPEG, JPG, and PNG are allowed.');
+                redirect("outlet/add_outlet");
+                return;
+            }
+
             $blob       = curl_file_create($image['tmp_name'],$image['type']);
             $mdata = array(
                 "nama"        => $name,
@@ -87,6 +104,7 @@ class Outlet extends CI_Controller
                 "long"        => $long,
                 "image"       => $blob
             );
+
         }else{
             $mdata = array(
                 "nama"        => $name,
@@ -101,19 +119,20 @@ class Outlet extends CI_Controller
         }
         
         $url = URLAPI . "/v1/outlet/addCabang";
-		$response = expatAPI($url, json_encode($mdata));
+        $response = expatAPI($url, json_encode($mdata));
         $result = $response->result;
-
-
+    
         if($response->status == 200) {
             $this->session->set_flashdata('success', $result->messages);
-			redirect('outlet');
-			return;
+            redirect('outlet');
+            return;
         }else{
             $this->session->set_flashdata('error', $result->messages->error);
-			redirect('outlet/add_outlet');
-			return;
+            redirect('outlet/add_outlet');
+            return;
         }
+
+
     }
 
     public function edit_outlet($id)
@@ -167,6 +186,23 @@ class Outlet extends CI_Controller
         
         $image      = $this->security->xss_clean(@$_FILES['imgoutlet']);
         if(!empty($image['name'])){
+
+            // Maximum 2MB in bytes 
+            $maxSize = 2 * 1024 * 1024; 
+        
+            // Allowed MIME types for images
+            $allowedTypes = array('image/jpeg', 'image/png', 'image/jpg');
+
+            if ($image['size'] > $maxSize) {
+                $this->session->set_flashdata('error', 'Your image is too big, Maximum 2MB');
+                redirect('outlet/edit_outlet/'.$urisegment);
+                return;
+            } else if (!in_array($image['type'], $allowedTypes)){
+                $this->session->set_flashdata('error', 'Error: Invalid file type. Only JPEG, JPG, and PNG are allowed.');
+                redirect('outlet/edit_outlet/'.$urisegment);
+                return;
+            }
+
             $blob       = curl_file_create($image['tmp_name'],$image['type']);
             $mdata = array(
                 "nama"        => $name,
@@ -179,7 +215,6 @@ class Outlet extends CI_Controller
                 "image"       => $blob
             );
         }else{
-
             $mdata = array(
                 "nama"        => $name,
                 "alamat"      => $address,
