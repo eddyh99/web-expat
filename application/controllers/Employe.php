@@ -98,7 +98,7 @@ class Employe extends CI_Controller
             "gender"        => $gender,
             "role"          => 'pegawai',
             "plafon"        => $plafon,
-            'membership'    => 'bronze',
+            // 'membership'    => 'bronze',
             "is_driver"     => $is_driver,
         );
 
@@ -106,9 +106,6 @@ class Employe extends CI_Controller
 		$url = URLAPI . "/v1/member/addMember";
 		$response = expatAPI($url, json_encode($mdata));
         $result = $response->result;
-
-        // echo '<pre>'.print_r($response,true).'</pre>';
-        // die;
 
         if($response->status == 200) {
             $this->session->set_flashdata('success', $result->messages);

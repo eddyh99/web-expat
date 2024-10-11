@@ -116,7 +116,6 @@ class Produk extends CI_Controller
         
         $mdata = array(
             "nama"          => $produk,
-            "image"         => (empty($image['name']) ? null : curl_file_create($image['tmp_name'],$image['type'])),
             "deskripsi"     => $description,
             "sku"           => $sku,
             "price"         => str_replace(",", "", $price),
@@ -128,6 +127,29 @@ class Produk extends CI_Controller
             "satuan"        => (empty($satuan) ? null : implode(",", $satuan)),
             "cabang"        => implode(",", $cabang),
         );
+
+        if(!empty($image['name'])){
+
+            // Maximum 2MB in bytes 
+            $maxSize = 2 * 1024 * 1024; 
+
+            // Allowed MIME types for images
+            $allowedTypes = array('image/jpeg', 'image/png', 'image/jpg');
+
+            if ($image['size'] > $maxSize) {
+                $this->session->set_flashdata('error', 'Your image is too big, Maximum 2MB');
+                redirect("produk/add_produk");
+                return;
+            } else if (!in_array($image['type'], $allowedTypes)){
+                $this->session->set_flashdata('error', 'Error: Invalid file type. Only JPEG, JPG, and PNG are allowed.');
+                redirect("produk/add_produk");
+                return;
+            }
+
+            $mdata['image'] = curl_file_create($image['tmp_name'],$image['type']);
+        }else{
+            $mdata['image'] = null;
+        }
 
         $url = URLAPI . "/v1/produk/addProduk";
 		$response = expatAPI($url, json_encode($mdata));
@@ -212,12 +234,12 @@ class Produk extends CI_Controller
 		$this->form_validation->set_rules('favorite', 'Favorite', 'trim|required');
 		$this->form_validation->set_rules('additional[]', 'Additional', 'trim');
 		$this->form_validation->set_rules('optional[]', 'Optional', 'trim');
-		$this->form_validation->set_rules('satuan[]', 'Satuan', 'trim|required');
+		$this->form_validation->set_rules('satuan[]', 'Satuan', 'trim');
 		$this->form_validation->set_rules('cabang[]', 'Cabang', 'trim|required');
 
         if ($this->form_validation->run() == FALSE) {
 			$this->session->set_flashdata('error', $this->message->error_msg(validation_errors()));
-			redirect("produk/edit_produk");
+			redirect("produk/edit_produk/".$id);
 			return;
 		}
 
@@ -238,7 +260,7 @@ class Produk extends CI_Controller
         
         $mdata = array(
             "nama"          => $produk,
-            "image"         => (empty($image['name']) ? null : curl_file_create($image['tmp_name'],$image['type'])),
+            // "image"         => (empty($image['name']) ? null : curl_file_create($image['tmp_name'],$image['type'])),
             "deskripsi"     => $description,
             "sku"           => $sku,
             "price"         => str_replace(",", "", $price),
@@ -250,6 +272,31 @@ class Produk extends CI_Controller
             "satuan"        => (empty($satuan) ? null : implode(",", $satuan)),
             "cabang"        => implode(",", $cabang),
         );
+
+        
+        if(!empty($image['name'])){
+
+            // Maximum 2MB in bytes 
+            $maxSize = 2 * 1024 * 1024; 
+
+            // Allowed MIME types for images
+            $allowedTypes = array('image/jpeg', 'image/png', 'image/jpg');
+
+            if ($image['size'] > $maxSize) {
+                $this->session->set_flashdata('error', 'Your image is too big, Maximum 2MB');
+                redirect("produk/edit_produk/".$id);
+                return;
+            } else if (!in_array($image['type'], $allowedTypes)){
+                $this->session->set_flashdata('error', 'Error: Invalid file type. Only JPEG, JPG, and PNG are allowed.');
+                redirect("produk/edit_produk/".$id);
+                return;
+            }
+
+            $mdata['image'] = curl_file_create($image['tmp_name'],$image['type']);
+        }else{
+            $mdata['image'] = null;
+        }
+
 
 
         $url = URLAPI . "/v1/produk/updateProduk?id=".$id_product;
