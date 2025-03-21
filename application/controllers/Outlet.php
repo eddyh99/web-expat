@@ -38,13 +38,15 @@ class Outlet extends CI_Controller
 
     public function add_outlet()
     {
+        $result_allproduk   = expatAPI(URLAPI . "/v1/produk/get_allproduk")->result->messages;
         $data = array(
             'title'         => NAMETITLE . ' - Add Outlet',
             'content'       => 'admin/outlet/add_outlet',
             'extra'         => 'admin/outlet/js/_js_index',
             'master_active'     => 'active',
             'master_in'         => 'in',
-            'dropdown_outlet'   => 'text-expat-green'
+            'dropdown_outlet'   => 'text-expat-green',
+            'produk'            => $result_allproduk
         );
         $this->load->view('layout/wrapper', $data);
     }
@@ -70,9 +72,10 @@ class Outlet extends CI_Controller
         $address    = $this->security->xss_clean($this->input->post("address"));
         $opening    = $this->security->xss_clean($this->input->post("opening"));
         $contact    = $this->security->xss_clean($this->input->post("contact"));
-        $provinsi    = $this->security->xss_clean($this->input->post("provinsi"));
+        $provinsi   = $this->security->xss_clean($this->input->post("provinsi"));
         $lat        = $this->security->xss_clean($this->input->post("lat"));
         $long       = $this->security->xss_clean($this->input->post("long"));
+        $produk     = $this->security->xss_clean($this->input->post("produk"));
 
         $image      = $this->security->xss_clean($_FILES['imgoutlet']);
         if(!empty($image['name'])){
@@ -102,7 +105,8 @@ class Outlet extends CI_Controller
                 "provinsi"    => $provinsi,
                 "lat"         => $lat,
                 "long"        => $long,
-                "image"       => $blob
+                "image"       => $blob,
+                "produk"      => $produk
             );
 
         }else{
@@ -114,14 +118,16 @@ class Outlet extends CI_Controller
                 "provinsi"    => $provinsi,
                 "lat"         => $lat,
                 "long"        => $long,
+                "produk"      => $produk
             );
 
         }
         
+        
         $url = URLAPI . "/v1/outlet/addCabang";
         $response = expatAPI($url, json_encode($mdata));
         $result = $response->result;
-    
+
         if($response->status == 200) {
             $this->session->set_flashdata('success', $result->messages);
             redirect('outlet');

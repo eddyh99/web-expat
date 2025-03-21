@@ -1,16 +1,16 @@
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php/$1 [L]
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
 
-# DISABLE CACHING
-<IfModule mod_headers.c>
-Header set Cache-Control "no-cache, no-store, must-revalidate"
-Header set Pragma "no-cache"
-Header set Expires 0
+    # Redirect non-existing directories and files to index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php?/$1 [L]
+
+
+    <Files .htaccess>
+        order allow,deny
+        deny from all
+    </Files>
 </IfModule>
 
-<Files .htaccess>
-order allow,deny
-deny from all
-</Files>

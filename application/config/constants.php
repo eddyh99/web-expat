@@ -89,9 +89,9 @@ define('NAMETITLE','Expat. Roasters');
 
 //Inisialisasi Database Table
 // OLD
-define("URLAPI",'https://api-expats.softwarebali.com');
+//define("URLAPI",'https://api-expats.softwarebali.com');
 // NEW 
-// define("URLAPI",'https://api.expatroasters.com');
+define("URLAPI",'https://api.expatroasters.com');
 
 
 /*email config*/

@@ -28,129 +28,337 @@
                 </div>
             </div>
             <hr style="border-bottom: 8px solid #fff;">
-
-            <div class="mt-3 mb-4">
-                
-                <?php if(!empty($optional)){?>
-                    <h3 class="f-lora">Option</h3>
-                <?php 
-                    }
-                    foreach($optional as $op){
-                        if($op->price == 0){
-                ?>
-                    <div class="pt-2">
-                        <label for="<?= $op->sku?>" class="d-flex justify-content-between">
-                            <span><?= $op->optional?></span>
-                            <input type="radio" id="<?= $op->sku?>" data-opt="<?= $op->id?>" value="<?= $op->price?>" class="choose optional" name="optional" checked>
-                        </label>
-                    </div>
-                <?php 
-                        }
-                    }
-                ?>
-
-                <?php 
-                    foreach($optional as $op){
-                        if($op->price != 0){
-                ?>
-                    <div class="pt-2">
-                        <label for="<?= $op->sku?>" class="d-flex justify-content-between">
-                            <span><?= $op->optional?> <small>( +<?= number_format($op->price, 0,",",".")?>)</small></span>
-                            <input type="radio" id="<?= $op->sku?>" data-opt="<?= $op->id?>" class="choose" value="<?= $op->price?>" name="optional">
-                        </label>
-                    </div>
-                <?php 
-                        }
-                    }
-                ?>
+            
+            <?php if ($product->kategori!="drink"){?>
+                <div class="mt-3 mb-4">
                     
-            </div>
-            <hr style="border-bottom: 2px solid #fff;">
-            <div class="mt-3 mb-4">
-                <?php 
-                    if(!empty($satuan)){
-                    if($product->kategori == "drink"){
-                ?>
-                    <h3 class="f-lora">Cup Size</h3>
-                <?php } else if($product->kategori == "food"){?>
-                    <h3 class="f-lora">Portion Of Food</h3>
-                <?php } else {?>
-                    <h3 class="f-lora">Satuan</h3>
-                <?php }} ?>
-
-
-
-                <?php 
-                    foreach($satuan as $st){
-                        if($st->price == 0){
-                ?>
-                    <div class="pt-2">
-                        <label for="<?= $st->sku?>" class="d-flex justify-content-between">
-                            <span><?= $st->satuan?></span>
-                            <input type="radio" id="<?= $st->sku?>" data-st="<?= $st->id?>" value="<?= $st->price?>" class="choose" name="satuan" checked>
-                        </label>
-                    </div>
-                <?php 
+                    <?php if(!empty($optional)){?>
+                        <h3 class="f-lora">Option</h3>
+                    <?php 
                         }
-                    }
-                ?>
-
-                <?php 
-                    foreach($satuan as $st){
-                        if($st->price != 0){
-                ?>
-                    <div class="pt-2">
-                        <label for="<?= $st->sku?>" class="d-flex justify-content-between">
-                            <span><?= $st->satuan?> <small>( +<?= number_format($st->price, 0,",",".")?>)</small></span>
-                            <input type="radio" id="<?= $st->sku?>" data-st="<?= $st->id?>" value="<?= $st->price?>" class="choose" name="satuan">
-                        </label>
-                    </div>
-                <?php 
+                        foreach($optional as $op){
+                            if($op->price == 0){
+                    ?>
+                        <div class="pt-2">
+                            <label for="<?= $op->sku?>" class="d-flex justify-content-between">
+                                <span><?= $op->optional?></span>
+                                <input type="radio" id="<?= $op->sku?>" data-opt="<?= $op->id?>" value="<?= $op->price?>" class="choose optional" name="optional" checked>
+                            </label>
+                        </div>
+                    <?php 
+                            }
                         }
-                    }
-                ?>
+                    ?>
+    
+                    <?php 
+                        foreach($optional as $op){
+                            if($op->price != 0){
+                    ?>
+                        <div class="pt-2">
+                            <label for="<?= $op->sku?>" class="d-flex justify-content-between">
+                                <span><?= $op->optional?> <small>( +<?= number_format($op->price, 0,",",".")?>)</small></span>
+                                <input type="radio" id="<?= $op->sku?>" data-opt="<?= $op->id?>" class="choose" value="<?= $op->price?>" name="optional">
+                            </label>
+                        </div>
+                    <?php 
+                            }
+                        }
+                    ?>
+                        
+                </div>
+                <hr style="border-bottom: 2px solid #fff;">
+                <div class="mt-3 mb-4">
+                    <?php 
+                        if(!empty($satuan)){
+                        if($product->kategori == "drink"){
+                    ?>
+                        <h3 class="f-lora">Cup Size</h3>
+                    <?php } else if($product->kategori == "food"){?>
+                        <h3 class="f-lora">Portion Of Food</h3>
+                    <?php } else {?>
+                        <h3 class="f-lora">Satuan</h3>
+                    <?php }} ?>
+    
+    
+    
+                    <?php 
+                        foreach($satuan as $st){
+                            if($st->price == 0){
+                    ?>
+                        <div class="pt-2">
+                            <label for="<?= $st->sku?>" class="d-flex justify-content-between">
+                                <span><?= $st->satuan?></span>
+                                <input type="radio" id="<?= $st->sku?>" data-st="<?= $st->id?>" value="<?= $st->price?>" class="choose" name="satuan" checked>
+                            </label>
+                        </div>
+                    <?php 
+                            }
+                        }
+                    ?>
+    
+                    <?php 
+                        foreach($satuan as $st){
+                            if($st->price != 0){
+                    ?>
+                        <div class="pt-2">
+                            <label for="<?= $st->sku?>" class="d-flex justify-content-between">
+                                <span><?= $st->satuan?> <small>( +<?= number_format($st->price, 0,",",".")?>)</small></span>
+                                <input type="radio" id="<?= $st->sku?>" data-st="<?= $st->id?>" value="<?= $st->price?>" class="choose" name="satuan">
+                            </label>
+                        </div>
+                    <?php 
+                            }
+                        }
+                    ?>
+    
+    
+                </div>
+                <hr style="border-bottom: 2px solid #fff;">
+                <div class="mt-3 mb-4">
+                    
+                    <?php if(!empty($additional)){?>
+                    <h3 class="f-lora">Additional</h3>
+                    <?php }?>
+    
+    
+                    <?php 
+                        foreach($additional as $ad){
+                            if($ad->price == 0){
+                    ?>
+                        <div class="pt-2">
+                            <label for="<?= $ad->sku?>" class="d-flex justify-content-between">
+                                <span><?= $ad->additional?></span>
+                                <input type="radio" id="<?= $ad->sku?>" data-ad="<?= $ad->id?>" value="<?= $ad->price?>" class="choose" name="additional" checked>
+                            </label>
+                        </div>
+                    <?php 
+                            }
+                        }
+                    ?>
+    
+                    <?php 
+                        foreach($additional as $ad){
+                            if($ad->price != 0){
+                    ?>
+                        <div class="pt-2">
+                            <label for="<?= $ad->sku?>" class="d-flex justify-content-between">
+                                <span><?= $ad->additional?> <small>( +<?= number_format($ad->price, 0,",",".")?>)</small></span>
+                                <input type="radio" id="<?= $ad->sku?>" data-ad="<?= $ad->id?>" value="<?= $ad->price?>" class="choose" name="additional">
+                            </label>
+                        </div>
+                    <?php 
+                            }
+                        }
+                    ?>
+    
+                </div>
+            <?php }else{?>
+                <div class="mt-3 mb-4">
+                    
+                    <?php if(!empty($optional)){?>
+                        <h3 class="f-lora">Serving</h3>
+                    <?php 
+                        }
+                        foreach($optional as $op){
+                            if($op->price == 0 && $op->optiongroup=="Type"){
+                    ?>
+                        <div class="pt-2">
+                            <label for="<?= $op->sku?>" class="d-flex justify-content-between">
+                                <span><?= $op->optional?></span>
+                                <input type="radio" id="<?= $op->sku?>" data-opt="<?= $op->id?>" value="<?= $op->price?>" class="choose optional" name="optional" checked>
+                            </label>
+                        </div>
+                    <?php 
+                            }
+                        }
+                    ?>
+    
+                    <?php 
+                        foreach($optional as $op){
+                            if($op->price != 0 && $op->optiongroup=="Type"){
+                    ?>
+                        <div class="pt-2">
+                            <label for="<?= $op->sku?>" class="d-flex justify-content-between">
+                                <span><?= $op->optional?> <small>( +<?= number_format($op->price, 0,",",".")?>)</small></span>
+                                <input type="radio" id="<?= $op->sku?>" data-opt="<?= $op->id?>" class="choose" value="<?= $op->price?>" name="optional">
+                            </label>
+                        </div>
+                    <?php 
+                            }
+                        }
+                    ?>
+                        
+                </div>
+                <div class="mt-3 mb-4">
+                    
+                    <?php
+                        foreach($optional as $op){
+                            if($op->optiongroup=="Beans"){
+                    ?>
+                                <h3 class="f-lora">Beans Option</h3>
+                    <?php 
+                            break;
+                            }
+                        }
+                    ?>
+                    <select name="optional" class="form-control">
+                        <?php 
+                            // Loop for the options with price == 0
+                            foreach($optional as $op){
+                                if($op->price == 0 && $op->optiongroup=="Beans"){
+                        ?>
+                            <option value="<?= $op->price ?>" data-opt="<?= $op->id ?>" selected>
+                                <?= $op->optional ?>
+                            </option>
+                        <?php 
+                                }
+                            }
+                        ?>
+                        
+                        <?php 
+                            // Loop for the options with price != 0
+                            foreach($optional as $op){
+                                if($op->price != 0 && $op->optiongroup=="Beans"){
+                        ?>
+                            <option value="<?= $op->price ?>" data-opt="<?= $op->id ?>">
+                                <?= $op->optional ?> ( +<?= number_format($op->price, 0,",",".") ?> )
+                            </option>
+                        <?php 
+                                }
+                            }
+                        ?>
+                    </select>
+                    
 
+                </div>
+                <div class="mt-3 mb-4">
+                    
+                    <?php
+                        foreach($optional as $op){
+                            if($op->optiongroup=="Milk"){
+                    ?>
+                                <h3 class="f-lora">Milk Option</h3>
+                    <?php 
+                            break;
+                            }
+                        }
+                        foreach($optional as $op){
+                            if($op->price == 0 && $op->optiongroup=="Milk"){
+                    ?>
+                        <div class="pt-2">
+                            <label for="<?= $op->sku?>" class="d-flex justify-content-between">
+                                <span><?= $op->optional?></span>
+                                <input type="radio" id="<?= $op->sku?>" data-opt="<?= $op->id?>" value="<?= $op->price?>" class="choose optional" name="optional" checked>
+                            </label>
+                        </div>
+                    <?php 
+                            }
+                        }
+                    ?>
+    
+                    <?php 
+                        foreach($optional as $op){
+                            if($op->price != 0 && $op->optiongroup=="Milk"){
+                    ?>
+                        <div class="pt-2">
+                            <label for="<?= $op->sku?>" class="d-flex justify-content-between">
+                                <span><?= $op->optional?> <small>( +<?= number_format($op->price, 0,",",".")?>)</small></span>
+                                <input type="radio" id="<?= $op->sku?>" data-opt="<?= $op->id?>" class="choose" value="<?= $op->price?>" name="optional">
+                            </label>
+                        </div>
+                    <?php 
+                            }
+                        }
+                    ?>
+                        
+                </div>
+                <div class="mt-3 mb-4">
+                    
+                    <?php if(!empty($additional)){?>
+                        <h3 class="f-lora">Additional</h3>
+                    <?php }?>
+    
+    
+                    <?php 
+                        foreach($additional as $ad){
+                            if($ad->price == 0){
+                    ?>
+                        <div class="pt-2">
+                            <label for="<?= $ad->sku?>" class="d-flex justify-content-between">
+                                <span><?= $ad->additional?></span>
+                                <input type="radio" id="<?= $ad->sku?>" data-ad="<?= $ad->id?>" value="<?= $ad->price?>" class="choose" name="additional" checked>
+                            </label>
+                        </div>
+                    <?php 
+                            }
+                        }
+                    ?>
+    
+                    <?php 
+                        foreach($additional as $ad){
+                            if($ad->price != 0){
+                    ?>
+                        <div class="pt-2">
+                            <label for="<?= $ad->sku?>" class="d-flex justify-content-between">
+                                <span><?= $ad->additional?> <small>( +<?= number_format($ad->price, 0,",",".")?>)</small></span>
+                                <input type="radio" id="<?= $ad->sku?>" data-ad="<?= $ad->id?>" value="<?= $ad->price?>" class="choose" name="additional">
+                            </label>
+                        </div>
+                    <?php 
+                            }
+                        }
+                    ?>
+    
+                </div>
+                                <div class="mt-3 mb-4">
+                    <?php 
+                        if(!empty($satuan)){
+                        if($product->kategori == "drink"){
+                    ?>
+                        <h3 class="f-lora">Cup Size</h3>
+                    <?php } else if($product->kategori == "food"){?>
+                        <h3 class="f-lora">Portion Of Food</h3>
+                    <?php } else {?>
+                        <h3 class="f-lora">Satuan</h3>
+                    <?php }} ?>
+    
+    
+    
+                    <?php 
+                        foreach($satuan as $st){
+                            if($st->price == 0){
+                    ?>
+                        <div class="pt-2">
+                            <label for="<?= $st->sku?>" class="d-flex justify-content-between">
+                                <span><?= $st->satuan?></span>
+                                <input type="radio" id="<?= $st->sku?>" data-st="<?= $st->id?>" value="<?= $st->price?>" class="choose" name="satuan" checked>
+                            </label>
+                        </div>
+                    <?php 
+                            }
+                        }
+                    ?>
+    
+                    <?php 
+                        foreach($satuan as $st){
+                            if($st->price != 0){
+                    ?>
+                        <div class="pt-2">
+                            <label for="<?= $st->sku?>" class="d-flex justify-content-between">
+                                <span><?= $st->satuan?> <small>( +<?= number_format($st->price, 0,",",".")?>)</small></span>
+                                <input type="radio" id="<?= $st->sku?>" data-st="<?= $st->id?>" value="<?= $st->price?>" class="choose" name="satuan">
+                            </label>
+                        </div>
+                    <?php 
+                            }
+                        }
+                    ?>
+    
+    
+                </div>
 
-            </div>
-            <hr style="border-bottom: 2px solid #fff;">
-            <div class="mt-3 mb-4">
                 
-                <?php if(!empty($additional)){?>
-                <h3 class="f-lora">Additional</h3>
-                <?php }?>
-
-
-                <?php 
-                    foreach($additional as $ad){
-                        if($ad->price == 0){
-                ?>
-                    <div class="pt-2">
-                        <label for="<?= $ad->sku?>" class="d-flex justify-content-between">
-                            <span><?= $ad->additional?></span>
-                            <input type="radio" id="<?= $ad->sku?>" data-ad="<?= $ad->id?>" value="<?= $ad->price?>" class="choose" name="additional" checked>
-                        </label>
-                    </div>
-                <?php 
-                        }
-                    }
-                ?>
-
-                <?php 
-                    foreach($additional as $ad){
-                        if($ad->price != 0){
-                ?>
-                    <div class="pt-2">
-                        <label for="<?= $ad->sku?>" class="d-flex justify-content-between">
-                            <span><?= $ad->additional?> <small>( +<?= number_format($ad->price, 0,",",".")?>)</small></span>
-                            <input type="radio" id="<?= $ad->sku?>" data-ad="<?= $ad->id?>" value="<?= $ad->price?>" class="choose" name="additional">
-                        </label>
-                    </div>
-                <?php 
-                        }
-                    }
-                ?>
-
-            </div>
+            <?php } ?>
             <div class="pt-2">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center">

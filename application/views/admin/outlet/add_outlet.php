@@ -100,6 +100,18 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="mb-4 col-12">
+                            <label for="produk" class="form-label">Select Produk</label>
+                            <select name="produk[]" multiple="multiple" id="produk" class="form-control produk_select2">
+                                <?php foreach($produk as $cb){?>
+                                    <option value="<?= $cb->id?>"><?= $cb->nama?></option>
+                                <?php }?>
+                            </select>
+                            <input type="checkbox" id="selectall">
+                            <label for="selectall">
+                                Select All
+                            </label>
+                        </div>
                         <button type="submit" class="btn btn-expat mt-3">Save Outlet</button>
                   </form>
                 </div>

@@ -11,6 +11,17 @@
 </style>
 
 <script>
+    $('.produk_select2').select2();
+    $("#selectall").click(function(){
+        if($("#selectall").is(':checked') ){
+            $("#produk > option").prop("selected","selected");
+            $("#produk").trigger("change");
+        }else{
+            $("#produk > option").prop("selected","");
+            $("#produk").trigger("change");
+            // $("#cabang > option").removeAttr("selected");
+        }
+    });
 
 	const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
 	const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))

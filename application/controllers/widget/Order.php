@@ -288,6 +288,7 @@ class Order extends CI_Controller
 		$resultproduk = expatAPI($urlproduk)->result->messages;
 
 
+
         $optional    = ((empty($resultproduk->optional)) ? null : explode(",", $resultproduk->optional));
         $new_opt = array();
         if(!empty($optional)){
@@ -296,8 +297,7 @@ class Order extends CI_Controller
                 array_push($new_opt, $temp_opt);
             }
         }
-
-
+        
         $satuan    = ((empty($resultproduk->satuan)) ? null : explode(",", $resultproduk->satuan));
         $new_st = array();
         if(!empty($satuan)){
